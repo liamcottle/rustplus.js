@@ -1,5 +1,6 @@
 "use strict";
 
+const path = require('path');
 const WebSocket = require('ws');
 const protobuf = require("protobufjs");
 const { EventEmitter } = require('events');
@@ -41,7 +42,7 @@ class RustPlus extends EventEmitter {
     connect() {
 
         // load protobuf then connect
-        protobuf.load("rustplus.proto").then((root) => {
+        protobuf.load(path.resolve(__dirname, "rustplus.proto")).then((root) => {
 
             // load proto types
             this.AppRequest = root.lookupType("rustplus.AppRequest");
