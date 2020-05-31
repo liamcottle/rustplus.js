@@ -1,0 +1,26 @@
+{
+  "name": "rustplus-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liamcottle/rustplus-api.git"
+  },
+  "keywords": [
+    "rust",
+    "rust+",
+    "companion",
+    "api",
+    "websocket"
+  ],
+  "author": "Liam Cottle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/liamcottle/rustplus-api/issues"
+  },
+  "homepage": "https://github.com/liamcottle/rustplus-api#readme"
+}
