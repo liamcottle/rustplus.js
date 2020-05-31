@@ -32,7 +32,7 @@ Have a look at the `AppRequest` message in the [rustplus.proto](./rustplus.proto
 
 ### Connecting
 
-The library will automatically connect to the server when you instantiate a `RustPlus` object. You will need to provide the follow details to be able to connect:
+The library will automatically connect to the server when you instantiate a `RustPlus` object. You will need to provide the following details to be able to connect:
 
 - Server Hostname/IP
 - Server App Port
