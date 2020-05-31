@@ -97,6 +97,12 @@ Here's a list of the emitted events:
 - `message`: When an `AppMessage` has been received from the Rust Server.
 - `request`: When an `AppRequest` has been sent to the Rust Server.
 
-## Server Pairing
+## Pairing
+
+### How to Pair with Server
 
 todo: document how to get player token
+
+### How to Pair with Smart Alarm and Smart Switch
+
+todo: document how to get entity id
