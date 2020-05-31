@@ -74,6 +74,8 @@ rustplus.getEntityInfo(1234567, (message) => {
 });
 ```
 
+Note: Once you have called `getEntityInfo` at least once for an entity id, you will receive broadcast messages automatically from the Rust server when the entity's state changes between on and off. These broadcasts won't be sent until you do so.
+
 ## Handle Messages
 
 A message is a payload of data sent to you from the Rust Server. This shouldn't be confused with Chat Messages.
