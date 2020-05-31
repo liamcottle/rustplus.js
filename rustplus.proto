@@ -1,0 +1,223 @@
+package rustplus;
+
+// This took me a while to craft by hand 😴
+
+message AppMessage {
+	optional AppResponse response = 1;
+	optional AppBroadcast broadcast = 2;
+}
+
+message AppRequest {
+
+	required uint32 seq = 1;
+	required uint64 playerId = 2;
+	required int32 playerToken = 3;
+
+	optional uint32 entityId = 4;
+	optional AppEmpty getInfo = 8;
+	optional AppEmpty getTime = 9;
+	optional AppEmpty getMap = 10;
+	optional AppEmpty getTeamInfo = 11;
+	optional AppSendMessage sendTeamMessage = 13;
+	optional AppEmpty getEntityInfo = 14;
+	optional AppSetEntityValue setEntityValue = 15;
+	optional AppEmpty checkSubscription = 16;
+	optional AppFlag setSubscription = 17;
+	optional AppEmpty getMapMarkers = 18;
+	optional AppCameraFrameRequest getCameraFrame = 19;
+
+}
+
+message AppSendMessage {
+	required string message = 1;
+}
+
+message AppSetEntityValue {
+	required bool value = 1;
+}
+
+message AppCameraFrameRequest {
+	required string identifier = 1;
+	required uint32 frame = 2;
+}
+
+message AppResponse {
+	required uint32 seq = 1;
+	optional AppSuccess success = 4;
+	optional AppError error = 5;
+	optional AppInfo info = 6;
+	optional AppTime time = 7;
+	optional AppMap map = 8;
+	optional AppTeamInfo teamInfo = 9;
+	optional AppTeamChat teamChat = 10;
+	optional AppEntityInfo entityInfo = 11;
+	optional AppFlag flag = 12;
+	optional AppMapMarkers mapMarkers = 13;
+	optional AppCameraFrame cameraFrame = 14;
+}
+
+message AppBroadcast {
+	optional AppTeamChanged teamChanged = 4;
+	optional AppTeamMessage teamMessage = 5;
+	optional AppEntityChanged entityChanged = 6;
+}
+
+message AppEmpty {
+
+}
+
+message AppSuccess {
+
+}
+
+message AppError {
+	required string error = 1;
+}
+
+message AppInfo {
+	required string name = 1;
+	required string headerImage = 2;
+	required string url = 3;
+	required string map = 4;
+	required uint32 mapSize = 5;
+	required uint32 wipeTime = 6;
+	required uint32 players = 7;
+	required uint32 maxPlayers = 8;
+	required uint32 queuedPlayers = 9;
+	optional uint32 seed = 10;
+	optional uint32 salt = 11;
+}
+
+message AppTime {
+	required float dayLengthMinutes = 1;
+	required float timeScale = 2;
+	required float sunrise = 3;
+	required float sunset = 4;
+	required float time = 5;
+}
+
+message AppMap {
+
+	required uint32 width = 1;
+	required uint32 height = 2;
+	required bytes jpgImage = 3;
+	required int32 oceanMargin = 4;
+	repeated AppMap.Monument monuments = 5;
+	optional string background = 6;
+
+	message Monument {
+		required string token = 1;
+		required float x = 2;
+		required float y = 3;
+	}
+
+}
+
+message AppTeamInfo {
+
+	required uint64 leaderSteamId = 1;
+	repeated AppTeamInfo.Member members = 2;
+	repeated AppTeamInfo.Note mapNotes = 3;
+	repeated AppTeamInfo.Note leaderMapNotes = 4;
+
+	message Member {
+		required uint64 steamId = 1;
+		required string name = 2;
+		required float x = 3;
+		required float y = 4;
+		required bool isOnline = 5;
+		required uint32 spawnTime = 6;
+		required bool isAlive = 7;
+		required uint32 deathTime = 8;
+	}
+
+	message Note {
+		required int32 type = 2;
+		required float x = 3;
+		required float y = 4;
+	}
+
+}
+
+message AppTeamChat {
+	repeated AppChatMessage messages = 1;
+}
+
+message AppChatMessage {
+	required uint64 steamId = 1;
+	required string name = 2;
+	required string message = 3;
+	required string color = 4;
+	required uint32 time = 5;
+}
+
+message AppEntityInfo {
+	required int32 type = 1;
+	required AppEntityPayload payload = 3;
+}
+
+message AppEntityPayload {
+	optional bool value = 1;
+}
+
+message AppFlag {
+	required bool value = 1;
+}
+
+message AppMapMarkers {
+	repeated AppMarker markers = 1;
+}
+
+message Vector4 {
+	optional float x = 1;
+	optional float y = 2;
+	optional float z = 3;
+	optional float w = 4;
+}
+
+message AppMarker {
+
+	required uint32 id = 1;
+	required int32 type = 2;
+	required float x = 3;
+	required float y = 4;
+	optional uint64 steamId = 5;
+	optional float rotation = 6;
+	optional float radius = 7;
+	optional Vector4 color1 = 8;
+	optional Vector4 color2 = 9;
+	optional float alpha = 10;
+	optional string name = 11;
+	repeated AppMarker.SellOrder sellOrders = 13;
+
+	message SellOrder {
+		required int32 itemId = 1;
+		required int32 quantity = 2;
+		required int32 currencyId = 3;
+		required int32 costPerItem = 4;
+		required int32 amountInStock = 5;
+		required bool itemIsBlueprint = 6;
+		required bool currencyIsBlueprint = 7;
+	}
+
+}
+
+message AppCameraFrame {
+	required uint32 frame = 1;
+	required bytes jpgImage = 2;
+}
+
+
+message AppTeamChanged {
+	required uint64 playerId = 1;
+	required AppTeamInfo teamInfo = 2;
+}
+
+message AppTeamMessage {
+	required AppChatMessage message = 1;
+}
+
+message AppEntityChanged {
+	required uint32 entityId = 1;
+	required AppEntityPayload payload = 2;
+}
