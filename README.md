@@ -43,7 +43,7 @@ The library will automatically connect to the server when you instantiate a `Rus
 - Server Hostname/IP
 - Server App Port
 - Player Id (Your Steam ID)
-- Player Token (Token from Server Pairing)
+- Player Token ([Token from Server Pairing](#how-to-pair-with-server))
 
 ```js
 const RustPlus = require('rustplus-api');
