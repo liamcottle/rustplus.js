@@ -74,11 +74,13 @@ rustplus.getEntityInfo(1234567, (message) => {
 });
 ```
 
-Note: Once you have called `getEntityInfo` at least once for an entity id, you will receive broadcast messages automatically from the Rust server when the entity's state changes between on and off. These broadcasts won't be sent until you do so.
-
 ### Entity Changed Broadcasts
 
-Once you have called `getEntityInfo` at least once for an entity id, you can capture the broadcast messages when its state changes like so:
+Once you have called `getEntityInfo` at least once for an entity id, you will receive broadcast messages automatically from the Rust server when the entity's state changes between on and off.
+
+If you don't call `getEntityInfo` at least once, you will never receive the broadcast.
+
+You can capture the broadcast like so:
 
 ```js
 rustplus.on('message', (message) => {
