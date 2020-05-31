@@ -2,6 +2,10 @@
 
 This is an unofficial NodeJS library for controlling Smart Switches and various other things in the PC game [Rust](https://store.steampowered.com/app/252490/Rust/).
 
+It communicates with the Rust Game Server via the WebSocket running on the port configured in your `server.cfg` as `app.port`.
+
+You can find the port your server is using for the Rust+ App by typing `app.port` into the F1 console. I recommend you to set the port to something static in your `server.cfg` file and then make sure you have configured port forwarding on your router.
+
 ## Features
 
 Below is a list of features that are implemented in this library.
