@@ -177,7 +177,7 @@ class RustPlus extends EventEmitter {
     /**
      * Send a message to Team Chat
      */
-    sendTeamChatMessage(message, callback) {
+    sendTeamMessage(message, callback) {
         this.sendRequest({
             sendTeamMessage: {
                 message: message,
