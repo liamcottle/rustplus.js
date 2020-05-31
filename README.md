@@ -6,6 +6,12 @@ It communicates with the Rust Game Server via the WebSocket running on the port 
 
 You can find the port your server is using for the Rust+ App by typing `app.port` into the F1 console. I recommend you to set the port to something static in your `server.cfg` file and then make sure you have configured port forwarding on your router.
 
+## Install
+
+```
+npm install liamcottle/rustplus-api
+```
+
 ## Features
 
 Below is a list of features that are implemented in this library.
@@ -40,7 +46,7 @@ The library will automatically connect to the server when you instantiate a `Rus
 - Player Token (Token from Server Pairing)
 
 ```js
-const RustPlus = require('./rustplus');
+const RustPlus = require('rustplus-api');
 var rustplus = new RustPlus('hostname', 28183, 'steamid', 1234567890);
 ```
 
