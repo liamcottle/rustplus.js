@@ -43,7 +43,7 @@ The library will automatically connect to the server when you instantiate a `Rus
 - Server Hostname/IP
 - Server App Port
 - Player Id (Your Steam ID)
-- Player Token ([Token from Server Pairing](#how-to-pair-with-server))
+- Player Token ([Token from Server Pairing](#pairing))
 
 ```js
 const RustPlus = require('rustplus-api');
@@ -132,10 +132,22 @@ Here's a list of the emitted events:
 
 ## Pairing
 
-### How to Pair with Server
+In order to use this library, we need to get the Server Information to connect to the App WebSocket as well as get the Entity Ids of the Smart Alarms and Smart switches we want to interact with.
 
-todo: document how to get player token
+The way this works in the official Rust+ app is documented in the [Pairing Flow](docs/PairingFlow.md) document in the docs folder.
 
-### How to Pair with Smart Alarm and Smart Switch
+You can gather the required information in several ways.
 
-todo: document how to get entity id
+### As a Rust Server Admin
+
+- You already have access to your `Server IP` and `App Port` configured in your `server.cfg` file.
+- You can find your `playerToken` in the sqlite3 database file `player.tokens.db` with the following command on a Linux server. `sqlite3 player.tokens.db "select * from data;" ".exit"`
+- You will get output like so: `xxxxxxxxxxxxxxxxx|yyyyyyyyy`
+- `xxxxxxxxxxxxxxxxx` is the `playerId` associated with `yyyyyyyyy` which is the `playerToken`. It can be a positive or negative integer.
+- As an admin you can use the command `lookingat_debug` to show/hide the entity id of what you are currently looking at. I like to bind it to a key with `bind o lookingat_debug`.
+
+### As a Normal Player
+
+- todo: document custom expo app
+- todo: document intercepting fcm notifications with frida
+    
