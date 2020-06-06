@@ -152,8 +152,13 @@ message AppChatMessage {
 }
 
 message AppEntityInfo {
-	required int32 type = 1;
+	required AppEntityType type = 1;
 	required AppEntityPayload payload = 3;
+}
+
+enum AppEntityType {
+	Switch = 1;
+	Alarm = 2;
 }
 
 message AppEntityPayload {
