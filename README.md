@@ -146,8 +146,42 @@ You can gather the required information in several ways.
 - `xxxxxxxxxxxxxxxxx` is the `playerId` associated with `yyyyyyyyy` which is the `playerToken`. It can be a positive or negative integer.
 - As an admin you can use the command `lookingat_debug` to show/hide the entity id of what you are currently looking at. I like to bind it to a key with `bind o lookingat_debug`.
 
-### As a Normal Player
+### Using the Pair script via CLI
 
-- todo: document custom expo app
-- todo: document intercepting fcm notifications with frida
+Clone this repo, install the dependencies and then run the script. You will be prompted to open a URL in your browser. This will take you to the Rust Companion site to log in with your Steam account.
+
+```
+git clone https://github.com/liamcottle/rustplus-api
+cd rustplus-api
+npm install
+node pair.js
+```
+
+Example Output
+
+```
+liamcottle@Liams-MacBook-Pro rustplus-api % node pair.js
+Registering with FCM
+Fetching Expo Push Token
+Received Expo Push Token: ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
+Please open the following URL in your browser to link your Steam Account with rustplus-api.
+https://companion-rust.facepunch.com/login?returnUrl=http%3A%2F%2Flocalhost%3A3000%2Fcallback
+Listening for FCM Notifications
+Steam Account Connected.
+Registering with Rust Companion API
+Successfully registered with Rust Companion API.
+When you Pair with Servers or Smart Devices in game, notifications will appear here.
+{
+  img: '',
+  port: '28017',
+  ip: 'your-server-ip',
+  name: "your-server-name",
+  id: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+  type: 'server',
+  url: '',
+  desc: 'your-server-description',
+  playerId: 'your-steam-id',
+  playerToken: 'your-player-token'
+}
+```
     
