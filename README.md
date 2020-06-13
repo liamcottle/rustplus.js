@@ -83,6 +83,14 @@ The library will automatically connect to the server when you instantiate a `Rus
 ```js
 const RustPlus = require('rustplus-api');
 var rustplus = new RustPlus('hostname', 28183, 'steamid', 1234567890);
+
+// wait until connected before sending commands
+rustplus.on('connected', () => {
+
+    // ready to send requests
+    rustplus.sendTeamMessage('Hello from rustplus-api!');
+
+});
 ```
 
 ### Turn Smart Switch On/Off
