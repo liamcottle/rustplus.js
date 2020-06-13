@@ -108,6 +108,8 @@ rustplus.turnSmartSwitchOn(1234567, (message) => {
 
 ### Send messages to Team Chat
 
+You need to be in a team before you can send messages to team chat.
+
 ```js
 rustplus.sendTeamMessage('message to team chat');
 ```
