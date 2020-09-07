@@ -159,10 +159,23 @@ message AppEntityInfo {
 enum AppEntityType {
 	Switch = 1;
 	Alarm = 2;
+	StorageMonitor = 3;
 }
 
 message AppEntityPayload {
+
 	optional bool value = 1;
+	repeated AppEntityPayload.Item items = 2;
+	optional int32 capacity = 3;
+	optional bool hasProtection = 4;
+	optional uint32 protectionExpiry = 5;
+
+	message Item {
+		required int32 itemId = 1;
+		required int32 quantity = 2;
+		required bool itemIsBlueprint = 3;
+	}
+
 }
 
 message AppFlag {
