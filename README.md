@@ -156,6 +156,44 @@ rustplus.on('message', (message) => {
 });
 ```
 
+#### Storage Monitor
+
+The Storage Monitor that was recently added to Rust sends Entity Changed Broadcasts when items are added and removed from the Storage Container that the Storage Monitor is associated with.
+
+You will receive two broadcasts for the Storage Monitor, one with the `entityChanged.payload.value` set to `true` and the second with the `entityChanged.payload.value` set to `false`. When using the official Rust+ app you'll see the storage monitor entity change to green, then back to grey.
+
+You can use the following snippet as an idea of how to listen for changes to a Storage Monitor and print out the current items in it.
+
+As above, make sure to call `getEntityInfo` with the Storage Monitor entity id so you are sent the broadcasts by the server.
+
+```js
+rustplus.on('message', (message) => {
+    if(message.broadcast && message.broadcast.entityChanged){
+
+        var entityChanged = message.broadcast.entityChanged;
+    
+        var entityId = entityChanged.entityId;
+        var value = entityChanged.payload.value;
+        var capacity = entityChanged.payload.capacity;
+        var items = entityChanged.payload.items;
+        
+        // only print info when second broadcast is received
+        if(!value){
+
+            console.log(`entity ${entityId} has a capacity of ${capacity}`);
+            console.log(`entity ${entityId} contains ${items.length} item(s)`);
+            
+            // print out the items in this storage entity
+            items.forEach((item) => {
+                console.log(item);
+            });
+
+        }
+
+    }
+});
+```
+
 ## Handle Messages
 
 A message is a payload of data sent to you from the Rust Server. This shouldn't be confused with Chat Messages.
