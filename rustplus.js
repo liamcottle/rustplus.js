@@ -208,6 +208,28 @@ class RustPlus extends EventEmitter {
             },
         }, callback);
     }
+    
+    /**
+     * Get the ingame time
+    */
+    getTime(callback) {
+        this.sendRequest({
+            getTime: {
+
+            },
+        }, callback);
+    }
+
+    /**
+     * Get all map markers
+     */
+    getMapMarkers(callback) {
+        this.sendRequest({
+            getMapMarkers: {
+
+            },
+        }, callback);
+    }
 
 }
 
