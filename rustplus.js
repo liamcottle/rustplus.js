@@ -230,6 +230,17 @@ class RustPlus extends EventEmitter {
             },
         }, callback);
     }
+    
+    /**
+     * Get the server info
+     */
+    getInfo(callback) {
+        this.sendRequest({
+            getInfo: {
+
+            },
+        }, callback);
+    }
 
 }
 
