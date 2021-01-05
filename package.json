@@ -1,5 +1,5 @@
 {
-  "name": "rustplus-api",
+  "name": "@liamcottle/rustplus.js",
   "version": "1.2.0",
   "description": "Unofficial NodeJS library for controlling Smart Switches in the PC game Rust",
   "main": "rustplus.js",
@@ -8,11 +8,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/liamcottle/rustplus-api.git"
+    "url": "git+https://github.com/liamcottle/rustplus.js.git"
   },
   "keywords": [
     "rust",
     "rust+",
+    "rustplus",
+    "rustplus-api",
     "companion",
     "api",
     "websocket",
@@ -23,9 +25,9 @@
   "author": "Liam Cottle",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/liamcottle/rustplus-api/issues"
+    "url": "https://github.com/liamcottle/rustplus.js/issues"
   },
-  "homepage": "https://github.com/liamcottle/rustplus-api#readme",
+  "homepage": "https://github.com/liamcottle/rustplus.js#readme",
   "dependencies": {
     "axios": "^0.19.2",
     "express": "^4.17.1",
