@@ -1,4 +1,4 @@
-# RustPlus API
+# rustplus.js
 
 This is an unofficial NodeJS library for interacting with Smart Switches, Smart Alarms and various other things in the PC game [Rust](https://store.steampowered.com/app/252490/Rust/).
 
@@ -11,7 +11,7 @@ The server owner needs to make sure their `app.port` has been configured and ope
 To use this library in your own NodeJS app, you can install it via `npm`.
 
 ```
-npm install liamcottle/rustplus-api
+npm install @liamcottle/rustplus.js
 ```
 
 ## Features
@@ -89,14 +89,14 @@ The library will automatically connect to the server when you instantiate a `Rus
 - Player Token ([Token from Server Pairing](#pairing))
 
 ```js
-const RustPlus = require('rustplus-api');
+const RustPlus = require('@liamcottle/rustplus.js');
 var rustplus = new RustPlus('hostname', 28183, 'steamid', 1234567890);
 
 // wait until connected before sending commands
 rustplus.on('connected', () => {
 
     // ready to send requests
-    rustplus.sendTeamMessage('Hello from rustplus-api!');
+    rustplus.sendTeamMessage('Hello from rustplus.js!');
 
 });
 ```
@@ -249,8 +249,8 @@ To use it, clone this repo, install the dependencies and then run the `pair.js` 
 Once your Steam Account is connected with the Rust Companion API server, you will receive pairing notifications in the console.
 
 ```
-git clone https://github.com/liamcottle/rustplus-api
-cd rustplus-api
+git clone https://github.com/liamcottle/rustplus.js
+cd rustplus.js
 npm install
 node pair.js
 ```
@@ -258,11 +258,11 @@ node pair.js
 Example Output
 
 ```
-liamcottle@Liams-MacBook-Pro rustplus-api % node pair.js
+liamcottle@Liams-MacBook-Pro rustplus.js % node pair.js
 Registering with FCM
 Fetching Expo Push Token
 Received Expo Push Token: ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
-Please open the following URL in your browser to link your Steam Account with rustplus-api.
+Please open the following URL in your browser to link your Steam Account with rustplus.js.
 https://companion-rust.facepunch.com/login?returnUrl=http%3A%2F%2Flocalhost%3A3000%2Fcallback
 Listening for FCM Notifications
 Steam Account Connected.
