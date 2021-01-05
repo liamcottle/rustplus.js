@@ -1,6 +1,6 @@
 {
   "name": "rustplus-api",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Unofficial NodeJS library for controlling Smart Switches in the PC game Rust",
   "main": "rustplus.js",
   "scripts": {
