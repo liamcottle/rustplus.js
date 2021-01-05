@@ -36,13 +36,13 @@ async function run() {
             if(steamAuthToken){
 
                 console.log("Steam Account Connected.");
-                res.send('Steam Account successfully linked with rustplus-api. You can now close this window and go back to the console.');
+                res.send('Steam Account successfully linked with rustplus.js, you can now close this window and go back to the console.');
 
                 // register with Rust Companion API
                 console.log("Registering with Rust Companion API");
                 axios.post('https://companion-rust.facepunch.com:443/api/push/register', {
                     AuthToken: steamAuthToken,
-                    DeviceId: 'rustplus-api',
+                    DeviceId: 'rustplus.js',
                     PushKind: 0,
                     PushToken: expoPushToken,
                 }).then((response) => {
@@ -60,7 +60,7 @@ async function run() {
         });
 
         // ask user to login with steam
-        console.log("Please open the following URL in your browser to link your Steam Account with rustplus-api.");
+        console.log("Please open the following URL in your browser to link your Steam Account with rustplus.js");
         console.log("https://companion-rust.facepunch.com/login?returnUrl=" + encodeURIComponent(`http://localhost:${port}/callback`));
 
         console.log("Listening for FCM Notifications");
@@ -93,7 +93,7 @@ async function shutdown() {
             data: {
                 AuthToken: steamAuthToken,
                 PushToken: expoPushToken,
-                DeviceId: 'rustplus-api',
+                DeviceId: 'rustplus.js',
             },
         }).then((response) => {
             console.log("Successfully unregistered from Rust Companion API");
