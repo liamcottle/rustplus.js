@@ -22,7 +22,7 @@ Below is a list of features that are implemented in this library with helper met
 - [x] Turn Smart Switch Off
 - [x] Send messages to Team Chat
 - [x] Get Entity Info (Current state of Smart Switch / Smart Alarm)
-- [ ] Get CCTV Camera Frames (Currently disabled in the Rust+ app by Facepunch)
+- [x] Get CCTV Camera Frames (Currently disabled in the Rust+ app by Facepunch)
 
 The CCTV Camera Frames are currently disabled in the Rust+ app and on the server by default, but you can enable it if you are a server admin by running the following command in the F1 console.
 
