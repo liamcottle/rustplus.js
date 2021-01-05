@@ -34,17 +34,17 @@ Note: This will not enable CCTV in the Rust+ app, but will send jpeg packets bac
 
 Here is the full list of requests that you can send. These are from the `AppRequest` message in the [rustplus.proto](./rustplus.proto) protobuf file that I wrote by hand.
 
-- getInfo
-- getTime
-- getMap
-- getTeamInfo
-- sendTeamMessage
-- getEntityInfo
-- setEntityValue
-- checkSubscription
-- setSubscription
-- getMapMarkers
-- getCameraFrame
+- `getInfo`
+- `getTime`
+- `getMap`
+- `getTeamInfo`
+- `sendTeamMessage`
+- `getEntityInfo`
+- `setEntityValue`
+- `checkSubscription`
+- `setSubscription`
+- `getMapMarkers`
+- `getCameraFrame`
 
 At the moment, most of these aren't implemented in a helper method but you can still craft the requests manually. Have a look in the protobuf file to know what data you need to send.
 
