@@ -1,3 +1,4 @@
+syntax = "proto2";
 package rustplus;
 
 // This took me a while to craft by hand 😴
