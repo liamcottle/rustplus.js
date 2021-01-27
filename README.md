@@ -14,7 +14,7 @@
     </a>
 </p>
 
-This is an unofficial NodeJS library for interacting with Smart Switches, Smart Alarms and various other things in the PC game [Rust](https://store.steampowered.com/app/252490/Rust/).
+This is an **unofficial** NodeJS library for interacting with Smart Switches, Smart Alarms and various other things in the PC game [Rust](https://store.steampowered.com/app/252490/Rust/).
 
 It communicates with the [Rust Game Server](https://developer.valvesoftware.com/wiki/Rust_Dedicated_Server) via the WebSocket running on the port configured in your `server.cfg` as `app.port`.
 
