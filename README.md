@@ -3,15 +3,9 @@
 </p>
 
 <p align="center">
-<a href="https://www.npmjs.com/package/@liamcottle/rustplus.js">
-<img src="https://img.shields.io/npm/dt/@liamcottle/rustplus.js" alt="npm"/>
-</a>
-<a href="https://discord.com/channels/@me">
-<img src="https://img.shields.io/badge/Discord-Liam%20Cottle%230001-%237289DA?style=flat&logo=discord" alt="discord"/>
-</a>
-<a href="https://twitter.com/liamcottle">
-<img src="https://img.shields.io/badge/Twitter-@liamcottle-%231DA1F2?style=flat&logo=twitter" alt="twitter"/>
-</a>
+<a href="https://www.npmjs.com/package/@liamcottle/rustplus.js"><img src="https://img.shields.io/npm/dt/@liamcottle/rustplus.js" alt="npm"/></a>
+<a href="https://discord.com/channels/@me"><img src="https://img.shields.io/badge/Discord-Liam%20Cottle%230001-%237289DA?style=flat&logo=discord" alt="discord"/></a>
+<a href="https://twitter.com/liamcottle"><img src="https://img.shields.io/badge/Twitter-@liamcottle-%231DA1F2?style=flat&logo=twitter" alt="twitter"/></a>
 </p>
 
 This is an **unofficial** NodeJS library for interacting with Smart Switches, Smart Alarms and various other things in the PC game [Rust](https://store.steampowered.com/app/252490/Rust/).
