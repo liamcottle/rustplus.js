@@ -19,6 +19,7 @@ message AppRequest {
 	optional AppEmpty getTime = 9;
 	optional AppEmpty getMap = 10;
 	optional AppEmpty getTeamInfo = 11;
+	optional AppEmpty getTeamChat = 12;
 	optional AppSendMessage sendTeamMessage = 13;
 	optional AppEmpty getEntityInfo = 14;
 	optional AppSetEntityValue setEntityValue = 15;
