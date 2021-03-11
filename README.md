@@ -17,7 +17,7 @@ It communicates with the [Rust Game Server](https://developer.valvesoftware.com/
 
 The server owner needs to make sure their `app.port` has been configured and opened in their firewall.
 
-Also, feel free to checkout my new rust project [Atlas](https://github.com/liamcottle/atlas-for-rust). It's an interactive map experience for Rust.
+Also, feel free to check out my new rust project [Atlas](https://github.com/liamcottle/atlas-for-rust). It's an interactive map experience for Rust.
 
 ## Install
 
