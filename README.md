@@ -300,13 +300,13 @@ When you Pair with Servers or Smart Devices in game, notifications will appear h
 
 If you want this project taken down, feel free to message me! However this project only allows you to automate the same actions you can already do in the official Rust+ app.
 
-I'm looking forward to seeing all of the projects the Rust community come up with! Some ideas I came up with, but haven't had a chance to build yet are:
+I'm looking forward to seeing all of the projects the Rust community come up with! Here are some ideas I came up with:
 
 - Discord Bot
     - Sync Team Chat in-game and on Discord.
     - Send messages to Discord when Smart Alarms are triggered.
     - Send messages to Discord when Cargo, Heli or Crate events spawn on the map.
     - Controlling Smart Devices via Discord messages.
-- Vending Machine Search Tool
-    - Find a specific item for sale on the map.
+- [Vending Machine Search Tool](https://github.com/liamcottle/atlas-for-rust)
+    - Find a specific item for sale on the map
     - Statistics on what items are commonly sold, and for what prices.
