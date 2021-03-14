@@ -94,7 +94,7 @@ rustplus.sendRequest({
 
 ### Connecting
 
-The library will automatically connect to the server when you instantiate a `RustPlus` object. You will need to provide the following details to be able to connect:
+You will need to provide the following details to be able to connect:
 
 - Server IP (or hostname)
 - Server App Port
@@ -112,7 +112,12 @@ rustplus.on('connected', () => {
     rustplus.sendTeamMessage('Hello from rustplus.js!');
 
 });
+
+// connect to rust server
+rustplus.connect();
 ```
+
+> Note: You now need to call `connect` manually after creating a `RustPlus` instance. The library no longer automatically connects.
 
 ### Turn Smart Switch On/Off
 
