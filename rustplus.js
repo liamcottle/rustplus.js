@@ -27,8 +27,6 @@ class RustPlus extends EventEmitter {
         this.seq = 0;
         this.seqCallbacks = [];
 
-        this.connect();
-
     }
 
     /**
@@ -101,6 +99,16 @@ class RustPlus extends EventEmitter {
 
         });
 
+    }
+
+    /**
+     * Disconnect from the Rust Server.
+     */
+    disconnect() {
+        if(this.websocket){
+            this.websocket.terminate();
+            this.websocket = null;
+        }
     }
 
     /**
