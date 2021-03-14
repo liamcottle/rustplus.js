@@ -92,6 +92,8 @@ rustplus.sendRequest({
 
 ## Examples
 
+More code examples can be found in the [examples](./examples) directory.
+
 ### Connecting
 
 You will need to provide the following details to be able to connect:
