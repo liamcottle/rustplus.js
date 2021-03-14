@@ -121,6 +121,8 @@ class RustPlus extends EventEmitter {
 
     /**
      * Send a Request to the Rust Server with an optional callback when a Response is received.
+     * @param data this should contain valid data for the AppRequest packet in the rustplus.proto schema file
+     * @param callback
      */
     sendRequest(data, callback) {
 
@@ -132,29 +134,27 @@ class RustPlus extends EventEmitter {
             this.seqCallbacks[currentSeq] = callback;
         }
 
-        // create base payload
-        let payload = {
+        // create protobuf from AppRequest packet
+        let request = this.AppRequest.fromObject({
             seq: currentSeq,
             playerId: this.playerId,
             playerToken: this.playerToken,
-        };
+            ...data, // merge in provided data for AppRequest
+        });
 
-        // merge in request data
-        payload = {...payload, ...data};
-
-        // create app request protobuf
-        let message = this.AppRequest.fromObject(payload);
-
-        // send app request to rust server
-        this.websocket.send(this.AppRequest.encode(message).finish());
+        // send AppRequest packet to rust server
+        this.websocket.send(this.AppRequest.encode(request).finish());
 
         // fire event when request has been sent, this is useful for logging
-        this.emit('request', message);
+        this.emit('request', request);
 
     }
 
     /**
      * Send a Request to the Rust Server to set the Entity Value.
+     * @param entityId the entity id to set the value for
+     * @param value the value to set on the entity
+     * @param callback
      */
     setEntityValue(entityId, value, callback) {
         this.sendRequest({
@@ -167,6 +167,8 @@ class RustPlus extends EventEmitter {
 
     /**
      * Turn a Smart Switch On
+     * @param entityId the entity id of the smart switch to turn on
+     * @param callback
      */
     turnSmartSwitchOn(entityId, callback) {
         this.setEntityValue(entityId, true, callback);
@@ -174,6 +176,8 @@ class RustPlus extends EventEmitter {
 
     /**
      * Turn a Smart Switch Off
+     * @param entityId the entity id of the smart switch to turn off
+     * @param callback
      */
     turnSmartSwitchOff(entityId, callback) {
         this.setEntityValue(entityId, false, callback);
@@ -193,6 +197,8 @@ class RustPlus extends EventEmitter {
 
     /**
      * Send a message to Team Chat
+     * @param message the message to send to team chat
+     * @param callback
      */
     sendTeamMessage(message, callback) {
         this.sendRequest({
@@ -204,6 +210,8 @@ class RustPlus extends EventEmitter {
 
     /**
      * Get info for an Entity
+     * @param entityId the id of the entity to get info of
+     * @param callback
      */
     getEntityInfo(entityId, callback) {
         this.sendRequest({
