@@ -42,7 +42,7 @@ class RustPlus extends EventEmitter {
         // load protobuf then connect
         protobuf.load(path.resolve(__dirname, "rustplus.proto")).then((root) => {
 
-            // make sure existing connecting is disconnected before connecting again.
+            // make sure existing connection is disconnected before connecting again.
             if(this.websocket){
                 this.disconnect();
             }
