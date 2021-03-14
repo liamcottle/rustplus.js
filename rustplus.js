@@ -13,6 +13,14 @@ class RustPlus extends EventEmitter {
      * @param playerId SteamId of the Player
      * @param playerToken Player Token from Server Pairing
      * @param useFacepunchProxy True to use secure websocket via Facepunch's proxy, or false to directly connect to Rust Server
+     *
+     * Events emitted by the RustPlus class instance
+     * - connecting: When we are connecting to the Rust Server.
+     * - connected: When we are connected to the Rust Server.
+     * - message: When an AppMessage has been received from the Rust Server.
+     * - request: When an AppRequest has been sent to the Rust Server.
+     * - disconnected: When we are disconnected from the Rust Server.
+     * - error: When something goes wrong.
      */
     constructor(server, port, playerId, playerToken, useFacepunchProxy = false) {
 
@@ -31,11 +39,6 @@ class RustPlus extends EventEmitter {
 
     /**
      * This sets everything up and then connects to the Rust Server via WebSocket.
-     * Events Emitted:
-     * - connecting: When we are connecting to the Rust Server.
-     * - connected: When we are connected to the Rust Server.
-     * - message: When a AppMessage has been received from the Rust Server.
-     * - disconnected: When we are disconnected from the Rust Server.
      */
     connect() {
 
