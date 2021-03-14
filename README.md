@@ -29,58 +29,24 @@ npm install @liamcottle/rustplus.js
 
 ## Features
 
-Below is a list of features that are implemented in this library with helper methods. Examples of these are available in the [Examples](#examples) section.
+Below is a list of convenience methods that are implemented for common requests in the RustPlus library. Examples of these can be found in the [examples](#examples) section.
 
-- [x] Turn Smart Switch On
-- [x] Turn Smart Switch Off
-- [x] Send messages to Team Chat
-- [x] Get Entity Info (Current state of Smart Switch / Smart Alarm)
-- [x] Get CCTV Camera Frames (Currently disabled in the Rust+ app by Facepunch)
+- `turnSmartSwitchOn` Turn Smart Switch on
+- `turnSmartSwitchOff` Turn Smart Switch off
+- `sendTeamMessage` Send messages to Team Chat
+- `getEntityInfo` Get current state of a Smart Device
+- `setEntityValue` Set the value of a Smart Device
+- `getInfo` Get info about the Rust Server
+- `getMap` Fetch map info, which inclues a jpeg image
+- `getTime` Get the current in game time
+- `getMapMarkers` Get map markers, such as vending machines and cargo/heli
 
-The CCTV Camera Frames are currently disabled in the Rust+ app and on the server by default, but you can enable it if you are a server admin by running the following command in the F1 console.
+More requests are available and can be found in the `AppRequest` message section of the [rustplus.proto](./rustplus.proto) protobuf file that I wrote by hand.
 
-```
-cctvrender.enabled true
-```
-
-Note: This will not enable CCTV in the Rust+ app, but will send jpeg packets back to you through the websocket.
-
-Here is the full list of requests that you can send. These are from the `AppRequest` message in the [rustplus.proto](./rustplus.proto) protobuf file that I wrote by hand.
-
-- `getInfo`
-- `getTime`
-- `getMap`
-- `getTeamInfo`
-- `sendTeamMessage`
-- `getEntityInfo`
-- `setEntityValue`
-- `checkSubscription`
-- `setSubscription`
-- `getMapMarkers`
-- `getCameraFrame`
-
-At the moment, most of these aren't implemented in a helper method but you can still craft the requests manually. Have a look in the protobuf file to know what data you need to send.
+For requests that aren't available through a convenience method, you can still craft and send the requests manually with `sendRequest`, as shown below. Have a look in the protobuf file to know what data you need to send.
 
 ```js
-// Get the Server Info
-rustplus.sendRequest({
-    getInfo: {}
-}, (message) => {
-    console.log(message);
-});
-```
-
-```js
-// Get the Map
-rustplus.sendRequest({
-    getMap: {}
-}, (message) => {
-    console.log(message);
-});
-```
-
-```js
-// Send Team Message
+// Send Team Message without using convenience method
 rustplus.sendRequest({
     sendTeamMessage: {
         message: "Message for Team Chat",
@@ -99,13 +65,13 @@ More code examples can be found in the [examples](./examples) directory.
 You will need to provide the following details to be able to connect:
 
 - Server IP (or hostname)
-- Server App Port
+- App Port (`app.port` in `server.cfg`)
 - Player Id (Your Steam ID)
 - Player Token ([Token from Server Pairing](#pairing))
 
 ```js
 const RustPlus = require('@liamcottle/rustplus.js');
-var rustplus = new RustPlus('hostname', 28183, 'steamid', 1234567890);
+var rustplus = new RustPlus('ip', 'port', 'playerId', 'playerToken');
 
 // wait until connected before sending commands
 rustplus.on('connected', () => {
@@ -240,6 +206,18 @@ Here's a list of the emitted events:
 - `error`: When something goes wrong.
 - `message`: When an `AppMessage` has been received from the Rust Server.
 - `request`: When an `AppRequest` has been sent to the Rust Server.
+
+## CCTV Camera Frames
+
+The Rust+ websocket protocol allows you to fetch CCTV Camera frames through the `getCameraFrame` request. However, these aren't available in the official Rust+ app yet and are also disabled server side.
+
+It is possible to enable CCTV Camera frames if you are the server admin by running the following command in the F1 console.
+
+```
+cctvrender.enabled true
+```
+
+> Note: This will not enable CCTV Cameras in the Rust+ app, but it will allow you to request jpeg packets through the websocket with the `getCameraFrame` request.
 
 ## Pairing
 
