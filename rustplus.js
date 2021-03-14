@@ -246,7 +246,7 @@ class RustPlus extends EventEmitter {
             },
         }, callback);
     }
-    
+
     /**
      * Get the server info
      */
@@ -254,6 +254,32 @@ class RustPlus extends EventEmitter {
         this.sendRequest({
             getInfo: {
 
+            },
+        }, callback);
+    }
+
+    /**
+     * Get team info
+     */
+    getTeamInfo(callback) {
+        this.sendRequest({
+            getTeamInfo: {
+
+            },
+        }, callback);
+    }
+
+    /**
+     * Get CCTV Camera frame
+     * @param identifier CCTV Camera Identifier, such as OILRIG1 (or custom name)
+     * @param frame integer that should be incremented for each frame request. Otherwise a cached frame is returned
+     * @param callback
+     */
+    getCameraFrame(identifier, frame, callback) {
+        this.sendRequest({
+            getCameraFrame: {
+                identifier: identifier,
+                frame: frame,
             },
         }, callback);
     }

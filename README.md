@@ -40,6 +40,8 @@ Below is a list of convenience methods that are implemented for common requests 
 - `getMap` Fetch map info, which inclues a jpeg image
 - `getTime` Get the current in game time
 - `getMapMarkers` Get map markers, such as vending machines and cargo/heli
+- `getTeamInfo` Get list of team members and positions on map
+- `getCameraFrame` Get a jpeg image from a CCTV Camera
 
 More requests are available and can be found in the `AppRequest` message section of the [rustplus.proto](./rustplus.proto) protobuf file that I wrote by hand.
 
