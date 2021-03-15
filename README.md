@@ -58,6 +58,8 @@ rustplus.sendRequest({
 });
 ```
 
+If you want a promise based API for sending requests, you can use `sendRequestAsync`. You won't be able to use the convenience methods, but it's very straightforward to craft the request payloads manually. Check [this example](./examples/6_async_requests.js) for using `sendRequestAsync`.
+
 ## Examples
 
 More code examples can be found in the [examples](./examples) directory.
