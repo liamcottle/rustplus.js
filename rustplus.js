@@ -151,6 +151,42 @@ class RustPlus extends EventEmitter {
     }
 
     /**
+     * Send a Request to the Rust Server and return a Promise
+     * @param data this should contain valid data for the AppRequest packet defined in the rustplus.proto schema file
+     * @param timeoutMilliseconds milliseconds before the promise will be rejected. Defaults to 10 seconds.
+     */
+    sendRequestAsync(data, timeoutMilliseconds = 10000) {
+        return new Promise((resolve, reject) => {
+
+            // reject promise after timeout
+            var timeout = setTimeout(() => {
+                reject(new Error('Timeout reached while waiting for response'));
+            }, timeoutMilliseconds);
+
+            // send request
+            this.sendRequest(data, (message) => {
+
+                // cancel timeout
+                clearTimeout(timeout);
+
+                if(message.response.error){
+
+                    // reject promise if server returns an AppError for this request
+                    reject(message.response.error);
+
+                } else {
+
+                    // request was successful, resolve with message.response
+                    resolve(message.response);
+
+                }
+
+            });
+
+        });
+    }
+
+    /**
      * Send a Request to the Rust Server to set the Entity Value.
      * @param entityId the entity id to set the value for
      * @param value the value to set on the entity
