@@ -27,6 +27,7 @@ message AppRequest {
 	optional AppFlag setSubscription = 17;
 	optional AppEmpty getMapMarkers = 18;
 	optional AppCameraFrameRequest getCameraFrame = 19;
+	optional AppPromoteToLeader promoteToLeader = 20;
 
 }
 
@@ -41,6 +42,10 @@ message AppSetEntityValue {
 message AppCameraFrameRequest {
 	required string identifier = 1;
 	required uint32 frame = 2;
+}
+
+message AppPromoteToLeader {
+	required uint64 steamId = 1;
 }
 
 message AppResponse {
