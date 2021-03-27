@@ -285,6 +285,32 @@ When you Pair with Servers or Smart Devices in game, notifications will appear h
 }
 ```
 
+## Connection Limits
+
+The Rust game server enforces a limit on how many connections can be made to the Rust+ websocket, and how many connections can be made by the same IP Address at once.
+
+- Max Connections: `500` is default
+    - Can be adjusted with server var `app.maxconnections`
+- Max Connections per IP: `5` is default
+    - Can be adjusted with server var `app.maxconnectionsperip`
+
+## Rate Limits
+
+The Rust game server enforces rate limits on requests sent to the Rust+ websocket. This is done with a [token bucket](https://en.wikipedia.org/wiki/Token_bucket) approach.
+
+The token bucket gives you a maximum amount of tokens, and replenishes them over time at a fixed rate.
+
+Here is a list of the rate limits enforced by the Rust game server:
+
+- Requests per IP Address
+    - `50 tokens limit, 15 tokens replenished per second.`
+- Requests per Player ID
+    - `25 tokens limit, 3 tokens replenished per second.`
+- Requests for Server Pairing
+    - `5 tokens limit, 0.1 tokens replenished per second.`
+    
+Rate limits can be found in the `CompanionServer.Listener` class in `Assembly-CSharp.dll` from the game server files.
+
 ## Hey Facepunch!
 
 If you want this project taken down, feel free to message me! However this project only allows you to automate the same actions you can already do in the official Rust+ app.
