@@ -311,6 +311,25 @@ Here is a list of the rate limits enforced by the Rust game server:
     
 Rate limits can be found in the `CompanionServer.Listener` class in `Assembly-CSharp.dll` from the game server files.
 
+Below is the token cost per request type:
+
+```
+Default: 1
+--
+CameraFrame: 2
+CheckSubscription: 1
+EntityInfo: 1
+Info: 1
+Map: 5
+MapMarkers: 1
+PromoteToLeader: 1
+SendTeamChat: 2
+SetEntityValue: 1
+SetSubscription: 1
+TeamInfo: 1
+Time: 1
+```
+
 ## Hey Facepunch!
 
 If you want this project taken down, feel free to message me! However this project only allows you to automate the same actions you can already do in the official Rust+ app.
