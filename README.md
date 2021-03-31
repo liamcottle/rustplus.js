@@ -223,6 +223,15 @@ cctvrender.enabled true
 
 > Note: This will not enable CCTV Cameras in the Rust+ app, but it will allow you to request jpeg packets through the websocket with the `getCameraFrame` request.
 
+CCTV Example:
+
+```
+rustplus.getCameraFrame("DOME1", 0, (message) => {
+  console.log(message);
+  return true;
+});
+```
+
 ## Pairing
 
 In order to use this library, we need to get the Server Information to connect to the App WebSocket as well as get the Entity Ids of the Smart Alarms and Smart switches we want to interact with.
