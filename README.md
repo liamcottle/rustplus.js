@@ -255,7 +255,9 @@ If you just want to interact with your own private server for testing, you won't
 
 I have put together a CLI tool which will do everything required to receive notifications from the Rust Companion API when you click the "Pair" buttons in game.
 
-To use it, clone this repo, install the dependencies and then run the `pair.js` cli tool. You will be prompted to open a URL in your browser. This will take you to the Rust Companion website to log in with your Steam account.
+To use it, clone this repo, install the dependencies and then run the `pair.js` cli tool. A custom Google Chrome browser will be launched. This will take you to the Rust Companion website to log in with your Steam account.
+
+> Note: You must have Google Chrome installed to use pair.js
 
 Once your Steam Account is connected with the Rust Companion API server, you will receive pairing notifications in the console.
 
