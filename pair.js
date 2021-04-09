@@ -89,9 +89,10 @@ async function run() {
         await ChromeLauncher.launch({
             startingUrl: `http://localhost:${port}`,
             chromeFlags: [
-                '--disable-web-security',
-                '--disable-site-isolation-trials',
-                '--user-data-dir=/tmp/temporary-chrome-profile-dir',
+                '--disable-web-security', // allows us to manipulate rust+ window
+                '--disable-popup-blocking', // allows us to open rust+ login from our main window
+                '--disable-site-isolation-trials', // required for --disable-web-security to work
+                '--user-data-dir=/tmp/temporary-chrome-profile-dir-rustplus', // create a new chrome profile for pair.js
             ],
             handleSIGINT: false, // handled manually in shutdown
         }).then(chrome => {
