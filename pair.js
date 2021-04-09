@@ -2,13 +2,15 @@ const axios = require('axios');
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const { register, listen } = require('push-receiver');
+const ChromeLauncher = require('chrome-launcher');
+const path = require('path');
 
 const app = express();
 const port = 3000;
 const server = app.listen(port);
 
 var expoPushToken = null;
-var steamAuthToken = null;
+var authToken = null;
 
 async function run() {
 
@@ -28,12 +30,21 @@ async function run() {
         expoPushToken = response.data.data.expoPushToken;
         console.log("Received Expo Push Token: " + expoPushToken);
 
+        // register pair web page
+        app.get('/', (req, res) => {
+            res.sendFile(path.join(__dirname + '/pair.html'));
+        });
+
         // register callback
-        app.get('/callback', (req, res) => {
+        app.get('/callback', async (req, res) => {
 
-            steamAuthToken = req.query.token;
+            // we no longer need the Google Chrome instance
+            await ChromeLauncher.killAll();
 
-            if(steamAuthToken){
+            // get token from callback
+            authToken = req.query.token;
+
+            if(authToken){
 
                 console.log("Steam Account Connected.");
                 res.send('Steam Account successfully linked with rustplus.js, you can now close this window and go back to the console.');
@@ -41,7 +52,7 @@ async function run() {
                 // register with Rust Companion API
                 console.log("Registering with Rust Companion API");
                 axios.post('https://companion-rust.facepunch.com:443/api/push/register', {
-                    AuthToken: steamAuthToken,
+                    AuthToken: authToken,
                     DeviceId: 'rustplus.js',
                     PushKind: 0,
                     PushToken: expoPushToken,
@@ -54,14 +65,42 @@ async function run() {
                 });
 
             } else {
+                console.log("token missing from request!");
                 res.send('token missing from request!');
             }
 
         });
 
-        // ask user to login with steam
-        console.log("Please open the following URL in your browser to link your Steam Account with rustplus.js");
-        console.log("https://companion-rust.facepunch.com/login?returnUrl=" + encodeURIComponent(`http://localhost:${port}/callback`));
+        // tell user to login in Google Chrome
+        console.log("Google Chrome is launching so you can link rustplus.js to Rust+");
+
+        /**
+         * FIXME: Google Chrome is launched with Web Security disabled.
+         * This is bad, but it allows us to modify the window object of other domains, such as Rust+
+         * By doing so, we can inject a custom ReactNativeWebView.postMessage handler to capture Rust+ auth data.
+         *
+         * Rust+ recently changed the login flow, which no longer sends auth data in the URL callback.
+         * Auth data is now sent to a ReactNative.postMessage handler, which is available to the Rust+ app since
+         * it is a ReactNative app.
+         *
+         * We don't have access to ReactNative, but we can emulate the behaviour by registering our own window objects.
+         * However, to do so we need to disable Web Security to be able to manipulate the window of other origins.
+         */
+        await ChromeLauncher.launch({
+            startingUrl: `http://localhost:${port}`,
+            chromeFlags: [
+                '--disable-web-security',
+                '--disable-site-isolation-trials',
+                '--user-data-dir=/tmp/temporary-chrome-profile-dir',
+            ],
+            handleSIGINT: false, // handled manually in shutdown
+        }).then(chrome => {
+            console.log("Continue the pairing process in Google Chrome.");
+        }).catch((error) => {
+            console.log(error);
+            console.log("pair.js failed to launch Google Chrome. Do you have it installed?");
+            process.exit(0);
+        });
 
         console.log("Listening for FCM Notifications");
         await listen(credentials, ({ notification, persistentId }) => {
@@ -86,12 +125,15 @@ process.on('SIGINT', shutdown);
 
 async function shutdown() {
 
+    // close chrome instances launched by pair.js
+    await ChromeLauncher.killAll();
+
     // unregister with Rust Companion API
-    if(steamAuthToken){
+    if(authToken && expoPushToken){
         console.log("Unregistering from Rust Companion API");
         await axios.delete('https://companion-rust.facepunch.com:443/api/push/unregister', {
             data: {
-                AuthToken: steamAuthToken,
+                AuthToken: authToken,
                 PushToken: expoPushToken,
                 DeviceId: 'rustplus.js',
             },

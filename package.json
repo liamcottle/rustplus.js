@@ -27,6 +27,7 @@
   "homepage": "https://github.com/liamcottle/rustplus.js#readme",
   "dependencies": {
     "axios": "^0.21.1",
+    "chrome-launcher": "^0.13.4",
     "express": "^4.17.1",
     "protobufjs": "^6.9.0",
     "push-receiver": "^2.1.0",
