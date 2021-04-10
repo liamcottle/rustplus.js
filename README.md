@@ -275,8 +275,8 @@ liamcottle@Liams-MacBook-Pro rustplus.js % node pair.js
 Registering with FCM
 Fetching Expo Push Token
 Received Expo Push Token: ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
-Please open the following URL in your browser to link your Steam Account with rustplus.js.
-https://companion-rust.facepunch.com/login?returnUrl=http%3A%2F%2Flocalhost%3A3000%2Fcallback
+Google Chrome is launching so you can link rustplus.js to Rust+
+Continue the pairing process in Google Chrome.
 Listening for FCM Notifications
 Steam Account Connected.
 Registering with Rust Companion API
@@ -309,7 +309,7 @@ The Rust game server enforces a limit on how many connections can be made to the
 
 The Rust game server enforces rate limits on requests sent to the Rust+ websocket. This is done with a [token bucket](https://en.wikipedia.org/wiki/Token_bucket) approach.
 
-The token bucket gives you a maximum amount of tokens, and replenishes them over time at a fixed rate.
+The token bucket gives you a maximum amount of tokens, and replenes them over time at a fixed rate.
 
 Here is a list of the rate limits enforced by the Rust game server:
 
