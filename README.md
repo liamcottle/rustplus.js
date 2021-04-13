@@ -152,6 +152,8 @@ The Storage Monitor that was recently added to Rust sends Entity Changed Broadca
 
 You will receive two broadcasts for the Storage Monitor, one with the `entityChanged.payload.value` set to `true` and the second with the `entityChanged.payload.value` set to `false`. When using the official Rust+ app you'll see the storage monitor entity change to green, then back to grey.
 
+Note that broadcasts are sent without player interaction only if tool cupboard changes to decaying state. Resources removed from a decay tick does not send a broadcast.
+
 You can use the following snippet as an idea of how to listen for changes to a Storage Monitor and print out the current items in it.
 
 As above, make sure to call `getEntityInfo` with the Storage Monitor entity id so you are sent the broadcasts by the server.
