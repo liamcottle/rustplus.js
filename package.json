@@ -1,6 +1,6 @@
 {
   "name": "@liamcottle/rustplus.js",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "description": "Unofficial NodeJS library for controlling Smart Switches in the PC game Rust",
   "main": "rustplus.js",
   "bin": {
