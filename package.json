@@ -3,6 +3,9 @@
   "version": "2.1.2",
   "description": "Unofficial NodeJS library for controlling Smart Switches in the PC game Rust",
   "main": "rustplus.js",
+  "bin": {
+    "rustplus": "./cli/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/liamcottle/rustplus.js.git"
@@ -28,6 +31,8 @@
   "dependencies": {
     "axios": "^0.21.1",
     "chrome-launcher": "^0.13.4",
+    "command-line-args": "^5.1.1",
+    "command-line-usage": "^6.1.1",
     "express": "^4.17.1",
     "protobufjs": "^6.9.0",
     "push-receiver": "^2.1.0",
