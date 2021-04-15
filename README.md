@@ -253,37 +253,29 @@ If you just want to interact with your own private server for testing, you won't
     - `yyyyyyyyy` is the `playerToken`. (It can be a positive or negative integer.)
 - As an admin you can use the command `lookingat_debug` to show/hide the entity id of what you are currently looking at. I like to bind it to a key with `bind o lookingat_debug`.
 
-### Using the CLI Pair Tool
+### Using the Command Line Tool
 
-I have put together a CLI tool which will do everything required to receive notifications from the Rust Companion API when you click the "Pair" buttons in game.
+I have put together a command line tool which will do everything required to receive Pairing Notifications from the Rust Companion API when you click the "Pair" buttons in game.
 
-To use it, clone this repo, install the dependencies and then run the `pair.js` cli tool. A custom Google Chrome browser will be launched. This will take you to the Rust Companion website to log in with your Steam account.
-
-> Note: You must have Google Chrome installed to use pair.js
-
-Once your Steam Account is connected with the Rust Companion API server, you will receive pairing notifications in the console.
+Before you can listen for Pairing Notifications, you need to register with FCM, Expo and link your Steam Account with Rust+. Conveniently, you can do this by running the following command.
 
 ```
-git clone https://github.com/liamcottle/rustplus.js
-cd rustplus.js
-npm install
-node pair.js
+npx @liamcottle/rustplus.js fcm-register
+```
+
+A custom Google Chrome browser will be launched. This will take you to the Rust Companion website to log in with your Steam account.
+
+> Note: You must have Google Chrome installed to use `fcm-register`
+
+After successfully registering, you can listen for Pairing Notifications
+
+```
+npx @liamcottle/rustplus.js fcm-listen
 ```
 
 Example Output
 
 ```
-liamcottle@Liams-MacBook-Pro rustplus.js % node pair.js
-Registering with FCM
-Fetching Expo Push Token
-Received Expo Push Token: ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
-Please open the following URL in your browser to link your Steam Account with rustplus.js.
-https://companion-rust.facepunch.com/login?returnUrl=http%3A%2F%2Flocalhost%3A3000%2Fcallback
-Listening for FCM Notifications
-Steam Account Connected.
-Registering with Rust Companion API
-Successfully registered with Rust Companion API.
-When you Pair with Servers or Smart Devices in game, notifications will appear here.
 {
   img: '',
   port: '28017',
@@ -296,6 +288,21 @@ When you Pair with Servers or Smart Devices in game, notifications will appear h
   playerId: 'your-steam-id',
   playerToken: 'your-player-token'
 }
+```
+
+The command line tool allows you to set a custom config file for saving and loading your credentials. This is helpful if you want to register on your local pc, and copy the config to another server.
+
+```
+npx @liamcottle/rustplus.js --config-file=/path/to/config.json <command>
+```
+
+If you want to run the latest changes to the CLI tool, you can run it like so:
+
+```
+git clone https://github.com/liamcottle/rustplus.js
+cd rustplus.js
+npm install
+node cli/index.js <command>
 ```
 
 ## Connection Limits
