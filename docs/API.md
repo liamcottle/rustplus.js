@@ -22,6 +22,36 @@ These endpoints are used by the Rust+ Companion App.
 
 These endpoints are used by the Rust Server.
 
-- GET /api/server/register
-- POST /api/server/refresh
-- POST /api/push/send
+### `/api/server/register`
+
+- Method: `GET`
+
+Registers a new Rust server with the Rust+ Companion API. This is called when the Rust server is initialized and has not registered, or refreshing the existing server token fails.
+
+### `/api/server/refresh`
+
+- Method: `POST`
+- Headers:
+    - `Content-Type`: `text/plain`
+- Body: `Existing Server Token`
+
+Refreshes an existing server token.
+
+### `/api/push/send`
+
+- Method: `POST`
+- Headers:
+    - `Content-Type`: `application/json`
+- JSON Body:
+    - `ServerToken` (string)
+    - `SteamIds` (list of unsigned longs)
+    - `Channel` (int)
+      - `Pairing=1001`
+      - `PlayerLoggedIn=1002`
+      - `PlayerDied=1003`
+      - `SmartAlarm=1004`
+    - `Title` (string)
+    - `Body` (string)
+    - `Data` (dictionary<string, string>)
+
+Sends a push notification to the Rust+ Companion App.
