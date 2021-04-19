@@ -58,5 +58,23 @@ Refreshes an existing server token.
     - `Title` (string)
     - `Body` (string)
     - `Data` (dictionary<string, string>)
+        - `id` (string)
+        - `name` (string)
+        - `desc` (string)
+        - `img` (string)
+        - `logo` (string)
+        - `url` (string)
+        - `ip` (string)
+        - `port` (string)
+        - `playerId` (string)
+        - `playerToken` (string)
+        - `entityId` (string)
+        - `entityType` (string)
+        - `entityName` (string)
+        - `type` (string)
+            - `death`
+            - `login`
+            - `server`
+            - `entity`
 
 Sends a push notification to the Rust+ Companion App.
