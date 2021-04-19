@@ -8,7 +8,12 @@ Base URL
 
 These endpoints are used by the Rust+ Companion App.
 
-- GET /api/avatar/{steamId}
+### `/api/avatar/{steamId}`
+
+- Method: `GET`
+
+Redirects to the Profile Image for the SteamId.
+
 - POST /api/push/register
 - DELETE /api/push/unregister
 - POST /api/subscriptions/app/add
