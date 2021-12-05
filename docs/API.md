@@ -14,6 +14,10 @@ These endpoints are used by the Rust+ Companion App.
 
 Redirects to the Profile Image for the SteamId.
 
+### TODO
+
+Endpoints that haven't been documented yet.
+
 - POST /api/push/register
 - DELETE /api/push/unregister
 - POST /api/subscriptions/app/add
