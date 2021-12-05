@@ -198,8 +198,15 @@ async function fcmListen(options) {
         // parse notification body
         const body = JSON.parse(notification.data.body);
 
+        // generate timestamp
+        const timestamp = new Date().toLocaleString();
+
+        // log timestamp the notification was received (in green colour)
+        console.log('\x1b[32m%s\x1b[0m', `[${timestamp}] Notification Received`)
+
         // log notification body
         console.log(body);
+
     });
 }
 
