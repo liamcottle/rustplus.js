@@ -30,7 +30,7 @@
   "homepage": "https://github.com/liamcottle/rustplus.js#readme",
   "dependencies": {
     "axios": "^0.24.0",
-    "chrome-launcher": "^0.13.4",
+    "chrome-launcher": "^0.15.0",
     "command-line-args": "^5.2.0",
     "command-line-usage": "^6.1.1",
     "express": "^4.17.1",
