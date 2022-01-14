@@ -235,6 +235,7 @@ enum AppMarkerType {
 	CargoShip = 5;
 	Crate = 6;
 	GenericRadius = 7;
+	PatrolHelicopter = 8;
 }
 
 message AppCameraFrame {
