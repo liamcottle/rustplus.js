@@ -26,7 +26,7 @@ message AppRequest {
 	optional AppEmpty checkSubscription = 16;
 	optional AppFlag setSubscription = 17;
 	optional AppEmpty getMapMarkers = 18;
-	optional AppPromoteToLeader promoteToLeader = 19;
+	optional AppPromoteToLeader promoteToLeader = 20;
 
 }
 
