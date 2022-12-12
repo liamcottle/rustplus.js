@@ -14,6 +14,16 @@ These endpoints are used by the Rust+ Companion App.
 
 Redirects to the Profile Image for the SteamId.
 
+### `/api/history/read`
+
+- Method: `POST`
+- Headers:
+    - `Content-Type`: `application/json`
+- Body: `AuthToken`
+
+Api request made by the rust+ app returns a notifcationID, Player SteamId, notification date, Sever ID, title (event title eg {name} is online) , Body (server name), data (event details such as server ip and port target name if relating to player and id)
+The events contained are player deaths when team loads in and pair requests even when the server is not paired
+
 ### TODO
 
 Endpoints that haven't been documented yet.
