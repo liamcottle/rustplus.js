@@ -157,7 +157,6 @@ message AppRequest {
 	optional AppEmpty checkSubscription = 16;
 	optional AppFlag setSubscription = 17;
 	optional AppEmpty getMapMarkers = 18;
-	// optional AppCameraFrameRequest getCameraFrame = 19; // was removed from official app
 	optional AppPromoteToLeader promoteToLeader = 20;
 	optional AppEmpty getClanInfo = 21;
 	optional AppSendMessage setClanMotd = 22;
@@ -184,7 +183,6 @@ message AppResponse {
 	optional AppEntityInfo entityInfo = 11;
 	optional AppFlag flag = 12;
 	optional AppMapMarkers mapMarkers = 13;
-	// optional AppCameraFrame cameraFrame = 14; // was removed from official app
 	optional AppClanInfo clanInfo = 15;
 	optional AppClanChat clanChat = 16;
 	optional AppNexusAuth nexusAuth = 17;
@@ -408,17 +406,3 @@ message AppNewClanMessage {
 	required int64 clanId = 1;
 	required AppClanMessage message = 2;
 }
-
-/* was removed from official app
-message AppCameraFrameRequest {
-	required string identifier = 1;
-	required uint32 frame = 2;
-}
-*/
-
-/* was removed from official app
-message AppCameraFrame {
-	required uint32 frame = 1;
-	required bytes jpgImage = 2;
-}
-*/
