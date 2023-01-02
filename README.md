@@ -41,7 +41,6 @@ Below is a list of convenience methods that are implemented for common requests 
 - `getTime` Get the current in game time
 - `getMapMarkers` Get map markers, such as vending machines and cargo/heli
 - `getTeamInfo` Get list of team members and positions on map
-- `getCameraFrame` Get a jpeg image from a CCTV Camera
 
 More requests are available and can be found in the `AppRequest` message section of the [rustplus.proto](./rustplus.proto) protobuf file that I wrote by hand.
 
@@ -215,24 +214,7 @@ Here's a list of the emitted events:
 
 ## CCTV Camera Frames
 
-The Rust+ websocket protocol allows you to fetch CCTV Camera frames through the `getCameraFrame` request. However, these aren't available in the official Rust+ app yet and are also disabled server side.
-
-It is possible to enable CCTV Camera frames if you are the server admin by running the following command in the F1 console.
-
-```
-cctvrender.enabled true
-```
-
-> Note: This will not enable CCTV Cameras in the Rust+ app, but it will allow you to request jpeg packets through the websocket with the `getCameraFrame` request.
-
-CCTV Example:
-
-```
-rustplus.getCameraFrame("DOME1", 0, (message) => {
-  console.log(message);
-  return true;
-});
-```
+The Rust+ websocket protocol removed the ability to fetch camera frames.
 
 ## Pairing
 
@@ -336,7 +318,6 @@ Below is the token cost per request type:
 ```
 Default: 1
 --
-CameraFrame: 2
 CheckSubscription: 1
 EntityInfo: 1
 Info: 1
