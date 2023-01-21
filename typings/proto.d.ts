@@ -20,7 +20,7 @@ export interface AppRequest {
 	checkSubscription?: AppEmpty;
 	setSubscription?: AppFlag;
 	getMapMarkers?: AppEmpty;
-	getCameraFrame?: AppCameraFrameRequest;
+	// getCameraFrame?: AppCameraFrameRequest; // was removed from official app
 	promoteToLeader?: AppPromoteToLeader;
 }
 
@@ -32,10 +32,11 @@ export interface AppSetEntityValue {
 	value: boolean;
 }
 
+/* was removed from official app
 export interface AppCameraFrameRequest {
 	identifier: string;
 	frame: number;
-}
+} */
 
 export interface AppPromoteToLeader {
 	steamId: number;
@@ -53,7 +54,7 @@ export interface AppResponse {
 	entityInfo?: AppEntityInfo;
 	flag?: AppFlag;
 	mapMarkers?: AppMapMarkers;
-	cameraFrame?: AppCameraFrame;
+	// cameraFrame?: AppCameraFrame; // was removed from official app
 }
 
 export interface AppBroadcast {
@@ -218,10 +219,11 @@ export enum AppMarkerType {
 	GenericRadius = 7,
 }
 
+/* was removed from official app 
 export interface AppCameraFrame {
 	frame: number;
 	jpgImage: bytes;
-}
+} */
 
 export interface AppTeamChanged {
 	playerId: number;

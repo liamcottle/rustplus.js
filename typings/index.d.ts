@@ -94,6 +94,7 @@ declare class RustPlus extends EventEmitter {
 	 * @param identifier CCTV Camera Identifier, such as OILRIG1 (or custom name)
 	 * @param frame integer that should be incremented for each frame request. Otherwise a cached frame is returned
 	 * @param callback
+	 * @deprecated was removed from official app
 	 */
 	getCameraFrame(identifier: string, frame: number, callback: (message: AppMessage) => any): void;
 }
