@@ -3,6 +3,7 @@
   "version": "2.3.0",
   "description": "Unofficial NodeJS library for controlling Smart Switches in the PC game Rust",
   "main": "rustplus.js",
+  "types": "./typings/index.d.ts",
   "bin": {
     "rustplus": "./cli/index.js"
   },
