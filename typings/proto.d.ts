@@ -1,6 +1,127 @@
-export interface AppMessage {
-	response?: AppResponse;
-	broadcast?: AppBroadcast;
+export interface Vector3 {
+	x?: number;
+	y?: number;
+	z?: number;
+}
+
+export interface Half3 {
+	x?: number;
+	y?: number;
+	z?: number;
+}
+
+export interface Ray {
+	origin?: Vector3;
+	direction?: Vector3;
+}
+
+export interface Vector4 {
+	x?: number;
+	y?: number;
+	z?: number;
+	w?: number;
+}
+
+export interface Color {
+	r?: number;
+	g?: number;
+	b?: number;
+	a?: number;
+}
+
+export interface Vector2 {
+	x?: number;
+	y?: number;
+}
+
+export interface ClanActionResult {
+	requestId: number;
+	result: number;
+	hasClanInfo: boolean;
+	clanInfo?: ClanInfo;
+}
+
+export interface ClanInfo {
+	clanId: number;
+	name: string;
+	created: number;
+	creator: number;
+	motd?: string;
+	motdTimestamp?: number;
+	motdAuthor?: number;
+	logo?: Buffer;
+	color?: number;
+	roles: Role[];
+	members: Member[];
+	invites: Invite[];
+	maxMemberCount: number[];
+}
+export interface Role {
+	roleId: number;
+	rank: number;
+	name: string;
+	canSetMotd: boolean;
+	canSetLogo: boolean;
+	canInvite: boolean;
+	canKick: boolean;
+	canPromote: boolean;
+	canDemote: boolean;
+	canSetPlayerNotes: boolean;
+	canAccessLogs: boolean;
+}
+
+export interface Member {
+	steamId: number;
+	roleId: number;
+	joined: number;
+	lastSeen: number;
+	notes?: string;
+	online?: bool;
+}
+
+export interface Invite {
+	steamId: number;
+	recruiter: number;
+	timestamp: number;
+}
+
+export interface ClanLog {
+	clanId: number;
+	logEntries: Entry[];
+}
+export interface Entry {
+	timestamp: number;
+	eventKey: string;
+	arg1?: string;
+	arg2?: string;
+	arg3?: string;
+	arg4?: string;
+}
+
+export interface ClanInvitations {
+	invitations: Invitation[];
+}
+export interface Invitation {
+	clanId: number;
+	recruiter: number;
+	timestamp: number;
+}
+
+export enum AppEntityType {
+	Switch = 1,
+	Alarm = 2,
+	StorageMonitor = 3,
+}
+
+export enum AppMarkerType {
+	Undefined = 0,
+	Player = 1,
+	Explosion = 2,
+	VendingMachine = 3,
+	CH47 = 4,
+	CargoShip = 5,
+	Crate = 6,
+	GenericRadius = 7,
 }
 
 export interface AppRequest {
@@ -21,18 +142,16 @@ export interface AppRequest {
 	setSubscription?: AppFlag;
 	getMapMarkers?: AppEmpty;
 	promoteToLeader?: AppPromoteToLeader;
+	getClanInfo?: AppEmpty;
+	setClanMotd?: AppSendMessage;
+	getClanChat?: AppEmpty;
+	sendClanMessage?: AppSendMessage;
+	getNexusAuth?: AppGetNexusAuth;
 }
 
-export interface AppSendMessage {
-	message: string;
-}
-
-export interface AppSetEntityValue {
-	value: boolean;
-}
-
-export interface AppPromoteToLeader {
-	steamId: number;
+export interface AppMessage {
+	response?: AppResponse;
+	broadcast?: AppBroadcast;
 }
 
 export interface AppResponse {
@@ -47,20 +166,45 @@ export interface AppResponse {
 	entityInfo?: AppEntityInfo;
 	flag?: AppFlag;
 	mapMarkers?: AppMapMarkers;
+	clanInfo?: AppClanInfo;
+	clanChat?: AppClanChat;
+	nexusAuth?: AppNexusAuth;
 }
 
 export interface AppBroadcast {
 	teamChanged?: AppTeamChanged;
-	teamMessage?: AppTeamMessage;
+	teamMessage?: AppNewTeamMessage;
 	entityChanged?: AppEntityChanged;
+	clanChanged?: AppClanChanged;
+	clanMessage?: AppNewClanMessage;
 }
 
-export interface AppEmpty { }
+export interface AppEmpty {}
 
-export interface AppSuccess { }
+export interface AppSendMessage {
+	message: string;
+}
+
+export interface AppSetEntityValue {
+	value: boolean;
+}
+
+export interface AppPromoteToLeader {
+	steamId: number;
+}
+
+export interface AppGetNexusAuth {
+	appKey: string;
+}
+
+export interface AppSuccess {}
 
 export interface AppError {
 	error: string;
+}
+
+export interface AppFlag {
+	value: boolean;
 }
 
 export interface AppInfo {
@@ -75,20 +219,24 @@ export interface AppInfo {
 	queuedPlayers: number;
 	seed?: number;
 	salt?: number;
+	logoImage?: string;
+	nexus?: string;
+	nexusId?: number;
+	nexusZone?: string;
 }
 
 export interface AppTime {
-	dayLengthMinutes: float;
-	timeScale: float;
-	sunrise: float;
-	sunset: float;
-	time: float;
+	dayLengthMinutes: number;
+	timeScale: number;
+	sunrise: number;
+	sunset: number;
+	time: number;
 }
 
 export interface AppMap {
 	width: number;
 	height: number;
-	jpgImage: bytes;
+	jpgImage: Buffer;
 	oceanMargin: number;
 	monuments: Monument[];
 	background?: string;
@@ -96,55 +244,13 @@ export interface AppMap {
 
 export interface Monument {
 	token: string;
-	x: float;
-	y: float;
-}
-
-export interface AppTeamInfo {
-	leaderSteamId: number;
-	members: Member[];
-	mapNotes: Note[];
-	leaderMapNotes: Note[];
-}
-
-export interface Member {
-	steamId: number;
-	name: string;
-	x: float;
-	y: float;
-	isOnline: boolean;
-	spawnTime: number;
-	isAlive: boolean;
-	deathTime: number;
-}
-
-export interface Note {
-	type: number;
-	x: float;
-	y: float;
-}
-
-export interface AppTeamChat {
-	messages: AppChatMessage[];
-}
-
-export interface AppChatMessage {
-	steamId: number;
-	name: string;
-	message: string;
-	color: string;
-	time: number;
+	x: number;
+	y: number;
 }
 
 export interface AppEntityInfo {
-	type: AppEntityType = 1;
-	payload: AppEntityPayload = 3;
-}
-
-export enum AppEntityType {
-	Switch = 1,
-	Alarm = 2,
-	StorageMonitor = 3,
+	type: AppEntityType;
+	payload: AppEntityPayload;
 }
 
 export interface AppEntityPayload {
@@ -161,33 +267,55 @@ export interface Item {
 	itemIsBlueprint: boolean;
 }
 
-export interface AppFlag {
-	value: boolean;
+export interface AppTeamInfo {
+	leaderSteamId: number;
+	members: Member[];
+	mapNotes: Note[];
+	leaderMapNotes: Note[];
 }
 
-export interface AppMapMarkers {
-	markers: AppMarker[];
+export interface Member {
+	steamId: number;
+	name: string;
+	x: number;
+	y: number;
+	isOnline: boolean;
+	spawnTime: number;
+	isAlive: boolean;
+	deathTime: number;
 }
 
-export interface Vector4 {
-	x?: float;
-	y?: float;
-	z?: float;
-	w?: float;
+export interface Note {
+	type: number;
+	x: number;
+	y: number;
+}
+
+export interface AppTeamMessage {
+	steamId: number;
+	name: string;
+	message: string;
+	color: string;
+	time: number;
+}
+
+export interface AppTeamChat {
+	messages: AppTeamMessage[];
 }
 
 export interface AppMarker {
 	id: number;
 	type: AppMarkerType;
-	x: float;
-	y: float;
+	x: number;
+	y: number;
 	steamId?: number;
-	rotation?: float;
-	radius?: float;
+	rotation?: number;
+	radius?: number;
 	color1?: Vector4;
 	color2?: Vector4;
-	alpha?: float;
+	alpha?: number;
 	name?: string;
+	outOfStock?: boolean;
 	sellOrders: SellOrder[];
 }
 
@@ -199,29 +327,53 @@ export interface SellOrder {
 	amountInStock: number;
 	itemIsBlueprint: boolean;
 	currencyIsBlueprint: boolean;
+	itemCondition?: number;
+	itemConditionMax?: number;
 }
 
-export enum AppMarkerType {
-	Player = 1,
-	Explosion = 2,
-	VendingMachine = 3,
-	CH47 = 4,
-	CargoShip = 5,
-	Crate = 6,
-	GenericRadius = 7,
+export interface AppMapMarkers {
+	markers: AppMarker[];
 }
 
+export interface AppClanInfo {
+	clanInfo?: ClanInfo;
+}
+
+export interface AppClanMessage {
+	steamId: number;
+	name: string;
+	message: string;
+	time: number;
+}
+
+export interface AppClanChat {
+	messages: AppClanMessage[];
+}
+
+export interface AppNexusAuth {
+	serverId: string;
+	playerToken: number;
+}
 
 export interface AppTeamChanged {
 	playerId: number;
 	teamInfo: AppTeamInfo;
 }
 
-export interface AppTeamMessage {
-	message: AppChatMessage;
+export interface AppNewTeamMessage {
+	message: AppTeamMessage;
 }
 
 export interface AppEntityChanged {
 	entityId: number;
 	payload: AppEntityPayload;
+}
+
+export interface AppClanChanged {
+	clanInfo?: ClanInfo;
+}
+
+export interface AppNewClanMessage {
+	clanId: number;
+	message: AppClanMessage;
 }
