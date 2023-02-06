@@ -76,7 +76,7 @@ export interface Member {
 	joined: number;
 	lastSeen: number;
 	notes?: string;
-	online?: bool;
+	online?: boolean;
 }
 
 export interface Invite {
