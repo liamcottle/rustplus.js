@@ -1,23 +1,15 @@
 syntax = "proto2";
 package rustplus;
 
-// This took me a while to craft by hand 😴
+message Vector2 {
+	optional float x = 1;
+	optional float y = 2;
+}
 
 message Vector3 {
 	optional float x = 1;
 	optional float y = 2;
 	optional float z = 3;
-}
-
-message Half3 {
-	optional uint32 x = 1;
-	optional uint32 y = 2;
-	optional uint32 z = 3;
-}
-
-message Ray {
-	optional Vector3 origin = 1;
-	optional Vector3 direction = 2;
 }
 
 message Vector4 {
@@ -27,6 +19,12 @@ message Vector4 {
 	optional float w = 4;
 }
 
+message Half3 {
+	optional float x = 1;
+	optional float y = 2;
+	optional float z = 3;
+}
+
 message Color {
 	optional float r = 1;
 	optional float g = 2;
@@ -34,9 +32,9 @@ message Color {
 	optional float a = 4;
 }
 
-message Vector2 {
-	optional float x = 1;
-	optional float y = 2;
+message Ray {
+	optional Vector3 origin = 1;
+	optional Vector3 direction = 2;
 }
 
 message ClanActionResult {
@@ -47,20 +45,19 @@ message ClanActionResult {
 }
 
 message ClanInfo {
-
 	required int64 clanId = 1;
 	required string name = 2;
 	required int64 created = 3;
-	required uint64 creator = 4;
+	required int64 creator = 4;
 	optional string motd = 5;
 	optional int64 motdTimestamp = 6;
-	optional uint64 motdAuthor = 7;
+	optional int64 motdAuthor = 7;
 	optional bytes logo = 8;
 	optional sint32 color = 9;
 	repeated ClanInfo.Role roles = 10;
 	repeated ClanInfo.Member members = 11;
 	repeated ClanInfo.Invite invites = 12;
-	repeated int32 maxMemberCount = 13;
+	optional int32 maxMemberCount = 13;
 
 	message Role {
 		required int32 roleId = 1;
@@ -77,7 +74,7 @@ message ClanInfo {
 	}
 
 	message Member {
-		required uint64 steamId = 1;
+		required int64 steamId = 1;
 		required int32 roleId = 2;
 		required int64 joined = 3;
 		required int64 lastSeen = 4;
@@ -86,15 +83,13 @@ message ClanInfo {
 	}
 
 	message Invite {
-		required uint64 steamId = 1;
-		required uint64 recruiter = 2;
+		required int64 steamId = 1;
+		required int64 recruiter = 2;
 		required int64 timestamp = 3;
 	}
-
 }
 
 message ClanLog {
-
 	required int64 clanId = 1;
 	repeated ClanLog.Entry logEntries = 2;
 
@@ -106,19 +101,16 @@ message ClanLog {
 		optional string arg3 = 5;
 		optional string arg4 = 6;
 	}
-
 }
 
 message ClanInvitations {
-
 	repeated ClanInvitations.Invitation invitations = 1;
 
 	message Invitation {
 		required int64 clanId = 1;
-		required uint64 recruiter = 2;
+		required int64 recruiter = 2;
 		required int64 timestamp = 3;
 	}
-
 }
 
 enum AppEntityType {
@@ -140,11 +132,9 @@ enum AppMarkerType {
 }
 
 message AppRequest {
-
 	required uint32 seq = 1;
 	required uint64 playerId = 2;
 	required int32 playerToken = 3;
-
 	optional uint32 entityId = 4;
 	optional AppEmpty getInfo = 8;
 	optional AppEmpty getTime = 9;
@@ -163,7 +153,9 @@ message AppRequest {
 	optional AppEmpty getClanChat = 23;
 	optional AppSendMessage sendClanMessage = 24;
 	optional AppGetNexusAuth getNexusAuth = 25;
-
+	optional AppCameraSubscribe cameraSubscribe = 30;
+	optional AppEmpty cameraUnsubscribe = 31;
+	optional AppCameraInput cameraInput = 32;
 }
 
 message AppMessage {
@@ -172,7 +164,7 @@ message AppMessage {
 }
 
 message AppResponse {
-	required uint32 seq = 1;
+	required int32 seq = 1;
 	optional AppSuccess success = 4;
 	optional AppError error = 5;
 	optional AppInfo info = 6;
@@ -186,18 +178,19 @@ message AppResponse {
 	optional AppClanInfo clanInfo = 15;
 	optional AppClanChat clanChat = 16;
 	optional AppNexusAuth nexusAuth = 17;
+	optional AppCameraInfo cameraSubscribeInfo = 20;
 }
 
 message AppBroadcast {
 	optional AppTeamChanged teamChanged = 4;
-	optional AppNewTeamMessage teamMessage = 5;
+	optional AppNewTeamMessage newTeamMessage = 5;
 	optional AppEntityChanged entityChanged = 6;
 	optional AppClanChanged clanChanged = 7;
 	optional AppNewClanMessage clanMessage = 8;
+	optional AppCameraRays cameraRays = 10;
 }
 
 message AppEmpty {
-
 }
 
 message AppSendMessage {
@@ -209,7 +202,7 @@ message AppSetEntityValue {
 }
 
 message AppPromoteToLeader {
-	required uint64 steamId = 1;
+	required int64 steamId = 1;
 }
 
 message AppGetNexusAuth {
@@ -217,7 +210,6 @@ message AppGetNexusAuth {
 }
 
 message AppSuccess {
-
 }
 
 message AppError {
@@ -255,7 +247,6 @@ message AppTime {
 }
 
 message AppMap {
-
 	required uint32 width = 1;
 	required uint32 height = 2;
 	required bytes jpgImage = 3;
@@ -268,7 +259,6 @@ message AppMap {
 		required float x = 2;
 		required float y = 3;
 	}
-
 }
 
 message AppEntityInfo {
@@ -277,7 +267,6 @@ message AppEntityInfo {
 }
 
 message AppEntityPayload {
-
 	optional bool value = 1;
 	repeated AppEntityPayload.Item items = 2;
 	optional int32 capacity = 3;
@@ -289,11 +278,9 @@ message AppEntityPayload {
 		required int32 quantity = 2;
 		required bool itemIsBlueprint = 3;
 	}
-
 }
 
 message AppTeamInfo {
-
 	required uint64 leaderSteamId = 1;
 	repeated AppTeamInfo.Member members = 2;
 	repeated AppTeamInfo.Note mapNotes = 3;
@@ -315,7 +302,6 @@ message AppTeamInfo {
 		required float x = 3;
 		required float y = 4;
 	}
-
 }
 
 message AppTeamMessage {
@@ -331,7 +317,6 @@ message AppTeamChat {
 }
 
 message AppMarker {
-
 	required uint32 id = 1;
 	required AppMarkerType type = 2;
 	required float x = 3;
@@ -357,7 +342,6 @@ message AppMarker {
 		optional float itemCondition = 8;
 		optional float itemConditionMax = 9;
 	}
-
 }
 
 message AppMapMarkers {
@@ -405,4 +389,43 @@ message AppClanChanged {
 message AppNewClanMessage {
 	required int64 clanId = 1;
 	required AppClanMessage message = 2;
+}
+
+message AppCameraSubscribe {
+	required string cameraId = 1;
+}
+
+message AppCameraInput {
+	required int32 buttons = 1;
+	required Vector2 mouseDelta = 2;
+}
+
+message AppCameraInfo {
+	required int32 width = 1;
+	required int32 height = 2;
+	required float nearPlane = 3;
+	required float farPlane = 4;
+	required int32 controlFlags = 5;
+}
+
+message AppCameraRays {
+	required float verticalFov = 1;
+	required int32 sampleOffset = 2;
+	required bytes rayData = 3;
+	required float distance = 4;
+	repeated AppCameraRays.Entity entities = 5;
+
+	enum EntityType {
+		Tree = 1;
+		Player = 2;
+	}
+
+	message Entity {
+		required uint32 entityId = 1;
+		required EntityType type = 2;
+		required Vector3 position = 3;
+		required Vector3 rotation = 4;
+		required Vector3 size = 5;
+		optional string name = 6;
+	}
 }

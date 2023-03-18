@@ -4,6 +4,9 @@ const path = require('path');
 const WebSocket = require('ws');
 const protobuf = require("protobufjs");
 const { EventEmitter } = require('events');
+const Jimp = require('jimp');
+
+
 
 class RustPlus extends EventEmitter {
 
@@ -316,18 +319,237 @@ class RustPlus extends EventEmitter {
     /**
      * Get CCTV Camera frame
      * @param identifier CCTV Camera Identifier, such as OILRIG1 (or custom name)
-     * @param frame integer that should be incremented for each frame request. Otherwise a cached frame is returned
      * @param callback
      */
-    getCameraFrame(identifier, frame, callback) {
+    subscribeToCamera(identifier, callback) {
         this.sendRequest({
-            getCameraFrame: {
-                identifier: identifier,
-                frame: frame,
+            cameraSubscribe: {
+                cameraId: identifier,
             },
         }, callback);
     }
 
+    /**
+     * Sends camera movement to the server (mouse movement)
+     * @param buttons The buttons that are currently pressed
+     * @param x The x delta of the mouse movement
+     * @param y The y delta of the mouse movement
+     * @param callback
+     */
+    sendCameraMovement(buttons, x, y, callback) {
+        this.sendRequest({
+            cameraInput: {
+                buttons: buttons,
+                mouseDelta: {
+                    x: x,
+                    y: y,
+                }
+            },
+        }, callback);
+    }
+
+    /**
+     * Render a camera frame to a PNG image buffer
+     * @param frames the frame data to render
+     * @param width the width of the frame
+     * @param height the height of the frame
+     * @param callback the callback to call with the rendered image buffer
+     */
+    renderCameraFrame(frames, width, height, callback) {
+
+        // First we populate the samplePositionBuffer with the positions of each sample
+        const samplePositionBuffer = new Int16Array(width * height * 2);
+        for (let w = 0, _ = 0; _ < height; _++)
+            for (let g = 0; g < width; g++) {
+                samplePositionBuffer[w] = g;
+                samplePositionBuffer[++w] = _;
+                w++;
+            }
+
+        for (let B = new IndexGenerator(1337), R = width * height - 1; R >= 1; R--) {
+            let C = 2 * R,
+                I = 2 * B.nextInt(R + 1),
+                P = samplePositionBuffer[C],
+                k = samplePositionBuffer[C + 1],
+                A = samplePositionBuffer[I],
+                F = samplePositionBuffer[I + 1];
+            samplePositionBuffer[I] = P;
+            samplePositionBuffer[I + 1] = k;
+            samplePositionBuffer[C] = A;
+            samplePositionBuffer[C + 1] = F;
+        }
+
+        // Create the output buffer
+        const output = new Array(width * height);
+        // Loop through each frame
+        for (let frame of frames) {
+
+            // Reset some look back and pointer variables
+            let sampleOffset = 2 * frame.sampleOffset;
+            let dataPointer = 0;
+            let rayLookback = new Array(64);
+            for (let r = 0; r < 64; r++) rayLookback[r] = [0, 0, 0];
+
+            const rayData = frame.rayData;
+
+            // Loop through the ray data
+            while (true) {
+                if (dataPointer >= rayData.length - 1)
+                    break;
+
+                // Get the first byte and set some variables
+                var t, r, i, n = rayData[dataPointer++];
+
+                // Ray Decoding Logic
+                if (255 === n) {
+                    var l = rayData[dataPointer++],
+                        o = rayData[dataPointer++],
+                        s = rayData[dataPointer++],
+                        u = (3 * (((t = (l << 2) | (o >> 6)) / 128) | 0) + 5 * (((r = 63 & o) / 16) | 0) + 7 * (i = s)) & 63,
+                        f = rayLookback[u];
+                    f[0] = t;
+                    f[1] = r;
+                    f[2] = i;
+                } else {
+                    var c = 192 & n;
+
+                    if (0 === c) {
+                        var h = 63 & n, y = rayLookback[h];
+                        t = y[0];
+                        r = y[1];
+                        i = y[2];
+                    } else if (64 === c) {
+                        var p = 63 & n,
+                            v = rayLookback[p],
+                            b = v[0],
+                            w = v[1],
+                            _ = v[2],
+                            g = rayData[dataPointer++];
+                        t = b + ((g >> 3) - 15);
+                        r = w + ((7 & g) - 3);
+                        i = _;
+                    } else if (128 === c) {
+                        var R = 63 & n,
+                            C = rayLookback[R],
+                            I = C[0],
+                            P = C[1],
+                            k = C[2];
+                        t = I + (rayData[dataPointer++] - 127);
+                        r = P;
+                        i = k;
+                    } else {
+                        var A = rayData[dataPointer++],
+                            F = rayData[dataPointer++],
+                            D = (3 * (((t = (A << 2) | (F >> 6)) / 128) | 0) + 5 * (((r = 63 & F) / 16) | 0) + 7 * (i = 63 & n)) & 63,
+                            E = rayLookback[D];
+                        E[0] = t;
+                        E[1] = r;
+                        E[2] = i;
+                    }
+                }
+
+                sampleOffset %= 2 * width * height;
+                const index = samplePositionBuffer[sampleOffset++] + samplePositionBuffer[sampleOffset++] * width;
+                output[index] = [t / 1023, r / 63, i];
+            }
+        }
+
+        const colours = [
+            [0.5, 0.5, 0.5], [0.8, 0.7, 0.7], [0.3, 0.7, 1], [0.6, 0.6, 0.6],
+            [0.7, 0.7, 0.7], [0.8, 0.6, 0.4], [1, 0.4, 0.4], [1, 0.1, 0.1],
+        ]
+
+        const image = new Jimp(width, height);
+
+        for (let i = 0; i < output.length; i++) {
+            let ray = output[i];
+            if (!ray) {
+                continue;
+            }
+
+            let distance = ray[0]
+            let alignment = ray[1]
+            let material = ray[2]
+
+            let target_colour;
+
+            if (distance === 1 && alignment === 0 && material === 0) {
+                target_colour = [208, 230, 252];
+            } else {
+                let colour = colours[material];
+                target_colour = [(alignment * colour[0] * 255), (alignment * colour[1] * 255), (alignment * colour[2] * 255)]
+            }
+
+            let x = i % width;
+            let y = height - 1 - Math.floor(i / width);
+            image.setPixelColor(Jimp.rgbaToInt(target_colour[0], target_colour[1], target_colour[2], 255), x, y);
+        }
+
+        image.getBuffer(Jimp.MIME_PNG, (err, buffer) => {
+            if (err)
+                console.log(err);
+            callback(buffer)
+        });
+    }
+
+    /**
+     * These represent the possible inputs that can be sent to the server.
+     */
+    static MovementControls = {
+
+        FORWARD : 2,
+        BACKWARD : 4,
+        LEFT : 8,
+        RIGHT : 16,
+        JUMP : 32,
+        DUCK : 64,
+        SPRINT : 128,
+        USE : 256,
+        FIRE_PRIMARY : 1024,
+        FIRE_SECONDARY : 2048,
+        RELOAD : 8192,
+        FIRE_THIRD : 134217728,
+    }
+
+    /**
+     * These represent the possible camera movement options that can be sent to the server.
+     * For example, Static CCTV cameras will not have any movement options.
+     */
+    static CameraMovementOptions = {
+        NONE : 0,
+        MOVEMENT : 1,
+        MOUSE : 2,
+        SPRINT_AND_DUCK : 4,
+        FIRE : 8,
+        RELOAD : 16,
+        CROSSHAIR : 32,
+    }
+
+}
+
+class IndexGenerator {
+    constructor(e) {
+        this.state = 0 | e;
+        this.nextState();
+    }
+
+    nextInt(e) {
+        var t = ((this.nextState() * (0 | e)) / 4294967295) | 0;
+        if (t < 0) t = e + t - 1;
+        return 0 | t;
+    }
+
+    nextState() {
+        var e = this.state,
+            t = e;
+        e = ((e = ((e = (e ^ ((e << 13) | 0)) | 0) ^ ((e >>> 17) | 0)) | 0) ^ ((e << 5) | 0)) | 0;
+        this.state = e;
+        return j(t);
+    }
+}
+
+function j(e) {
+    return e >= 0 ? e : 4294967295 + e - 1;
 }
 
 module.exports = RustPlus;
