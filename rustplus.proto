@@ -48,10 +48,10 @@ message ClanInfo {
 	required int64 clanId = 1;
 	required string name = 2;
 	required int64 created = 3;
-	required int64 creator = 4;
+	required uint64 creator = 4;
 	optional string motd = 5;
 	optional int64 motdTimestamp = 6;
-	optional int64 motdAuthor = 7;
+	optional uint64 motdAuthor = 7;
 	optional bytes logo = 8;
 	optional sint32 color = 9;
 	repeated ClanInfo.Role roles = 10;
@@ -74,7 +74,7 @@ message ClanInfo {
 	}
 
 	message Member {
-		required int64 steamId = 1;
+		required uint64 steamId = 1;
 		required int32 roleId = 2;
 		required int64 joined = 3;
 		required int64 lastSeen = 4;
@@ -83,8 +83,8 @@ message ClanInfo {
 	}
 
 	message Invite {
-		required int64 steamId = 1;
-		required int64 recruiter = 2;
+		required uint64 steamId = 1;
+		required uint64 recruiter = 2;
 		required int64 timestamp = 3;
 	}
 }
@@ -108,7 +108,7 @@ message ClanInvitations {
 
 	message Invitation {
 		required int64 clanId = 1;
-		required int64 recruiter = 2;
+		required uint64 recruiter = 2;
 		required int64 timestamp = 3;
 	}
 }
@@ -164,7 +164,7 @@ message AppMessage {
 }
 
 message AppResponse {
-	required int32 seq = 1;
+	required uint32 seq = 1;
 	optional AppSuccess success = 4;
 	optional AppError error = 5;
 	optional AppInfo info = 6;
@@ -183,7 +183,7 @@ message AppResponse {
 
 message AppBroadcast {
 	optional AppTeamChanged teamChanged = 4;
-	optional AppNewTeamMessage newTeamMessage = 5;
+	optional AppNewTeamMessage teamMessage = 5;
 	optional AppEntityChanged entityChanged = 6;
 	optional AppClanChanged clanChanged = 7;
 	optional AppNewClanMessage clanMessage = 8;
@@ -202,7 +202,7 @@ message AppSetEntityValue {
 }
 
 message AppPromoteToLeader {
-	required int64 steamId = 1;
+	required uint64 steamId = 1;
 }
 
 message AppGetNexusAuth {
@@ -429,3 +429,4 @@ message AppCameraRays {
 		optional string name = 6;
 	}
 }
+U
