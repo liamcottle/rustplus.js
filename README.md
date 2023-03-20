@@ -329,6 +329,8 @@ SetEntityValue: 1
 SetSubscription: 1
 TeamInfo: 1
 Time: 1
+Camera Subscription: 1
+Camera Movement: 0.01
 ```
 
 ## Hey Facepunch!

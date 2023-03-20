@@ -9,7 +9,7 @@ rustplus.on('connected', () => {
      * where after subscription the server will send data to your client for around 10-15 seconds
      * where you must then re-subscribe.
      */
-    rustplus.subscribeToCamera("DOME1", cameraData => {
+    rustplus.subscribeToCamera("A_PTZ_CAMERA", cameraData => {
         if (!cameraData.cameraSubscribeInfo) return;
         const subData = cameraData.response.cameraSubscribeInfo;
 
@@ -25,17 +25,36 @@ rustplus.on('connected', () => {
             // Wait until we have 5 Broadcasts to build an Image:
             if (cameraRays.length >= 5) {
                 // Remove the first rayData
-                cameraRays.shift()
+                cameraRays.shift();
                 // Render the image and then save it with jimp
                 rustplus.renderCameraFrame(cameraRays, subData.width, subData.height, image => {
                     read(image, (err, image) => {
-                        if (err) throw err
-                        image.write("camera.png")
-                    })
-                })
+                        if (err) throw err;
+                        image.write("camera.png");
+                    });
+                });
             }
-        })
-    })
+        });
+
+        // Lets check that we have the ability to zoom the camera:
+        // This can be done with a bitwise AND operation and checking it is equal to the constant
+        if ((subData.controlFlags & RustPlus.CameraMovementOptions.FIRE) === RustPlus.CameraMovementOptions.FIRE) {
+            // This means this flag is enabled. Now we are going to send a zoom command every 5 seconds
+            setInterval(() => {
+                // Use a bitwise OR on all the operations you need. The 0 is for demonstration only
+                const buttons = 0 | RustPlus.MovementInputControls.FIRE_PRIMARY;
+                rustplus.sendCameraMovement(buttons, 0, 0);
+                // Once the input is sent, you must then "clear" the movement. If you imagine clicking down
+                // And then releasing the button
+                rustplus.sendCameraMovement(0, 0, 0);
+            }, 5000);
+        }
+
+        // Resubscribe to the camera every 10 seconds
+        setInterval(() => {
+            rustplus.subscribeToCamera("A_PTZ_CAMERA")
+        }, 10_000)
+    });
 
 });
 

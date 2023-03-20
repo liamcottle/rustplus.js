@@ -410,11 +410,11 @@ class RustPlus extends EventEmitter {
                     break;
 
                 // Get the first byte and set some variables
-                var t, r, i, n = rayData[dataPointer++];
+                let t, r, i, n = rayData[dataPointer++];
 
                 // Ray Decoding Logic
                 if (255 === n) {
-                    var l = rayData[dataPointer++],
+                    let l = rayData[dataPointer++],
                         o = rayData[dataPointer++],
                         s = rayData[dataPointer++],
                         u = (3 * (((t = (l << 2) | (o >> 6)) / 128) | 0) + 5 * (((r = 63 & o) / 16) | 0) + 7 * (i = s)) & 63,
@@ -423,15 +423,15 @@ class RustPlus extends EventEmitter {
                     f[1] = r;
                     f[2] = i;
                 } else {
-                    var c = 192 & n;
+                    let c = 192 & n;
 
                     if (0 === c) {
-                        var h = 63 & n, y = rayLookback[h];
+                        let h = 63 & n, y = rayLookback[h];
                         t = y[0];
                         r = y[1];
                         i = y[2];
                     } else if (64 === c) {
-                        var p = 63 & n,
+                        let p = 63 & n,
                             v = rayLookback[p],
                             b = v[0],
                             w = v[1],
@@ -441,7 +441,7 @@ class RustPlus extends EventEmitter {
                         r = w + ((7 & g) - 3);
                         i = _;
                     } else if (128 === c) {
-                        var R = 63 & n,
+                        let R = 63 & n,
                             C = rayLookback[R],
                             I = C[0],
                             P = C[1],
@@ -450,7 +450,7 @@ class RustPlus extends EventEmitter {
                         r = P;
                         i = k;
                     } else {
-                        var A = rayData[dataPointer++],
+                        let A = rayData[dataPointer++],
                             F = rayData[dataPointer++],
                             D = (3 * (((t = (A << 2) | (F >> 6)) / 128) | 0) + 5 * (((r = 63 & F) / 16) | 0) + 7 * (i = 63 & n)) & 63,
                             E = rayLookback[D];
@@ -546,13 +546,13 @@ class IndexGenerator {
     }
 
     nextInt(e) {
-        var t = ((this.nextState() * (0 | e)) / 4294967295) | 0;
+        let t = ((this.nextState() * (0 | e)) / 4294967295) | 0;
         if (t < 0) t = e + t - 1;
         return 0 | t;
     }
 
     nextState() {
-        var e = this.state, t = e;
+        let e = this.state, t = e;
         e = ((e = ((e = (e ^ ((e << 13) | 0)) | 0) ^ ((e >>> 17) | 0)) | 0) ^ ((e << 5) | 0)) | 0;
         this.state = e;
         return t >= 0 ? t : 4294967295 + t - 1;
