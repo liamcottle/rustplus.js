@@ -52,8 +52,8 @@ rustplus.on('connected', () => {
 
         // Resubscribe to the camera every 10 seconds
         setInterval(() => {
-            rustplus.subscribeToCamera("A_PTZ_CAMERA")
-        }, 10_000)
+            rustplus.subscribeToCamera("A_PTZ_CAMERA");
+        }, 10_000);
     });
 
 });

@@ -469,7 +469,7 @@ class RustPlus extends EventEmitter {
         const colours = [
             [0.5, 0.5, 0.5], [0.8, 0.7, 0.7], [0.3, 0.7, 1], [0.6, 0.6, 0.6],
             [0.7, 0.7, 0.7], [0.8, 0.6, 0.4], [1, 0.4, 0.4], [1, 0.1, 0.1],
-        ]
+        ];
 
         const image = new Jimp(width, height);
 
@@ -500,7 +500,7 @@ class RustPlus extends EventEmitter {
         image.getBuffer(Jimp.MIME_PNG, (err, buffer) => {
             if (err)
                 console.log(err);
-            callback(buffer)
+            callback(buffer);
         });
     }
 
