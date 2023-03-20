@@ -429,4 +429,3 @@ message AppCameraRays {
 		optional string name = 6;
 	}
 }
-U
