@@ -7,7 +7,6 @@ const { EventEmitter } = require('events');
 const Jimp = require('jimp');
 
 
-
 class RustPlus extends EventEmitter {
 
     /**
@@ -330,6 +329,19 @@ class RustPlus extends EventEmitter {
     }
 
     /**
+     * Unsubscribes from a CCTV Camera
+     * @param identifier CCTV Camera Identifier
+     * @param callback
+     */
+    unsubscribeFromCamera(identifier, callback) {
+        this.sendRequest({
+            cameraUnsubscribe: {
+
+            }
+        }, callback)
+    }
+
+    /**
      * Sends camera movement to the server (mouse movement)
      * @param buttons The buttons that are currently pressed
      * @param x The x delta of the mouse movement
@@ -350,7 +362,7 @@ class RustPlus extends EventEmitter {
 
     /**
      * Render a camera frame to a PNG image buffer
-     * @param frames the frame data to render
+     * @param frames the frame data to render. This will be an iterable of camera rays from the server.
      * @param width the width of the frame
      * @param height the height of the frame
      * @param callback the callback to call with the rendered image buffer
@@ -495,7 +507,7 @@ class RustPlus extends EventEmitter {
     /**
      * These represent the possible inputs that can be sent to the server.
      */
-    static MovementControls = {
+    static MovementInputControls = {
 
         FORWARD : 2,
         BACKWARD : 4,
@@ -540,16 +552,11 @@ class IndexGenerator {
     }
 
     nextState() {
-        var e = this.state,
-            t = e;
+        var e = this.state, t = e;
         e = ((e = ((e = (e ^ ((e << 13) | 0)) | 0) ^ ((e >>> 17) | 0)) | 0) ^ ((e << 5) | 0)) | 0;
         this.state = e;
-        return j(t);
+        return t >= 0 ? t : 4294967295 + t - 1;
     }
-}
-
-function j(e) {
-    return e >= 0 ? e : 4294967295 + e - 1;
 }
 
 module.exports = RustPlus;
