@@ -363,6 +363,41 @@ class Camera extends EventEmitter {
 
     }
 
+    /**
+     * Shoots a PTZ controllable Auto Turret.
+     */
+    async shoot() {
+
+        // press left mouse button to shoot
+        await this.move(Camera.Buttons.FIRE_PRIMARY, 0, 0);
+
+        // release all mouse buttons
+        await this.move(Camera.Buttons.NONE, 0, 0);
+
+    }
+
+    /**
+     * Reloads a PTZ controllable Auto Turret
+     */
+    async reload() {
+
+        // press reload button to reload turret
+        await this.move(Camera.Buttons.RELOAD, 0, 0);
+
+        // release all mouse buttons
+        await this.move(Camera.Buttons.NONE, 0, 0);
+
+    }
+
+    /**
+     * Check if camera is an auto turret
+     * @returns {boolean}
+     */
+    isAutoTurret() {
+        const crosshairControlFlag = Camera.ControlFlags.CROSSHAIR;
+        return (this.cameraSubscribeInfo?.controlFlags & crosshairControlFlag) === crosshairControlFlag;
+    }
+
 }
 
 class IndexGenerator {
