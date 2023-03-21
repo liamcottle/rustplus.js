@@ -348,6 +348,21 @@ class Camera extends EventEmitter {
         });
     }
 
+    /**
+     * Zooms a PTZ camera in by 1 level.
+     * PTZ cameras have 4 zoom levels.
+     * If the PTZ camera is already at max zoom (level 4), it zooms out as far as it can (level 1).
+     */
+    async zoom() {
+
+        // press left mouse button to zoom in
+        await this.move(Camera.Buttons.FIRE_PRIMARY, 0, 0);
+
+        // release all mouse buttons
+        await this.move(Camera.Buttons.NONE, 0, 0);
+
+    }
+
 }
 
 class IndexGenerator {
