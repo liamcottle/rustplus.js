@@ -367,6 +367,11 @@ class RustPlus extends EventEmitter {
         }, callback);
     }
 
+    /**
+     * Get a camera instance for controlling CCTV Cameras, PTZ Cameras and  Auto Turrets
+     * @param identifier Camera Identifier, such as DOME1, OILRIG1L1, (or a custom camera id)
+     * @returns {Camera}
+     */
     getCamera(identifier) {
         return new Camera(this, identifier);
     }
