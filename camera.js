@@ -9,6 +9,7 @@ class Camera extends EventEmitter {
      * These represent the possible buttons that can be sent to the server.
      */
     static Buttons = {
+        NONE: 0,
         FORWARD: 2,
         BACKWARD: 4,
         LEFT: 8,
