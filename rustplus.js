@@ -337,10 +337,9 @@ class RustPlus extends EventEmitter {
 
     /**
      * Unsubscribes from a Camera
-     * @param identifier Camera Identifier
      * @param callback
      */
-    unsubscribeFromCamera(identifier, callback) {
+    unsubscribeFromCamera(callback) {
         this.sendRequest({
             cameraUnsubscribe: {
 
