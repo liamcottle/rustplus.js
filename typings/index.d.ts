@@ -1,11 +1,16 @@
-// Type definitions for rustplus.js 2.3.0
+// Type definitions for rustplus.js 2.4.0
 // Project: rustplus.js
 import { EventEmitter } from "events";
 import type { RequireAtLeastOne } from "type-fest";
 
 // Definitions by: s8wa2 https://github.com/s8wa2
-import { AppMessage, AppRequest, AppResponse } from "./proto";
+import {
+	AppMessage,
+	AppRequest,
+	AppResponse,
+} from "./proto";
 import protobuf from "protobufjs";
+import Camera from "../camera";
 export = RustPlus;
 
 interface RustPlusEvents {
@@ -84,10 +89,17 @@ declare class RustPlus extends EventEmitter {
 	 * This sets everything up and then connects to the Rust Server via WebSocket.
 	 */
 	connect(): void;
+
 	/**
 	 * Disconnect from the Rust Server.
 	 */
 	disconnect(): void;
+
+	/**
+     * Check if RustPlus is connected to the server.
+     */
+    isConnected(): boolean;
+
 	/**
 	 * Send a Request to the Rust Server with an optional callback when a Response is received.
 	 * @param data this should contain valid data for the AppRequest packet in the rustplus.proto schema file
@@ -97,6 +109,7 @@ declare class RustPlus extends EventEmitter {
 		data: UserRequest,
 		callback?: (message: AppMessage) => boolean | void
 	): void;
+
 	/**
 	 * Send a Request to the Rust Server and return a Promise
 	 * @param data this should contain valid data for the AppRequest packet defined in the rustplus.proto schema file
@@ -106,6 +119,7 @@ declare class RustPlus extends EventEmitter {
 		data: UserRequest,
 		timeoutMilliseconds?: number
 	): Promise<AppResponse>;
+	
 	/**
 	 * Send a Request to the Rust Server to set the Entity Value.
 	 * @param entityId the entity id to set the value for
@@ -117,6 +131,7 @@ declare class RustPlus extends EventEmitter {
 		value: boolean,
 		callback?: (message: AppMessage) => boolean | void
 	): void;
+	
 	/**
 	 * Turn a Smart Switch On
 	 * @param entityId the entity id of the smart switch to turn on
@@ -126,6 +141,7 @@ declare class RustPlus extends EventEmitter {
 		entityId: string,
 		callback?: (message: AppMessage) => boolean | void
 	): void;
+	
 	/**
 	 * Turn a Smart Switch Off
 	 * @param entityId the entity id of the smart switch to turn off
@@ -135,12 +151,14 @@ declare class RustPlus extends EventEmitter {
 		entityId: string,
 		callback?: (message: AppMessage) => boolean | void
 	): void;
+	
 	/**
 	 * Quickly turn on and off a Smart Switch as if it were a Strobe Light.
 	 * You will get rate limited by the Rust Server after a short period.
 	 * It was interesting to watch in game though 😝
 	 */
 	strobe(entityId: string, timeoutMilliseconds?: number, value?: boolean): void;
+	
 	/**
 	 * Send a message to Team Chat
 	 * @param message the message to send to team chat
@@ -150,6 +168,7 @@ declare class RustPlus extends EventEmitter {
 		message: string,
 		callback?: (message: AppMessage) => boolean | void
 	): void;
+
 	/**
 	 * Get info for an Entity
 	 * @param entityId the id of the entity to get info of
@@ -157,40 +176,71 @@ declare class RustPlus extends EventEmitter {
 	 */
 	getEntityInfo(
 		entityId: string,
-		callback?: (message: AppMessage) => boolean | void
+		callback: (message: AppMessage) => boolean | void
 	): void;
+	
 	/**
 	 * Get the Map
 	 */
-	getMap(callback?: (message: AppMessage) => boolean | void): void;
+	getMap(callback: (message: AppMessage) => boolean | void): void;
+	
 	/**
 	 * Get the ingame time
 	 */
-	getTime(callback?: (message: AppMessage) => boolean | void): void;
+	getTime(callback: (message: AppMessage) => boolean | void): void;
+	
 	/**
 	 * Get all map markers
 	 */
-	getMapMarkers(callback?: (message: AppMessage) => boolean | void): void;
+	getMapMarkers(callback: (message: AppMessage) => boolean | void): void;
+	
 	/**
 	 * Get the server info
 	 */
-	getInfo(callback?: (message: AppMessage) => boolean | void): void;
+	getInfo(callback: (message: AppMessage) => boolean | void): void;
+	
 	/**
 	 * Get team info
 	 */
-	getTeamInfo(callback?: (message: AppMessage) => boolean | void): void;
+	getTeamInfo(callback: (message: AppMessage) => boolean | void): void;
+
 	/**
-	 * Get CCTV Camera frame
-	 * @param identifier CCTV Camera Identifier, such as OILRIG1 (or custom name)
-	 * @param frame integer that should be incremented for each frame request. Otherwise a cached frame is returned
-	 * @param callback AppMessage handler, returning true prevents the message event from firing
-	 * @deprecated was removed from official app
+	 * Subscribes to a Camera
+	 * @param identifier Camera Identifier, such as OILRIG1 (or custom name)
+	 * @param callback
 	 */
-	getCameraFrame(
+	subscribeToCamera(
 		identifier: string,
-		frame: number,
 		callback?: (message: AppMessage) => boolean | void
 	): void;
+
+	/**
+	 * Unsubscribes from a Camera
+	 * @param callback
+	 */
+	unsubscribeFromCamera(
+		callback?: (message: AppMessage) => boolean | void
+	): void;
+
+	/**
+	 * Sends camera input to the server (mouse movement)
+	 * @param buttons The buttons that are currently pressed
+	 * @param x The x delta of the mouse movement
+	 * @param y The y delta of the mouse movement
+	 * @param callback
+	 */
+	sendCameraInput(
+		buttons: number,
+		x: number,
+		y: number,
+		callback?: (message: AppMessage) => boolean | void
+	): void;
+
+	/**
+	 * Get a camera instance for controlling CCTV Cameras, PTZ Cameras and  Auto Turrets
+	 * @param identifier Camera Identifier, such as DOME1, OILRIG1L1, (or a custom camera id)
+	 */
+	getCamera(identifier: string): Camera;
 }
 
 type UserRequest = RequireAtLeastOne<
