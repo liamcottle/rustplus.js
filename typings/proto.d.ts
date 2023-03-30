@@ -22,19 +22,14 @@ export declare enum AppMarkerType {
 }
 export declare function appMarkerTypeFromJSON(object: any): AppMarkerType;
 export declare function appMarkerTypeToJSON(object: AppMarkerType): string;
+export interface Vector2 {
+    x: number;
+    y: number;
+}
 export interface Vector3 {
     x: number;
     y: number;
     z: number;
-}
-export interface Half3 {
-    x: number;
-    y: number;
-    z: number;
-}
-export interface Ray {
-    origin: Vector3 | undefined;
-    direction: Vector3 | undefined;
 }
 export interface Vector4 {
     x: number;
@@ -42,15 +37,20 @@ export interface Vector4 {
     z: number;
     w: number;
 }
+export interface Half3 {
+    x: number;
+    y: number;
+    z: number;
+}
 export interface Color {
     r: number;
     g: number;
     b: number;
     a: number;
 }
-export interface Vector2 {
-    x: number;
-    y: number;
+export interface Ray {
+    origin: Vector3 | undefined;
+    direction: Vector3 | undefined;
 }
 export interface ClanActionResult {
     requestId: number;
@@ -71,7 +71,7 @@ export interface ClanInfo {
     roles: ClanInfo_Role[];
     members: ClanInfo_Member[];
     invites: ClanInfo_Invite[];
-    maxMemberCount: number[];
+    maxMemberCount: number;
 }
 export interface ClanInfo_Role {
     roleId: number;
@@ -141,6 +141,9 @@ export interface AppRequest {
     getClanChat: AppEmpty | undefined;
     sendClanMessage: AppSendMessage | undefined;
     getNexusAuth: AppGetNexusAuth | undefined;
+    cameraSubscribe: AppCameraSubscribe | undefined;
+    cameraUnsubscribe: AppEmpty | undefined;
+    cameraInput: AppCameraInput | undefined;
 }
 export interface AppMessage {
     response: AppResponse | undefined;
@@ -161,6 +164,7 @@ export interface AppResponse {
     clanInfo: AppClanInfo | undefined;
     clanChat: AppClanChat | undefined;
     nexusAuth: AppNexusAuth | undefined;
+    cameraSubscribeInfo: AppCameraInfo | undefined;
 }
 export interface AppBroadcast {
     teamChanged: AppTeamChanged | undefined;
@@ -168,6 +172,7 @@ export interface AppBroadcast {
     entityChanged: AppEntityChanged | undefined;
     clanChanged: AppClanChanged | undefined;
     clanMessage: AppNewClanMessage | undefined;
+    cameraRays: AppCameraRays | undefined;
 }
 export interface AppEmpty {
 }
@@ -338,6 +343,62 @@ export interface AppNewClanMessage {
     clanId: number;
     message: AppClanMessage | undefined;
 }
+export interface AppCameraSubscribe {
+    cameraId: string;
+}
+export interface AppCameraInput {
+    buttons: number;
+    mouseDelta: Vector2 | undefined;
+}
+export interface AppCameraInfo {
+    width: number;
+    height: number;
+    nearPlane: number;
+    farPlane: number;
+    controlFlags: number;
+}
+export interface AppCameraRays {
+    verticalFov: number;
+    sampleOffset: number;
+    rayData: Uint8Array;
+    distance: number;
+    entities: AppCameraRays_Entity[];
+}
+export declare enum AppCameraRays_EntityType {
+    Tree = 1,
+    Player = 2,
+    UNRECOGNIZED = -1
+}
+export declare function appCameraRays_EntityTypeFromJSON(object: any): AppCameraRays_EntityType;
+export declare function appCameraRays_EntityTypeToJSON(object: AppCameraRays_EntityType): string;
+export interface AppCameraRays_Entity {
+    entityId: number;
+    type: AppCameraRays_EntityType;
+    position: Vector3 | undefined;
+    rotation: Vector3 | undefined;
+    size: Vector3 | undefined;
+    name: string;
+}
+export declare const Vector2: {
+    encode(message: Vector2, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): Vector2;
+    fromJSON(object: any): Vector2;
+    toJSON(message: Vector2): unknown;
+    create<I extends {
+        x?: number;
+        y?: number;
+    } & {
+        x?: number;
+        y?: number;
+    } & { [K in Exclude<keyof I, keyof Vector2>]: never; }>(base?: I): Vector2;
+    fromPartial<I_1 extends {
+        x?: number;
+        y?: number;
+    } & {
+        x?: number;
+        y?: number;
+    } & { [K_1 in Exclude<keyof I_1, keyof Vector2>]: never; }>(object: I_1): Vector2;
+};
 export declare const Vector3: {
     encode(message: Vector3, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): Vector3;
@@ -362,6 +423,34 @@ export declare const Vector3: {
         z?: number;
     } & { [K_1 in Exclude<keyof I_1, keyof Vector3>]: never; }>(object: I_1): Vector3;
 };
+export declare const Vector4: {
+    encode(message: Vector4, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): Vector4;
+    fromJSON(object: any): Vector4;
+    toJSON(message: Vector4): unknown;
+    create<I extends {
+        x?: number;
+        y?: number;
+        z?: number;
+        w?: number;
+    } & {
+        x?: number;
+        y?: number;
+        z?: number;
+        w?: number;
+    } & { [K in Exclude<keyof I, keyof Vector4>]: never; }>(base?: I): Vector4;
+    fromPartial<I_1 extends {
+        x?: number;
+        y?: number;
+        z?: number;
+        w?: number;
+    } & {
+        x?: number;
+        y?: number;
+        z?: number;
+        w?: number;
+    } & { [K_1 in Exclude<keyof I_1, keyof Vector4>]: never; }>(object: I_1): Vector4;
+};
 export declare const Half3: {
     encode(message: Half3, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): Half3;
@@ -385,6 +474,34 @@ export declare const Half3: {
         y?: number;
         z?: number;
     } & { [K_1 in Exclude<keyof I_1, keyof Half3>]: never; }>(object: I_1): Half3;
+};
+export declare const Color: {
+    encode(message: Color, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): Color;
+    fromJSON(object: any): Color;
+    toJSON(message: Color): unknown;
+    create<I extends {
+        r?: number;
+        g?: number;
+        b?: number;
+        a?: number;
+    } & {
+        r?: number;
+        g?: number;
+        b?: number;
+        a?: number;
+    } & { [K in Exclude<keyof I, keyof Color>]: never; }>(base?: I): Color;
+    fromPartial<I_1 extends {
+        r?: number;
+        g?: number;
+        b?: number;
+        a?: number;
+    } & {
+        r?: number;
+        g?: number;
+        b?: number;
+        a?: number;
+    } & { [K_1 in Exclude<keyof I_1, keyof Color>]: never; }>(object: I_1): Color;
 };
 export declare const Ray: {
     encode(message: Ray, writer?: _m0.Writer): _m0.Writer;
@@ -454,82 +571,6 @@ export declare const Ray: {
         } & { [K_4 in Exclude<keyof I_1["direction"], keyof Vector3>]: never; };
     } & { [K_5 in Exclude<keyof I_1, keyof Ray>]: never; }>(object: I_1): Ray;
 };
-export declare const Vector4: {
-    encode(message: Vector4, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): Vector4;
-    fromJSON(object: any): Vector4;
-    toJSON(message: Vector4): unknown;
-    create<I extends {
-        x?: number;
-        y?: number;
-        z?: number;
-        w?: number;
-    } & {
-        x?: number;
-        y?: number;
-        z?: number;
-        w?: number;
-    } & { [K in Exclude<keyof I, keyof Vector4>]: never; }>(base?: I): Vector4;
-    fromPartial<I_1 extends {
-        x?: number;
-        y?: number;
-        z?: number;
-        w?: number;
-    } & {
-        x?: number;
-        y?: number;
-        z?: number;
-        w?: number;
-    } & { [K_1 in Exclude<keyof I_1, keyof Vector4>]: never; }>(object: I_1): Vector4;
-};
-export declare const Color: {
-    encode(message: Color, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): Color;
-    fromJSON(object: any): Color;
-    toJSON(message: Color): unknown;
-    create<I extends {
-        r?: number;
-        g?: number;
-        b?: number;
-        a?: number;
-    } & {
-        r?: number;
-        g?: number;
-        b?: number;
-        a?: number;
-    } & { [K in Exclude<keyof I, keyof Color>]: never; }>(base?: I): Color;
-    fromPartial<I_1 extends {
-        r?: number;
-        g?: number;
-        b?: number;
-        a?: number;
-    } & {
-        r?: number;
-        g?: number;
-        b?: number;
-        a?: number;
-    } & { [K_1 in Exclude<keyof I_1, keyof Color>]: never; }>(object: I_1): Color;
-};
-export declare const Vector2: {
-    encode(message: Vector2, writer?: _m0.Writer): _m0.Writer;
-    decode(input: _m0.Reader | Uint8Array, length?: number): Vector2;
-    fromJSON(object: any): Vector2;
-    toJSON(message: Vector2): unknown;
-    create<I extends {
-        x?: number;
-        y?: number;
-    } & {
-        x?: number;
-        y?: number;
-    } & { [K in Exclude<keyof I, keyof Vector2>]: never; }>(base?: I): Vector2;
-    fromPartial<I_1 extends {
-        x?: number;
-        y?: number;
-    } & {
-        x?: number;
-        y?: number;
-    } & { [K_1 in Exclude<keyof I_1, keyof Vector2>]: never; }>(object: I_1): Vector2;
-};
 export declare const ClanActionResult: {
     encode(message: ClanActionResult, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): ClanActionResult;
@@ -575,7 +616,7 @@ export declare const ClanActionResult: {
                 recruiter?: number;
                 timestamp?: number;
             }[];
-            maxMemberCount?: number[];
+            maxMemberCount?: number;
         };
     } & {
         requestId?: number;
@@ -617,7 +658,7 @@ export declare const ClanActionResult: {
                 recruiter?: number;
                 timestamp?: number;
             }[];
-            maxMemberCount?: number[];
+            maxMemberCount?: number;
         } & {
             clanId?: number;
             name?: string;
@@ -723,9 +764,9 @@ export declare const ClanActionResult: {
                 recruiter?: number;
                 timestamp?: number;
             }[]>]: never; };
-            maxMemberCount?: number[] & number[] & { [K_6 in Exclude<keyof I["clanInfo"]["maxMemberCount"], keyof number[]>]: never; };
-        } & { [K_7 in Exclude<keyof I["clanInfo"], keyof ClanInfo>]: never; };
-    } & { [K_8 in Exclude<keyof I, keyof ClanActionResult>]: never; }>(base?: I): ClanActionResult;
+            maxMemberCount?: number;
+        } & { [K_6 in Exclude<keyof I["clanInfo"], keyof ClanInfo>]: never; };
+    } & { [K_7 in Exclude<keyof I, keyof ClanActionResult>]: never; }>(base?: I): ClanActionResult;
     fromPartial<I_1 extends {
         requestId?: number;
         result?: number;
@@ -766,7 +807,7 @@ export declare const ClanActionResult: {
                 recruiter?: number;
                 timestamp?: number;
             }[];
-            maxMemberCount?: number[];
+            maxMemberCount?: number;
         };
     } & {
         requestId?: number;
@@ -808,7 +849,7 @@ export declare const ClanActionResult: {
                 recruiter?: number;
                 timestamp?: number;
             }[];
-            maxMemberCount?: number[];
+            maxMemberCount?: number;
         } & {
             clanId?: number;
             name?: string;
@@ -855,7 +896,7 @@ export declare const ClanActionResult: {
                 canDemote?: boolean;
                 canSetPlayerNotes?: boolean;
                 canAccessLogs?: boolean;
-            } & { [K_9 in Exclude<keyof I_1["clanInfo"]["roles"][number], keyof ClanInfo_Role>]: never; })[] & { [K_10 in Exclude<keyof I_1["clanInfo"]["roles"], keyof {
+            } & { [K_8 in Exclude<keyof I_1["clanInfo"]["roles"][number], keyof ClanInfo_Role>]: never; })[] & { [K_9 in Exclude<keyof I_1["clanInfo"]["roles"], keyof {
                 roleId?: number;
                 rank?: number;
                 name?: string;
@@ -889,7 +930,7 @@ export declare const ClanActionResult: {
                 lastSeen?: number;
                 notes?: string;
                 online?: boolean;
-            } & { [K_11 in Exclude<keyof I_1["clanInfo"]["members"][number], keyof ClanInfo_Member>]: never; })[] & { [K_12 in Exclude<keyof I_1["clanInfo"]["members"], keyof {
+            } & { [K_10 in Exclude<keyof I_1["clanInfo"]["members"][number], keyof ClanInfo_Member>]: never; })[] & { [K_11 in Exclude<keyof I_1["clanInfo"]["members"], keyof {
                 steamId?: number;
                 roleId?: number;
                 joined?: number;
@@ -909,14 +950,14 @@ export declare const ClanActionResult: {
                 steamId?: number;
                 recruiter?: number;
                 timestamp?: number;
-            } & { [K_13 in Exclude<keyof I_1["clanInfo"]["invites"][number], keyof ClanInfo_Invite>]: never; })[] & { [K_14 in Exclude<keyof I_1["clanInfo"]["invites"], keyof {
+            } & { [K_12 in Exclude<keyof I_1["clanInfo"]["invites"][number], keyof ClanInfo_Invite>]: never; })[] & { [K_13 in Exclude<keyof I_1["clanInfo"]["invites"], keyof {
                 steamId?: number;
                 recruiter?: number;
                 timestamp?: number;
             }[]>]: never; };
-            maxMemberCount?: number[] & number[] & { [K_15 in Exclude<keyof I_1["clanInfo"]["maxMemberCount"], keyof number[]>]: never; };
-        } & { [K_16 in Exclude<keyof I_1["clanInfo"], keyof ClanInfo>]: never; };
-    } & { [K_17 in Exclude<keyof I_1, keyof ClanActionResult>]: never; }>(object: I_1): ClanActionResult;
+            maxMemberCount?: number;
+        } & { [K_14 in Exclude<keyof I_1["clanInfo"], keyof ClanInfo>]: never; };
+    } & { [K_15 in Exclude<keyof I_1, keyof ClanActionResult>]: never; }>(object: I_1): ClanActionResult;
 };
 export declare const ClanInfo: {
     encode(message: ClanInfo, writer?: _m0.Writer): _m0.Writer;
@@ -959,7 +1000,7 @@ export declare const ClanInfo: {
             recruiter?: number;
             timestamp?: number;
         }[];
-        maxMemberCount?: number[];
+        maxMemberCount?: number;
     } & {
         clanId?: number;
         name?: string;
@@ -1065,8 +1106,8 @@ export declare const ClanInfo: {
             recruiter?: number;
             timestamp?: number;
         }[]>]: never; };
-        maxMemberCount?: number[] & number[] & { [K_6 in Exclude<keyof I["maxMemberCount"], keyof number[]>]: never; };
-    } & { [K_7 in Exclude<keyof I, keyof ClanInfo>]: never; }>(base?: I): ClanInfo;
+        maxMemberCount?: number;
+    } & { [K_6 in Exclude<keyof I, keyof ClanInfo>]: never; }>(base?: I): ClanInfo;
     fromPartial<I_1 extends {
         clanId?: number;
         name?: string;
@@ -1103,7 +1144,7 @@ export declare const ClanInfo: {
             recruiter?: number;
             timestamp?: number;
         }[];
-        maxMemberCount?: number[];
+        maxMemberCount?: number;
     } & {
         clanId?: number;
         name?: string;
@@ -1150,7 +1191,7 @@ export declare const ClanInfo: {
             canDemote?: boolean;
             canSetPlayerNotes?: boolean;
             canAccessLogs?: boolean;
-        } & { [K_8 in Exclude<keyof I_1["roles"][number], keyof ClanInfo_Role>]: never; })[] & { [K_9 in Exclude<keyof I_1["roles"], keyof {
+        } & { [K_7 in Exclude<keyof I_1["roles"][number], keyof ClanInfo_Role>]: never; })[] & { [K_8 in Exclude<keyof I_1["roles"], keyof {
             roleId?: number;
             rank?: number;
             name?: string;
@@ -1184,7 +1225,7 @@ export declare const ClanInfo: {
             lastSeen?: number;
             notes?: string;
             online?: boolean;
-        } & { [K_10 in Exclude<keyof I_1["members"][number], keyof ClanInfo_Member>]: never; })[] & { [K_11 in Exclude<keyof I_1["members"], keyof {
+        } & { [K_9 in Exclude<keyof I_1["members"][number], keyof ClanInfo_Member>]: never; })[] & { [K_10 in Exclude<keyof I_1["members"], keyof {
             steamId?: number;
             roleId?: number;
             joined?: number;
@@ -1204,13 +1245,13 @@ export declare const ClanInfo: {
             steamId?: number;
             recruiter?: number;
             timestamp?: number;
-        } & { [K_12 in Exclude<keyof I_1["invites"][number], keyof ClanInfo_Invite>]: never; })[] & { [K_13 in Exclude<keyof I_1["invites"], keyof {
+        } & { [K_11 in Exclude<keyof I_1["invites"][number], keyof ClanInfo_Invite>]: never; })[] & { [K_12 in Exclude<keyof I_1["invites"], keyof {
             steamId?: number;
             recruiter?: number;
             timestamp?: number;
         }[]>]: never; };
-        maxMemberCount?: number[] & number[] & { [K_14 in Exclude<keyof I_1["maxMemberCount"], keyof number[]>]: never; };
-    } & { [K_15 in Exclude<keyof I_1, keyof ClanInfo>]: never; }>(object: I_1): ClanInfo;
+        maxMemberCount?: number;
+    } & { [K_13 in Exclude<keyof I_1, keyof ClanInfo>]: never; }>(object: I_1): ClanInfo;
 };
 export declare const ClanInfo_Role: {
     encode(message: ClanInfo_Role, writer?: _m0.Writer): _m0.Writer;
@@ -1575,6 +1616,17 @@ export declare const AppRequest: {
         getNexusAuth?: {
             appKey?: string;
         };
+        cameraSubscribe?: {
+            cameraId?: string;
+        };
+        cameraUnsubscribe?: {};
+        cameraInput?: {
+            buttons?: number;
+            mouseDelta?: {
+                x?: number;
+                y?: number;
+            };
+        };
     } & {
         seq?: number;
         playerId?: number;
@@ -1625,7 +1677,29 @@ export declare const AppRequest: {
         } & {
             appKey?: string;
         } & { [K_16 in Exclude<keyof I["getNexusAuth"], "appKey">]: never; };
-    } & { [K_17 in Exclude<keyof I, keyof AppRequest>]: never; }>(base?: I): AppRequest;
+        cameraSubscribe?: {
+            cameraId?: string;
+        } & {
+            cameraId?: string;
+        } & { [K_17 in Exclude<keyof I["cameraSubscribe"], "cameraId">]: never; };
+        cameraUnsubscribe?: {} & {} & { [K_18 in Exclude<keyof I["cameraUnsubscribe"], never>]: never; };
+        cameraInput?: {
+            buttons?: number;
+            mouseDelta?: {
+                x?: number;
+                y?: number;
+            };
+        } & {
+            buttons?: number;
+            mouseDelta?: {
+                x?: number;
+                y?: number;
+            } & {
+                x?: number;
+                y?: number;
+            } & { [K_19 in Exclude<keyof I["cameraInput"]["mouseDelta"], keyof Vector2>]: never; };
+        } & { [K_20 in Exclude<keyof I["cameraInput"], keyof AppCameraInput>]: never; };
+    } & { [K_21 in Exclude<keyof I, keyof AppRequest>]: never; }>(base?: I): AppRequest;
     fromPartial<I_1 extends {
         seq?: number;
         playerId?: number;
@@ -1662,57 +1736,90 @@ export declare const AppRequest: {
         getNexusAuth?: {
             appKey?: string;
         };
+        cameraSubscribe?: {
+            cameraId?: string;
+        };
+        cameraUnsubscribe?: {};
+        cameraInput?: {
+            buttons?: number;
+            mouseDelta?: {
+                x?: number;
+                y?: number;
+            };
+        };
     } & {
         seq?: number;
         playerId?: number;
         playerToken?: number;
         entityId?: number;
-        getInfo?: {} & {} & { [K_18 in Exclude<keyof I_1["getInfo"], never>]: never; };
-        getTime?: {} & {} & { [K_19 in Exclude<keyof I_1["getTime"], never>]: never; };
-        getMap?: {} & {} & { [K_20 in Exclude<keyof I_1["getMap"], never>]: never; };
-        getTeamInfo?: {} & {} & { [K_21 in Exclude<keyof I_1["getTeamInfo"], never>]: never; };
-        getTeamChat?: {} & {} & { [K_22 in Exclude<keyof I_1["getTeamChat"], never>]: never; };
+        getInfo?: {} & {} & { [K_22 in Exclude<keyof I_1["getInfo"], never>]: never; };
+        getTime?: {} & {} & { [K_23 in Exclude<keyof I_1["getTime"], never>]: never; };
+        getMap?: {} & {} & { [K_24 in Exclude<keyof I_1["getMap"], never>]: never; };
+        getTeamInfo?: {} & {} & { [K_25 in Exclude<keyof I_1["getTeamInfo"], never>]: never; };
+        getTeamChat?: {} & {} & { [K_26 in Exclude<keyof I_1["getTeamChat"], never>]: never; };
         sendTeamMessage?: {
             message?: string;
         } & {
             message?: string;
-        } & { [K_23 in Exclude<keyof I_1["sendTeamMessage"], "message">]: never; };
-        getEntityInfo?: {} & {} & { [K_24 in Exclude<keyof I_1["getEntityInfo"], never>]: never; };
+        } & { [K_27 in Exclude<keyof I_1["sendTeamMessage"], "message">]: never; };
+        getEntityInfo?: {} & {} & { [K_28 in Exclude<keyof I_1["getEntityInfo"], never>]: never; };
         setEntityValue?: {
             value?: boolean;
         } & {
             value?: boolean;
-        } & { [K_25 in Exclude<keyof I_1["setEntityValue"], "value">]: never; };
-        checkSubscription?: {} & {} & { [K_26 in Exclude<keyof I_1["checkSubscription"], never>]: never; };
+        } & { [K_29 in Exclude<keyof I_1["setEntityValue"], "value">]: never; };
+        checkSubscription?: {} & {} & { [K_30 in Exclude<keyof I_1["checkSubscription"], never>]: never; };
         setSubscription?: {
             value?: boolean;
         } & {
             value?: boolean;
-        } & { [K_27 in Exclude<keyof I_1["setSubscription"], "value">]: never; };
-        getMapMarkers?: {} & {} & { [K_28 in Exclude<keyof I_1["getMapMarkers"], never>]: never; };
+        } & { [K_31 in Exclude<keyof I_1["setSubscription"], "value">]: never; };
+        getMapMarkers?: {} & {} & { [K_32 in Exclude<keyof I_1["getMapMarkers"], never>]: never; };
         promoteToLeader?: {
             steamId?: number;
         } & {
             steamId?: number;
-        } & { [K_29 in Exclude<keyof I_1["promoteToLeader"], "steamId">]: never; };
-        getClanInfo?: {} & {} & { [K_30 in Exclude<keyof I_1["getClanInfo"], never>]: never; };
+        } & { [K_33 in Exclude<keyof I_1["promoteToLeader"], "steamId">]: never; };
+        getClanInfo?: {} & {} & { [K_34 in Exclude<keyof I_1["getClanInfo"], never>]: never; };
         setClanMotd?: {
             message?: string;
         } & {
             message?: string;
-        } & { [K_31 in Exclude<keyof I_1["setClanMotd"], "message">]: never; };
-        getClanChat?: {} & {} & { [K_32 in Exclude<keyof I_1["getClanChat"], never>]: never; };
+        } & { [K_35 in Exclude<keyof I_1["setClanMotd"], "message">]: never; };
+        getClanChat?: {} & {} & { [K_36 in Exclude<keyof I_1["getClanChat"], never>]: never; };
         sendClanMessage?: {
             message?: string;
         } & {
             message?: string;
-        } & { [K_33 in Exclude<keyof I_1["sendClanMessage"], "message">]: never; };
+        } & { [K_37 in Exclude<keyof I_1["sendClanMessage"], "message">]: never; };
         getNexusAuth?: {
             appKey?: string;
         } & {
             appKey?: string;
-        } & { [K_34 in Exclude<keyof I_1["getNexusAuth"], "appKey">]: never; };
-    } & { [K_35 in Exclude<keyof I_1, keyof AppRequest>]: never; }>(object: I_1): AppRequest;
+        } & { [K_38 in Exclude<keyof I_1["getNexusAuth"], "appKey">]: never; };
+        cameraSubscribe?: {
+            cameraId?: string;
+        } & {
+            cameraId?: string;
+        } & { [K_39 in Exclude<keyof I_1["cameraSubscribe"], "cameraId">]: never; };
+        cameraUnsubscribe?: {} & {} & { [K_40 in Exclude<keyof I_1["cameraUnsubscribe"], never>]: never; };
+        cameraInput?: {
+            buttons?: number;
+            mouseDelta?: {
+                x?: number;
+                y?: number;
+            };
+        } & {
+            buttons?: number;
+            mouseDelta?: {
+                x?: number;
+                y?: number;
+            } & {
+                x?: number;
+                y?: number;
+            } & { [K_41 in Exclude<keyof I_1["cameraInput"]["mouseDelta"], keyof Vector2>]: never; };
+        } & { [K_42 in Exclude<keyof I_1["cameraInput"], keyof AppCameraInput>]: never; };
+    } & { [K_43 in Exclude<keyof I_1, keyof AppRequest>]: never; }>(object: I_1): AppRequest;
 };
 export declare const AppMessage: {
     encode(message: AppMessage, writer?: _m0.Writer): _m0.Writer;
@@ -1885,7 +1992,7 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[];
-                    maxMemberCount?: number[];
+                    maxMemberCount?: number;
                 };
             };
             clanChat?: {
@@ -1899,6 +2006,13 @@ export declare const AppMessage: {
             nexusAuth?: {
                 serverId?: string;
                 playerToken?: number;
+            };
+            cameraSubscribeInfo?: {
+                width?: number;
+                height?: number;
+                nearPlane?: number;
+                farPlane?: number;
+                controlFlags?: number;
             };
         };
         broadcast?: {
@@ -1988,7 +2102,7 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[];
-                    maxMemberCount?: number[];
+                    maxMemberCount?: number;
                 };
             };
             clanMessage?: {
@@ -1999,6 +2113,32 @@ export declare const AppMessage: {
                     message?: string;
                     time?: number;
                 };
+            };
+            cameraRays?: {
+                verticalFov?: number;
+                sampleOffset?: number;
+                rayData?: Uint8Array;
+                distance?: number;
+                entities?: {
+                    entityId?: number;
+                    type?: AppCameraRays_EntityType;
+                    position?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    rotation?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    size?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    name?: string;
+                }[];
             };
         };
     } & {
@@ -2167,7 +2307,7 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[];
-                    maxMemberCount?: number[];
+                    maxMemberCount?: number;
                 };
             };
             clanChat?: {
@@ -2181,6 +2321,13 @@ export declare const AppMessage: {
             nexusAuth?: {
                 serverId?: string;
                 playerToken?: number;
+            };
+            cameraSubscribeInfo?: {
+                width?: number;
+                height?: number;
+                nearPlane?: number;
+                farPlane?: number;
+                controlFlags?: number;
             };
         } & {
             seq?: number;
@@ -2708,7 +2855,7 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[];
-                    maxMemberCount?: number[];
+                    maxMemberCount?: number;
                 };
             } & {
                 clanInfo?: {
@@ -2747,7 +2894,7 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[];
-                    maxMemberCount?: number[];
+                    maxMemberCount?: number;
                 } & {
                     clanId?: number;
                     name?: string;
@@ -2853,9 +3000,9 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[]>]: never; };
-                    maxMemberCount?: number[] & number[] & { [K_35 in Exclude<keyof I["response"]["clanInfo"]["clanInfo"]["maxMemberCount"], keyof number[]>]: never; };
-                } & { [K_36 in Exclude<keyof I["response"]["clanInfo"]["clanInfo"], keyof ClanInfo>]: never; };
-            } & { [K_37 in Exclude<keyof I["response"]["clanInfo"], "clanInfo">]: never; };
+                    maxMemberCount?: number;
+                } & { [K_35 in Exclude<keyof I["response"]["clanInfo"]["clanInfo"], keyof ClanInfo>]: never; };
+            } & { [K_36 in Exclude<keyof I["response"]["clanInfo"], "clanInfo">]: never; };
             clanChat?: {
                 messages?: {
                     steamId?: number;
@@ -2879,20 +3026,33 @@ export declare const AppMessage: {
                     name?: string;
                     message?: string;
                     time?: number;
-                } & { [K_38 in Exclude<keyof I["response"]["clanChat"]["messages"][number], keyof AppClanMessage>]: never; })[] & { [K_39 in Exclude<keyof I["response"]["clanChat"]["messages"], keyof {
+                } & { [K_37 in Exclude<keyof I["response"]["clanChat"]["messages"][number], keyof AppClanMessage>]: never; })[] & { [K_38 in Exclude<keyof I["response"]["clanChat"]["messages"], keyof {
                     steamId?: number;
                     name?: string;
                     message?: string;
                     time?: number;
                 }[]>]: never; };
-            } & { [K_40 in Exclude<keyof I["response"]["clanChat"], "messages">]: never; };
+            } & { [K_39 in Exclude<keyof I["response"]["clanChat"], "messages">]: never; };
             nexusAuth?: {
                 serverId?: string;
                 playerToken?: number;
             } & {
                 serverId?: string;
                 playerToken?: number;
-            } & { [K_41 in Exclude<keyof I["response"]["nexusAuth"], keyof AppNexusAuth>]: never; };
+            } & { [K_40 in Exclude<keyof I["response"]["nexusAuth"], keyof AppNexusAuth>]: never; };
+            cameraSubscribeInfo?: {
+                width?: number;
+                height?: number;
+                nearPlane?: number;
+                farPlane?: number;
+                controlFlags?: number;
+            } & {
+                width?: number;
+                height?: number;
+                nearPlane?: number;
+                farPlane?: number;
+                controlFlags?: number;
+            } & { [K_41 in Exclude<keyof I["response"]["cameraSubscribeInfo"], keyof AppCameraInfo>]: never; };
         } & { [K_42 in Exclude<keyof I["response"], keyof AppResponse>]: never; };
         broadcast?: {
             teamChanged?: {
@@ -2981,7 +3141,7 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[];
-                    maxMemberCount?: number[];
+                    maxMemberCount?: number;
                 };
             };
             clanMessage?: {
@@ -2992,6 +3152,32 @@ export declare const AppMessage: {
                     message?: string;
                     time?: number;
                 };
+            };
+            cameraRays?: {
+                verticalFov?: number;
+                sampleOffset?: number;
+                rayData?: Uint8Array;
+                distance?: number;
+                entities?: {
+                    entityId?: number;
+                    type?: AppCameraRays_EntityType;
+                    position?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    rotation?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    size?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    name?: string;
+                }[];
             };
         } & {
             teamChanged?: {
@@ -3227,7 +3413,7 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[];
-                    maxMemberCount?: number[];
+                    maxMemberCount?: number;
                 };
             } & {
                 clanInfo?: {
@@ -3266,7 +3452,7 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[];
-                    maxMemberCount?: number[];
+                    maxMemberCount?: number;
                 } & {
                     clanId?: number;
                     name?: string;
@@ -3372,9 +3558,9 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[]>]: never; };
-                    maxMemberCount?: number[] & number[] & { [K_63 in Exclude<keyof I["broadcast"]["clanChanged"]["clanInfo"]["maxMemberCount"], keyof number[]>]: never; };
-                } & { [K_64 in Exclude<keyof I["broadcast"]["clanChanged"]["clanInfo"], keyof ClanInfo>]: never; };
-            } & { [K_65 in Exclude<keyof I["broadcast"]["clanChanged"], "clanInfo">]: never; };
+                    maxMemberCount?: number;
+                } & { [K_63 in Exclude<keyof I["broadcast"]["clanChanged"]["clanInfo"], keyof ClanInfo>]: never; };
+            } & { [K_64 in Exclude<keyof I["broadcast"]["clanChanged"], "clanInfo">]: never; };
             clanMessage?: {
                 clanId?: number;
                 message?: {
@@ -3395,10 +3581,130 @@ export declare const AppMessage: {
                     name?: string;
                     message?: string;
                     time?: number;
-                } & { [K_66 in Exclude<keyof I["broadcast"]["clanMessage"]["message"], keyof AppClanMessage>]: never; };
-            } & { [K_67 in Exclude<keyof I["broadcast"]["clanMessage"], keyof AppNewClanMessage>]: never; };
-        } & { [K_68 in Exclude<keyof I["broadcast"], keyof AppBroadcast>]: never; };
-    } & { [K_69 in Exclude<keyof I, keyof AppMessage>]: never; }>(base?: I): AppMessage;
+                } & { [K_65 in Exclude<keyof I["broadcast"]["clanMessage"]["message"], keyof AppClanMessage>]: never; };
+            } & { [K_66 in Exclude<keyof I["broadcast"]["clanMessage"], keyof AppNewClanMessage>]: never; };
+            cameraRays?: {
+                verticalFov?: number;
+                sampleOffset?: number;
+                rayData?: Uint8Array;
+                distance?: number;
+                entities?: {
+                    entityId?: number;
+                    type?: AppCameraRays_EntityType;
+                    position?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    rotation?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    size?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    name?: string;
+                }[];
+            } & {
+                verticalFov?: number;
+                sampleOffset?: number;
+                rayData?: Uint8Array;
+                distance?: number;
+                entities?: {
+                    entityId?: number;
+                    type?: AppCameraRays_EntityType;
+                    position?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    rotation?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    size?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    name?: string;
+                }[] & ({
+                    entityId?: number;
+                    type?: AppCameraRays_EntityType;
+                    position?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    rotation?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    size?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    name?: string;
+                } & {
+                    entityId?: number;
+                    type?: AppCameraRays_EntityType;
+                    position?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    } & {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    } & { [K_67 in Exclude<keyof I["broadcast"]["cameraRays"]["entities"][number]["position"], keyof Vector3>]: never; };
+                    rotation?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    } & {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    } & { [K_68 in Exclude<keyof I["broadcast"]["cameraRays"]["entities"][number]["rotation"], keyof Vector3>]: never; };
+                    size?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    } & {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    } & { [K_69 in Exclude<keyof I["broadcast"]["cameraRays"]["entities"][number]["size"], keyof Vector3>]: never; };
+                    name?: string;
+                } & { [K_70 in Exclude<keyof I["broadcast"]["cameraRays"]["entities"][number], keyof AppCameraRays_Entity>]: never; })[] & { [K_71 in Exclude<keyof I["broadcast"]["cameraRays"]["entities"], keyof {
+                    entityId?: number;
+                    type?: AppCameraRays_EntityType;
+                    position?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    rotation?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    size?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    name?: string;
+                }[]>]: never; };
+            } & { [K_72 in Exclude<keyof I["broadcast"]["cameraRays"], keyof AppCameraRays>]: never; };
+        } & { [K_73 in Exclude<keyof I["broadcast"], keyof AppBroadcast>]: never; };
+    } & { [K_74 in Exclude<keyof I, keyof AppMessage>]: never; }>(base?: I): AppMessage;
     fromPartial<I_1 extends {
         response?: {
             seq?: number;
@@ -3565,7 +3871,7 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[];
-                    maxMemberCount?: number[];
+                    maxMemberCount?: number;
                 };
             };
             clanChat?: {
@@ -3579,6 +3885,13 @@ export declare const AppMessage: {
             nexusAuth?: {
                 serverId?: string;
                 playerToken?: number;
+            };
+            cameraSubscribeInfo?: {
+                width?: number;
+                height?: number;
+                nearPlane?: number;
+                farPlane?: number;
+                controlFlags?: number;
             };
         };
         broadcast?: {
@@ -3668,7 +3981,7 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[];
-                    maxMemberCount?: number[];
+                    maxMemberCount?: number;
                 };
             };
             clanMessage?: {
@@ -3679,6 +3992,32 @@ export declare const AppMessage: {
                     message?: string;
                     time?: number;
                 };
+            };
+            cameraRays?: {
+                verticalFov?: number;
+                sampleOffset?: number;
+                rayData?: Uint8Array;
+                distance?: number;
+                entities?: {
+                    entityId?: number;
+                    type?: AppCameraRays_EntityType;
+                    position?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    rotation?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    size?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    name?: string;
+                }[];
             };
         };
     } & {
@@ -3847,7 +4186,7 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[];
-                    maxMemberCount?: number[];
+                    maxMemberCount?: number;
                 };
             };
             clanChat?: {
@@ -3862,14 +4201,21 @@ export declare const AppMessage: {
                 serverId?: string;
                 playerToken?: number;
             };
+            cameraSubscribeInfo?: {
+                width?: number;
+                height?: number;
+                nearPlane?: number;
+                farPlane?: number;
+                controlFlags?: number;
+            };
         } & {
             seq?: number;
-            success?: {} & {} & { [K_70 in Exclude<keyof I_1["response"]["success"], never>]: never; };
+            success?: {} & {} & { [K_75 in Exclude<keyof I_1["response"]["success"], never>]: never; };
             error?: {
                 error?: string;
             } & {
                 error?: string;
-            } & { [K_71 in Exclude<keyof I_1["response"]["error"], "error">]: never; };
+            } & { [K_76 in Exclude<keyof I_1["response"]["error"], "error">]: never; };
             info?: {
                 name?: string;
                 headerImage?: string;
@@ -3902,7 +4248,7 @@ export declare const AppMessage: {
                 nexus?: string;
                 nexusId?: number;
                 nexusZone?: string;
-            } & { [K_72 in Exclude<keyof I_1["response"]["info"], keyof AppInfo>]: never; };
+            } & { [K_77 in Exclude<keyof I_1["response"]["info"], keyof AppInfo>]: never; };
             time?: {
                 dayLengthMinutes?: number;
                 timeScale?: number;
@@ -3915,7 +4261,7 @@ export declare const AppMessage: {
                 sunrise?: number;
                 sunset?: number;
                 time?: number;
-            } & { [K_73 in Exclude<keyof I_1["response"]["time"], keyof AppTime>]: never; };
+            } & { [K_78 in Exclude<keyof I_1["response"]["time"], keyof AppTime>]: never; };
             map?: {
                 width?: number;
                 height?: number;
@@ -3944,13 +4290,13 @@ export declare const AppMessage: {
                     token?: string;
                     x?: number;
                     y?: number;
-                } & { [K_74 in Exclude<keyof I_1["response"]["map"]["monuments"][number], keyof AppMap_Monument>]: never; })[] & { [K_75 in Exclude<keyof I_1["response"]["map"]["monuments"], keyof {
+                } & { [K_79 in Exclude<keyof I_1["response"]["map"]["monuments"][number], keyof AppMap_Monument>]: never; })[] & { [K_80 in Exclude<keyof I_1["response"]["map"]["monuments"], keyof {
                     token?: string;
                     x?: number;
                     y?: number;
                 }[]>]: never; };
                 background?: string;
-            } & { [K_76 in Exclude<keyof I_1["response"]["map"], keyof AppMap>]: never; };
+            } & { [K_81 in Exclude<keyof I_1["response"]["map"], keyof AppMap>]: never; };
             teamInfo?: {
                 leaderSteamId?: number;
                 members?: {
@@ -4002,7 +4348,7 @@ export declare const AppMessage: {
                     spawnTime?: number;
                     isAlive?: boolean;
                     deathTime?: number;
-                } & { [K_77 in Exclude<keyof I_1["response"]["teamInfo"]["members"][number], keyof AppTeamInfo_Member>]: never; })[] & { [K_78 in Exclude<keyof I_1["response"]["teamInfo"]["members"], keyof {
+                } & { [K_82 in Exclude<keyof I_1["response"]["teamInfo"]["members"][number], keyof AppTeamInfo_Member>]: never; })[] & { [K_83 in Exclude<keyof I_1["response"]["teamInfo"]["members"], keyof {
                     steamId?: number;
                     name?: string;
                     x?: number;
@@ -4024,7 +4370,7 @@ export declare const AppMessage: {
                     type?: number;
                     x?: number;
                     y?: number;
-                } & { [K_79 in Exclude<keyof I_1["response"]["teamInfo"]["mapNotes"][number], keyof AppTeamInfo_Note>]: never; })[] & { [K_80 in Exclude<keyof I_1["response"]["teamInfo"]["mapNotes"], keyof {
+                } & { [K_84 in Exclude<keyof I_1["response"]["teamInfo"]["mapNotes"][number], keyof AppTeamInfo_Note>]: never; })[] & { [K_85 in Exclude<keyof I_1["response"]["teamInfo"]["mapNotes"], keyof {
                     type?: number;
                     x?: number;
                     y?: number;
@@ -4041,12 +4387,12 @@ export declare const AppMessage: {
                     type?: number;
                     x?: number;
                     y?: number;
-                } & { [K_81 in Exclude<keyof I_1["response"]["teamInfo"]["leaderMapNotes"][number], keyof AppTeamInfo_Note>]: never; })[] & { [K_82 in Exclude<keyof I_1["response"]["teamInfo"]["leaderMapNotes"], keyof {
+                } & { [K_86 in Exclude<keyof I_1["response"]["teamInfo"]["leaderMapNotes"][number], keyof AppTeamInfo_Note>]: never; })[] & { [K_87 in Exclude<keyof I_1["response"]["teamInfo"]["leaderMapNotes"], keyof {
                     type?: number;
                     x?: number;
                     y?: number;
                 }[]>]: never; };
-            } & { [K_83 in Exclude<keyof I_1["response"]["teamInfo"], keyof AppTeamInfo>]: never; };
+            } & { [K_88 in Exclude<keyof I_1["response"]["teamInfo"], keyof AppTeamInfo>]: never; };
             teamChat?: {
                 messages?: {
                     steamId?: number;
@@ -4074,14 +4420,14 @@ export declare const AppMessage: {
                     message?: string;
                     color?: string;
                     time?: number;
-                } & { [K_84 in Exclude<keyof I_1["response"]["teamChat"]["messages"][number], keyof AppTeamMessage>]: never; })[] & { [K_85 in Exclude<keyof I_1["response"]["teamChat"]["messages"], keyof {
+                } & { [K_89 in Exclude<keyof I_1["response"]["teamChat"]["messages"][number], keyof AppTeamMessage>]: never; })[] & { [K_90 in Exclude<keyof I_1["response"]["teamChat"]["messages"], keyof {
                     steamId?: number;
                     name?: string;
                     message?: string;
                     color?: string;
                     time?: number;
                 }[]>]: never; };
-            } & { [K_86 in Exclude<keyof I_1["response"]["teamChat"], "messages">]: never; };
+            } & { [K_91 in Exclude<keyof I_1["response"]["teamChat"], "messages">]: never; };
             entityInfo?: {
                 type?: AppEntityType;
                 payload?: {
@@ -4121,7 +4467,7 @@ export declare const AppMessage: {
                         itemId?: number;
                         quantity?: number;
                         itemIsBlueprint?: boolean;
-                    } & { [K_87 in Exclude<keyof I_1["response"]["entityInfo"]["payload"]["items"][number], keyof AppEntityPayload_Item>]: never; })[] & { [K_88 in Exclude<keyof I_1["response"]["entityInfo"]["payload"]["items"], keyof {
+                    } & { [K_92 in Exclude<keyof I_1["response"]["entityInfo"]["payload"]["items"][number], keyof AppEntityPayload_Item>]: never; })[] & { [K_93 in Exclude<keyof I_1["response"]["entityInfo"]["payload"]["items"], keyof {
                         itemId?: number;
                         quantity?: number;
                         itemIsBlueprint?: boolean;
@@ -4129,13 +4475,13 @@ export declare const AppMessage: {
                     capacity?: number;
                     hasProtection?: boolean;
                     protectionExpiry?: number;
-                } & { [K_89 in Exclude<keyof I_1["response"]["entityInfo"]["payload"], keyof AppEntityPayload>]: never; };
-            } & { [K_90 in Exclude<keyof I_1["response"]["entityInfo"], keyof AppEntityInfo>]: never; };
+                } & { [K_94 in Exclude<keyof I_1["response"]["entityInfo"]["payload"], keyof AppEntityPayload>]: never; };
+            } & { [K_95 in Exclude<keyof I_1["response"]["entityInfo"], keyof AppEntityInfo>]: never; };
             flag?: {
                 value?: boolean;
             } & {
                 value?: boolean;
-            } & { [K_91 in Exclude<keyof I_1["response"]["flag"], "value">]: never; };
+            } & { [K_96 in Exclude<keyof I_1["response"]["flag"], "value">]: never; };
             mapMarkers?: {
                 markers?: {
                     id?: number;
@@ -4259,7 +4605,7 @@ export declare const AppMessage: {
                         y?: number;
                         z?: number;
                         w?: number;
-                    } & { [K_92 in Exclude<keyof I_1["response"]["mapMarkers"]["markers"][number]["color1"], keyof Vector4>]: never; };
+                    } & { [K_97 in Exclude<keyof I_1["response"]["mapMarkers"]["markers"][number]["color1"], keyof Vector4>]: never; };
                     color2?: {
                         x?: number;
                         y?: number;
@@ -4270,7 +4616,7 @@ export declare const AppMessage: {
                         y?: number;
                         z?: number;
                         w?: number;
-                    } & { [K_93 in Exclude<keyof I_1["response"]["mapMarkers"]["markers"][number]["color2"], keyof Vector4>]: never; };
+                    } & { [K_98 in Exclude<keyof I_1["response"]["mapMarkers"]["markers"][number]["color2"], keyof Vector4>]: never; };
                     alpha?: number;
                     name?: string;
                     outOfStock?: boolean;
@@ -4304,7 +4650,7 @@ export declare const AppMessage: {
                         currencyIsBlueprint?: boolean;
                         itemCondition?: number;
                         itemConditionMax?: number;
-                    } & { [K_94 in Exclude<keyof I_1["response"]["mapMarkers"]["markers"][number]["sellOrders"][number], keyof AppMarker_SellOrder>]: never; })[] & { [K_95 in Exclude<keyof I_1["response"]["mapMarkers"]["markers"][number]["sellOrders"], keyof {
+                    } & { [K_99 in Exclude<keyof I_1["response"]["mapMarkers"]["markers"][number]["sellOrders"][number], keyof AppMarker_SellOrder>]: never; })[] & { [K_100 in Exclude<keyof I_1["response"]["mapMarkers"]["markers"][number]["sellOrders"], keyof {
                         itemId?: number;
                         quantity?: number;
                         currencyId?: number;
@@ -4315,7 +4661,7 @@ export declare const AppMessage: {
                         itemCondition?: number;
                         itemConditionMax?: number;
                     }[]>]: never; };
-                } & { [K_96 in Exclude<keyof I_1["response"]["mapMarkers"]["markers"][number], keyof AppMarker>]: never; })[] & { [K_97 in Exclude<keyof I_1["response"]["mapMarkers"]["markers"], keyof {
+                } & { [K_101 in Exclude<keyof I_1["response"]["mapMarkers"]["markers"][number], keyof AppMarker>]: never; })[] & { [K_102 in Exclude<keyof I_1["response"]["mapMarkers"]["markers"], keyof {
                     id?: number;
                     type?: AppMarkerType;
                     x?: number;
@@ -4350,7 +4696,7 @@ export declare const AppMessage: {
                         itemConditionMax?: number;
                     }[];
                 }[]>]: never; };
-            } & { [K_98 in Exclude<keyof I_1["response"]["mapMarkers"], "markers">]: never; };
+            } & { [K_103 in Exclude<keyof I_1["response"]["mapMarkers"], "markers">]: never; };
             clanInfo?: {
                 clanInfo?: {
                     clanId?: number;
@@ -4388,7 +4734,7 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[];
-                    maxMemberCount?: number[];
+                    maxMemberCount?: number;
                 };
             } & {
                 clanInfo?: {
@@ -4427,7 +4773,7 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[];
-                    maxMemberCount?: number[];
+                    maxMemberCount?: number;
                 } & {
                     clanId?: number;
                     name?: string;
@@ -4474,7 +4820,7 @@ export declare const AppMessage: {
                         canDemote?: boolean;
                         canSetPlayerNotes?: boolean;
                         canAccessLogs?: boolean;
-                    } & { [K_99 in Exclude<keyof I_1["response"]["clanInfo"]["clanInfo"]["roles"][number], keyof ClanInfo_Role>]: never; })[] & { [K_100 in Exclude<keyof I_1["response"]["clanInfo"]["clanInfo"]["roles"], keyof {
+                    } & { [K_104 in Exclude<keyof I_1["response"]["clanInfo"]["clanInfo"]["roles"][number], keyof ClanInfo_Role>]: never; })[] & { [K_105 in Exclude<keyof I_1["response"]["clanInfo"]["clanInfo"]["roles"], keyof {
                         roleId?: number;
                         rank?: number;
                         name?: string;
@@ -4508,7 +4854,7 @@ export declare const AppMessage: {
                         lastSeen?: number;
                         notes?: string;
                         online?: boolean;
-                    } & { [K_101 in Exclude<keyof I_1["response"]["clanInfo"]["clanInfo"]["members"][number], keyof ClanInfo_Member>]: never; })[] & { [K_102 in Exclude<keyof I_1["response"]["clanInfo"]["clanInfo"]["members"], keyof {
+                    } & { [K_106 in Exclude<keyof I_1["response"]["clanInfo"]["clanInfo"]["members"][number], keyof ClanInfo_Member>]: never; })[] & { [K_107 in Exclude<keyof I_1["response"]["clanInfo"]["clanInfo"]["members"], keyof {
                         steamId?: number;
                         roleId?: number;
                         joined?: number;
@@ -4528,14 +4874,14 @@ export declare const AppMessage: {
                         steamId?: number;
                         recruiter?: number;
                         timestamp?: number;
-                    } & { [K_103 in Exclude<keyof I_1["response"]["clanInfo"]["clanInfo"]["invites"][number], keyof ClanInfo_Invite>]: never; })[] & { [K_104 in Exclude<keyof I_1["response"]["clanInfo"]["clanInfo"]["invites"], keyof {
+                    } & { [K_108 in Exclude<keyof I_1["response"]["clanInfo"]["clanInfo"]["invites"][number], keyof ClanInfo_Invite>]: never; })[] & { [K_109 in Exclude<keyof I_1["response"]["clanInfo"]["clanInfo"]["invites"], keyof {
                         steamId?: number;
                         recruiter?: number;
                         timestamp?: number;
                     }[]>]: never; };
-                    maxMemberCount?: number[] & number[] & { [K_105 in Exclude<keyof I_1["response"]["clanInfo"]["clanInfo"]["maxMemberCount"], keyof number[]>]: never; };
-                } & { [K_106 in Exclude<keyof I_1["response"]["clanInfo"]["clanInfo"], keyof ClanInfo>]: never; };
-            } & { [K_107 in Exclude<keyof I_1["response"]["clanInfo"], "clanInfo">]: never; };
+                    maxMemberCount?: number;
+                } & { [K_110 in Exclude<keyof I_1["response"]["clanInfo"]["clanInfo"], keyof ClanInfo>]: never; };
+            } & { [K_111 in Exclude<keyof I_1["response"]["clanInfo"], "clanInfo">]: never; };
             clanChat?: {
                 messages?: {
                     steamId?: number;
@@ -4559,21 +4905,34 @@ export declare const AppMessage: {
                     name?: string;
                     message?: string;
                     time?: number;
-                } & { [K_108 in Exclude<keyof I_1["response"]["clanChat"]["messages"][number], keyof AppClanMessage>]: never; })[] & { [K_109 in Exclude<keyof I_1["response"]["clanChat"]["messages"], keyof {
+                } & { [K_112 in Exclude<keyof I_1["response"]["clanChat"]["messages"][number], keyof AppClanMessage>]: never; })[] & { [K_113 in Exclude<keyof I_1["response"]["clanChat"]["messages"], keyof {
                     steamId?: number;
                     name?: string;
                     message?: string;
                     time?: number;
                 }[]>]: never; };
-            } & { [K_110 in Exclude<keyof I_1["response"]["clanChat"], "messages">]: never; };
+            } & { [K_114 in Exclude<keyof I_1["response"]["clanChat"], "messages">]: never; };
             nexusAuth?: {
                 serverId?: string;
                 playerToken?: number;
             } & {
                 serverId?: string;
                 playerToken?: number;
-            } & { [K_111 in Exclude<keyof I_1["response"]["nexusAuth"], keyof AppNexusAuth>]: never; };
-        } & { [K_112 in Exclude<keyof I_1["response"], keyof AppResponse>]: never; };
+            } & { [K_115 in Exclude<keyof I_1["response"]["nexusAuth"], keyof AppNexusAuth>]: never; };
+            cameraSubscribeInfo?: {
+                width?: number;
+                height?: number;
+                nearPlane?: number;
+                farPlane?: number;
+                controlFlags?: number;
+            } & {
+                width?: number;
+                height?: number;
+                nearPlane?: number;
+                farPlane?: number;
+                controlFlags?: number;
+            } & { [K_116 in Exclude<keyof I_1["response"]["cameraSubscribeInfo"], keyof AppCameraInfo>]: never; };
+        } & { [K_117 in Exclude<keyof I_1["response"], keyof AppResponse>]: never; };
         broadcast?: {
             teamChanged?: {
                 playerId?: number;
@@ -4661,7 +5020,7 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[];
-                    maxMemberCount?: number[];
+                    maxMemberCount?: number;
                 };
             };
             clanMessage?: {
@@ -4672,6 +5031,32 @@ export declare const AppMessage: {
                     message?: string;
                     time?: number;
                 };
+            };
+            cameraRays?: {
+                verticalFov?: number;
+                sampleOffset?: number;
+                rayData?: Uint8Array;
+                distance?: number;
+                entities?: {
+                    entityId?: number;
+                    type?: AppCameraRays_EntityType;
+                    position?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    rotation?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    size?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    name?: string;
+                }[];
             };
         } & {
             teamChanged?: {
@@ -4752,7 +5137,7 @@ export declare const AppMessage: {
                         spawnTime?: number;
                         isAlive?: boolean;
                         deathTime?: number;
-                    } & { [K_113 in Exclude<keyof I_1["broadcast"]["teamChanged"]["teamInfo"]["members"][number], keyof AppTeamInfo_Member>]: never; })[] & { [K_114 in Exclude<keyof I_1["broadcast"]["teamChanged"]["teamInfo"]["members"], keyof {
+                    } & { [K_118 in Exclude<keyof I_1["broadcast"]["teamChanged"]["teamInfo"]["members"][number], keyof AppTeamInfo_Member>]: never; })[] & { [K_119 in Exclude<keyof I_1["broadcast"]["teamChanged"]["teamInfo"]["members"], keyof {
                         steamId?: number;
                         name?: string;
                         x?: number;
@@ -4774,7 +5159,7 @@ export declare const AppMessage: {
                         type?: number;
                         x?: number;
                         y?: number;
-                    } & { [K_115 in Exclude<keyof I_1["broadcast"]["teamChanged"]["teamInfo"]["mapNotes"][number], keyof AppTeamInfo_Note>]: never; })[] & { [K_116 in Exclude<keyof I_1["broadcast"]["teamChanged"]["teamInfo"]["mapNotes"], keyof {
+                    } & { [K_120 in Exclude<keyof I_1["broadcast"]["teamChanged"]["teamInfo"]["mapNotes"][number], keyof AppTeamInfo_Note>]: never; })[] & { [K_121 in Exclude<keyof I_1["broadcast"]["teamChanged"]["teamInfo"]["mapNotes"], keyof {
                         type?: number;
                         x?: number;
                         y?: number;
@@ -4791,13 +5176,13 @@ export declare const AppMessage: {
                         type?: number;
                         x?: number;
                         y?: number;
-                    } & { [K_117 in Exclude<keyof I_1["broadcast"]["teamChanged"]["teamInfo"]["leaderMapNotes"][number], keyof AppTeamInfo_Note>]: never; })[] & { [K_118 in Exclude<keyof I_1["broadcast"]["teamChanged"]["teamInfo"]["leaderMapNotes"], keyof {
+                    } & { [K_122 in Exclude<keyof I_1["broadcast"]["teamChanged"]["teamInfo"]["leaderMapNotes"][number], keyof AppTeamInfo_Note>]: never; })[] & { [K_123 in Exclude<keyof I_1["broadcast"]["teamChanged"]["teamInfo"]["leaderMapNotes"], keyof {
                         type?: number;
                         x?: number;
                         y?: number;
                     }[]>]: never; };
-                } & { [K_119 in Exclude<keyof I_1["broadcast"]["teamChanged"]["teamInfo"], keyof AppTeamInfo>]: never; };
-            } & { [K_120 in Exclude<keyof I_1["broadcast"]["teamChanged"], keyof AppTeamChanged>]: never; };
+                } & { [K_124 in Exclude<keyof I_1["broadcast"]["teamChanged"]["teamInfo"], keyof AppTeamInfo>]: never; };
+            } & { [K_125 in Exclude<keyof I_1["broadcast"]["teamChanged"], keyof AppTeamChanged>]: never; };
             teamMessage?: {
                 message?: {
                     steamId?: number;
@@ -4819,8 +5204,8 @@ export declare const AppMessage: {
                     message?: string;
                     color?: string;
                     time?: number;
-                } & { [K_121 in Exclude<keyof I_1["broadcast"]["teamMessage"]["message"], keyof AppTeamMessage>]: never; };
-            } & { [K_122 in Exclude<keyof I_1["broadcast"]["teamMessage"], "message">]: never; };
+                } & { [K_126 in Exclude<keyof I_1["broadcast"]["teamMessage"]["message"], keyof AppTeamMessage>]: never; };
+            } & { [K_127 in Exclude<keyof I_1["broadcast"]["teamMessage"], "message">]: never; };
             entityChanged?: {
                 entityId?: number;
                 payload?: {
@@ -4860,7 +5245,7 @@ export declare const AppMessage: {
                         itemId?: number;
                         quantity?: number;
                         itemIsBlueprint?: boolean;
-                    } & { [K_123 in Exclude<keyof I_1["broadcast"]["entityChanged"]["payload"]["items"][number], keyof AppEntityPayload_Item>]: never; })[] & { [K_124 in Exclude<keyof I_1["broadcast"]["entityChanged"]["payload"]["items"], keyof {
+                    } & { [K_128 in Exclude<keyof I_1["broadcast"]["entityChanged"]["payload"]["items"][number], keyof AppEntityPayload_Item>]: never; })[] & { [K_129 in Exclude<keyof I_1["broadcast"]["entityChanged"]["payload"]["items"], keyof {
                         itemId?: number;
                         quantity?: number;
                         itemIsBlueprint?: boolean;
@@ -4868,8 +5253,8 @@ export declare const AppMessage: {
                     capacity?: number;
                     hasProtection?: boolean;
                     protectionExpiry?: number;
-                } & { [K_125 in Exclude<keyof I_1["broadcast"]["entityChanged"]["payload"], keyof AppEntityPayload>]: never; };
-            } & { [K_126 in Exclude<keyof I_1["broadcast"]["entityChanged"], keyof AppEntityChanged>]: never; };
+                } & { [K_130 in Exclude<keyof I_1["broadcast"]["entityChanged"]["payload"], keyof AppEntityPayload>]: never; };
+            } & { [K_131 in Exclude<keyof I_1["broadcast"]["entityChanged"], keyof AppEntityChanged>]: never; };
             clanChanged?: {
                 clanInfo?: {
                     clanId?: number;
@@ -4907,7 +5292,7 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[];
-                    maxMemberCount?: number[];
+                    maxMemberCount?: number;
                 };
             } & {
                 clanInfo?: {
@@ -4946,7 +5331,7 @@ export declare const AppMessage: {
                         recruiter?: number;
                         timestamp?: number;
                     }[];
-                    maxMemberCount?: number[];
+                    maxMemberCount?: number;
                 } & {
                     clanId?: number;
                     name?: string;
@@ -4993,7 +5378,7 @@ export declare const AppMessage: {
                         canDemote?: boolean;
                         canSetPlayerNotes?: boolean;
                         canAccessLogs?: boolean;
-                    } & { [K_127 in Exclude<keyof I_1["broadcast"]["clanChanged"]["clanInfo"]["roles"][number], keyof ClanInfo_Role>]: never; })[] & { [K_128 in Exclude<keyof I_1["broadcast"]["clanChanged"]["clanInfo"]["roles"], keyof {
+                    } & { [K_132 in Exclude<keyof I_1["broadcast"]["clanChanged"]["clanInfo"]["roles"][number], keyof ClanInfo_Role>]: never; })[] & { [K_133 in Exclude<keyof I_1["broadcast"]["clanChanged"]["clanInfo"]["roles"], keyof {
                         roleId?: number;
                         rank?: number;
                         name?: string;
@@ -5027,7 +5412,7 @@ export declare const AppMessage: {
                         lastSeen?: number;
                         notes?: string;
                         online?: boolean;
-                    } & { [K_129 in Exclude<keyof I_1["broadcast"]["clanChanged"]["clanInfo"]["members"][number], keyof ClanInfo_Member>]: never; })[] & { [K_130 in Exclude<keyof I_1["broadcast"]["clanChanged"]["clanInfo"]["members"], keyof {
+                    } & { [K_134 in Exclude<keyof I_1["broadcast"]["clanChanged"]["clanInfo"]["members"][number], keyof ClanInfo_Member>]: never; })[] & { [K_135 in Exclude<keyof I_1["broadcast"]["clanChanged"]["clanInfo"]["members"], keyof {
                         steamId?: number;
                         roleId?: number;
                         joined?: number;
@@ -5047,14 +5432,14 @@ export declare const AppMessage: {
                         steamId?: number;
                         recruiter?: number;
                         timestamp?: number;
-                    } & { [K_131 in Exclude<keyof I_1["broadcast"]["clanChanged"]["clanInfo"]["invites"][number], keyof ClanInfo_Invite>]: never; })[] & { [K_132 in Exclude<keyof I_1["broadcast"]["clanChanged"]["clanInfo"]["invites"], keyof {
+                    } & { [K_136 in Exclude<keyof I_1["broadcast"]["clanChanged"]["clanInfo"]["invites"][number], keyof ClanInfo_Invite>]: never; })[] & { [K_137 in Exclude<keyof I_1["broadcast"]["clanChanged"]["clanInfo"]["invites"], keyof {
                         steamId?: number;
                         recruiter?: number;
                         timestamp?: number;
                     }[]>]: never; };
-                    maxMemberCount?: number[] & number[] & { [K_133 in Exclude<keyof I_1["broadcast"]["clanChanged"]["clanInfo"]["maxMemberCount"], keyof number[]>]: never; };
-                } & { [K_134 in Exclude<keyof I_1["broadcast"]["clanChanged"]["clanInfo"], keyof ClanInfo>]: never; };
-            } & { [K_135 in Exclude<keyof I_1["broadcast"]["clanChanged"], "clanInfo">]: never; };
+                    maxMemberCount?: number;
+                } & { [K_138 in Exclude<keyof I_1["broadcast"]["clanChanged"]["clanInfo"], keyof ClanInfo>]: never; };
+            } & { [K_139 in Exclude<keyof I_1["broadcast"]["clanChanged"], "clanInfo">]: never; };
             clanMessage?: {
                 clanId?: number;
                 message?: {
@@ -5075,10 +5460,130 @@ export declare const AppMessage: {
                     name?: string;
                     message?: string;
                     time?: number;
-                } & { [K_136 in Exclude<keyof I_1["broadcast"]["clanMessage"]["message"], keyof AppClanMessage>]: never; };
-            } & { [K_137 in Exclude<keyof I_1["broadcast"]["clanMessage"], keyof AppNewClanMessage>]: never; };
-        } & { [K_138 in Exclude<keyof I_1["broadcast"], keyof AppBroadcast>]: never; };
-    } & { [K_139 in Exclude<keyof I_1, keyof AppMessage>]: never; }>(object: I_1): AppMessage;
+                } & { [K_140 in Exclude<keyof I_1["broadcast"]["clanMessage"]["message"], keyof AppClanMessage>]: never; };
+            } & { [K_141 in Exclude<keyof I_1["broadcast"]["clanMessage"], keyof AppNewClanMessage>]: never; };
+            cameraRays?: {
+                verticalFov?: number;
+                sampleOffset?: number;
+                rayData?: Uint8Array;
+                distance?: number;
+                entities?: {
+                    entityId?: number;
+                    type?: AppCameraRays_EntityType;
+                    position?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    rotation?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    size?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    name?: string;
+                }[];
+            } & {
+                verticalFov?: number;
+                sampleOffset?: number;
+                rayData?: Uint8Array;
+                distance?: number;
+                entities?: {
+                    entityId?: number;
+                    type?: AppCameraRays_EntityType;
+                    position?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    rotation?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    size?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    name?: string;
+                }[] & ({
+                    entityId?: number;
+                    type?: AppCameraRays_EntityType;
+                    position?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    rotation?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    size?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    name?: string;
+                } & {
+                    entityId?: number;
+                    type?: AppCameraRays_EntityType;
+                    position?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    } & {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    } & { [K_142 in Exclude<keyof I_1["broadcast"]["cameraRays"]["entities"][number]["position"], keyof Vector3>]: never; };
+                    rotation?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    } & {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    } & { [K_143 in Exclude<keyof I_1["broadcast"]["cameraRays"]["entities"][number]["rotation"], keyof Vector3>]: never; };
+                    size?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    } & {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    } & { [K_144 in Exclude<keyof I_1["broadcast"]["cameraRays"]["entities"][number]["size"], keyof Vector3>]: never; };
+                    name?: string;
+                } & { [K_145 in Exclude<keyof I_1["broadcast"]["cameraRays"]["entities"][number], keyof AppCameraRays_Entity>]: never; })[] & { [K_146 in Exclude<keyof I_1["broadcast"]["cameraRays"]["entities"], keyof {
+                    entityId?: number;
+                    type?: AppCameraRays_EntityType;
+                    position?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    rotation?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    size?: {
+                        x?: number;
+                        y?: number;
+                        z?: number;
+                    };
+                    name?: string;
+                }[]>]: never; };
+            } & { [K_147 in Exclude<keyof I_1["broadcast"]["cameraRays"], keyof AppCameraRays>]: never; };
+        } & { [K_148 in Exclude<keyof I_1["broadcast"], keyof AppBroadcast>]: never; };
+    } & { [K_149 in Exclude<keyof I_1, keyof AppMessage>]: never; }>(object: I_1): AppMessage;
 };
 export declare const AppResponse: {
     encode(message: AppResponse, writer?: _m0.Writer): _m0.Writer;
@@ -5250,7 +5755,7 @@ export declare const AppResponse: {
                     recruiter?: number;
                     timestamp?: number;
                 }[];
-                maxMemberCount?: number[];
+                maxMemberCount?: number;
             };
         };
         clanChat?: {
@@ -5264,6 +5769,13 @@ export declare const AppResponse: {
         nexusAuth?: {
             serverId?: string;
             playerToken?: number;
+        };
+        cameraSubscribeInfo?: {
+            width?: number;
+            height?: number;
+            nearPlane?: number;
+            farPlane?: number;
+            controlFlags?: number;
         };
     } & {
         seq?: number;
@@ -5791,7 +6303,7 @@ export declare const AppResponse: {
                     recruiter?: number;
                     timestamp?: number;
                 }[];
-                maxMemberCount?: number[];
+                maxMemberCount?: number;
             };
         } & {
             clanInfo?: {
@@ -5830,7 +6342,7 @@ export declare const AppResponse: {
                     recruiter?: number;
                     timestamp?: number;
                 }[];
-                maxMemberCount?: number[];
+                maxMemberCount?: number;
             } & {
                 clanId?: number;
                 name?: string;
@@ -5936,9 +6448,9 @@ export declare const AppResponse: {
                     recruiter?: number;
                     timestamp?: number;
                 }[]>]: never; };
-                maxMemberCount?: number[] & number[] & { [K_35 in Exclude<keyof I["clanInfo"]["clanInfo"]["maxMemberCount"], keyof number[]>]: never; };
-            } & { [K_36 in Exclude<keyof I["clanInfo"]["clanInfo"], keyof ClanInfo>]: never; };
-        } & { [K_37 in Exclude<keyof I["clanInfo"], "clanInfo">]: never; };
+                maxMemberCount?: number;
+            } & { [K_35 in Exclude<keyof I["clanInfo"]["clanInfo"], keyof ClanInfo>]: never; };
+        } & { [K_36 in Exclude<keyof I["clanInfo"], "clanInfo">]: never; };
         clanChat?: {
             messages?: {
                 steamId?: number;
@@ -5962,20 +6474,33 @@ export declare const AppResponse: {
                 name?: string;
                 message?: string;
                 time?: number;
-            } & { [K_38 in Exclude<keyof I["clanChat"]["messages"][number], keyof AppClanMessage>]: never; })[] & { [K_39 in Exclude<keyof I["clanChat"]["messages"], keyof {
+            } & { [K_37 in Exclude<keyof I["clanChat"]["messages"][number], keyof AppClanMessage>]: never; })[] & { [K_38 in Exclude<keyof I["clanChat"]["messages"], keyof {
                 steamId?: number;
                 name?: string;
                 message?: string;
                 time?: number;
             }[]>]: never; };
-        } & { [K_40 in Exclude<keyof I["clanChat"], "messages">]: never; };
+        } & { [K_39 in Exclude<keyof I["clanChat"], "messages">]: never; };
         nexusAuth?: {
             serverId?: string;
             playerToken?: number;
         } & {
             serverId?: string;
             playerToken?: number;
-        } & { [K_41 in Exclude<keyof I["nexusAuth"], keyof AppNexusAuth>]: never; };
+        } & { [K_40 in Exclude<keyof I["nexusAuth"], keyof AppNexusAuth>]: never; };
+        cameraSubscribeInfo?: {
+            width?: number;
+            height?: number;
+            nearPlane?: number;
+            farPlane?: number;
+            controlFlags?: number;
+        } & {
+            width?: number;
+            height?: number;
+            nearPlane?: number;
+            farPlane?: number;
+            controlFlags?: number;
+        } & { [K_41 in Exclude<keyof I["cameraSubscribeInfo"], keyof AppCameraInfo>]: never; };
     } & { [K_42 in Exclude<keyof I, keyof AppResponse>]: never; }>(base?: I): AppResponse;
     fromPartial<I_1 extends {
         seq?: number;
@@ -6142,7 +6667,7 @@ export declare const AppResponse: {
                     recruiter?: number;
                     timestamp?: number;
                 }[];
-                maxMemberCount?: number[];
+                maxMemberCount?: number;
             };
         };
         clanChat?: {
@@ -6156,6 +6681,13 @@ export declare const AppResponse: {
         nexusAuth?: {
             serverId?: string;
             playerToken?: number;
+        };
+        cameraSubscribeInfo?: {
+            width?: number;
+            height?: number;
+            nearPlane?: number;
+            farPlane?: number;
+            controlFlags?: number;
         };
     } & {
         seq?: number;
@@ -6683,7 +7215,7 @@ export declare const AppResponse: {
                     recruiter?: number;
                     timestamp?: number;
                 }[];
-                maxMemberCount?: number[];
+                maxMemberCount?: number;
             };
         } & {
             clanInfo?: {
@@ -6722,7 +7254,7 @@ export declare const AppResponse: {
                     recruiter?: number;
                     timestamp?: number;
                 }[];
-                maxMemberCount?: number[];
+                maxMemberCount?: number;
             } & {
                 clanId?: number;
                 name?: string;
@@ -6828,9 +7360,9 @@ export declare const AppResponse: {
                     recruiter?: number;
                     timestamp?: number;
                 }[]>]: never; };
-                maxMemberCount?: number[] & number[] & { [K_78 in Exclude<keyof I_1["clanInfo"]["clanInfo"]["maxMemberCount"], keyof number[]>]: never; };
-            } & { [K_79 in Exclude<keyof I_1["clanInfo"]["clanInfo"], keyof ClanInfo>]: never; };
-        } & { [K_80 in Exclude<keyof I_1["clanInfo"], "clanInfo">]: never; };
+                maxMemberCount?: number;
+            } & { [K_78 in Exclude<keyof I_1["clanInfo"]["clanInfo"], keyof ClanInfo>]: never; };
+        } & { [K_79 in Exclude<keyof I_1["clanInfo"], "clanInfo">]: never; };
         clanChat?: {
             messages?: {
                 steamId?: number;
@@ -6854,20 +7386,33 @@ export declare const AppResponse: {
                 name?: string;
                 message?: string;
                 time?: number;
-            } & { [K_81 in Exclude<keyof I_1["clanChat"]["messages"][number], keyof AppClanMessage>]: never; })[] & { [K_82 in Exclude<keyof I_1["clanChat"]["messages"], keyof {
+            } & { [K_80 in Exclude<keyof I_1["clanChat"]["messages"][number], keyof AppClanMessage>]: never; })[] & { [K_81 in Exclude<keyof I_1["clanChat"]["messages"], keyof {
                 steamId?: number;
                 name?: string;
                 message?: string;
                 time?: number;
             }[]>]: never; };
-        } & { [K_83 in Exclude<keyof I_1["clanChat"], "messages">]: never; };
+        } & { [K_82 in Exclude<keyof I_1["clanChat"], "messages">]: never; };
         nexusAuth?: {
             serverId?: string;
             playerToken?: number;
         } & {
             serverId?: string;
             playerToken?: number;
-        } & { [K_84 in Exclude<keyof I_1["nexusAuth"], keyof AppNexusAuth>]: never; };
+        } & { [K_83 in Exclude<keyof I_1["nexusAuth"], keyof AppNexusAuth>]: never; };
+        cameraSubscribeInfo?: {
+            width?: number;
+            height?: number;
+            nearPlane?: number;
+            farPlane?: number;
+            controlFlags?: number;
+        } & {
+            width?: number;
+            height?: number;
+            nearPlane?: number;
+            farPlane?: number;
+            controlFlags?: number;
+        } & { [K_84 in Exclude<keyof I_1["cameraSubscribeInfo"], keyof AppCameraInfo>]: never; };
     } & { [K_85 in Exclude<keyof I_1, keyof AppResponse>]: never; }>(object: I_1): AppResponse;
 };
 export declare const AppBroadcast: {
@@ -6962,7 +7507,7 @@ export declare const AppBroadcast: {
                     recruiter?: number;
                     timestamp?: number;
                 }[];
-                maxMemberCount?: number[];
+                maxMemberCount?: number;
             };
         };
         clanMessage?: {
@@ -6973,6 +7518,32 @@ export declare const AppBroadcast: {
                 message?: string;
                 time?: number;
             };
+        };
+        cameraRays?: {
+            verticalFov?: number;
+            sampleOffset?: number;
+            rayData?: Uint8Array;
+            distance?: number;
+            entities?: {
+                entityId?: number;
+                type?: AppCameraRays_EntityType;
+                position?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                rotation?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                size?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                name?: string;
+            }[];
         };
     } & {
         teamChanged?: {
@@ -7208,7 +7779,7 @@ export declare const AppBroadcast: {
                     recruiter?: number;
                     timestamp?: number;
                 }[];
-                maxMemberCount?: number[];
+                maxMemberCount?: number;
             };
         } & {
             clanInfo?: {
@@ -7247,7 +7818,7 @@ export declare const AppBroadcast: {
                     recruiter?: number;
                     timestamp?: number;
                 }[];
-                maxMemberCount?: number[];
+                maxMemberCount?: number;
             } & {
                 clanId?: number;
                 name?: string;
@@ -7353,9 +7924,9 @@ export declare const AppBroadcast: {
                     recruiter?: number;
                     timestamp?: number;
                 }[]>]: never; };
-                maxMemberCount?: number[] & number[] & { [K_20 in Exclude<keyof I["clanChanged"]["clanInfo"]["maxMemberCount"], keyof number[]>]: never; };
-            } & { [K_21 in Exclude<keyof I["clanChanged"]["clanInfo"], keyof ClanInfo>]: never; };
-        } & { [K_22 in Exclude<keyof I["clanChanged"], "clanInfo">]: never; };
+                maxMemberCount?: number;
+            } & { [K_20 in Exclude<keyof I["clanChanged"]["clanInfo"], keyof ClanInfo>]: never; };
+        } & { [K_21 in Exclude<keyof I["clanChanged"], "clanInfo">]: never; };
         clanMessage?: {
             clanId?: number;
             message?: {
@@ -7376,9 +7947,129 @@ export declare const AppBroadcast: {
                 name?: string;
                 message?: string;
                 time?: number;
-            } & { [K_23 in Exclude<keyof I["clanMessage"]["message"], keyof AppClanMessage>]: never; };
-        } & { [K_24 in Exclude<keyof I["clanMessage"], keyof AppNewClanMessage>]: never; };
-    } & { [K_25 in Exclude<keyof I, keyof AppBroadcast>]: never; }>(base?: I): AppBroadcast;
+            } & { [K_22 in Exclude<keyof I["clanMessage"]["message"], keyof AppClanMessage>]: never; };
+        } & { [K_23 in Exclude<keyof I["clanMessage"], keyof AppNewClanMessage>]: never; };
+        cameraRays?: {
+            verticalFov?: number;
+            sampleOffset?: number;
+            rayData?: Uint8Array;
+            distance?: number;
+            entities?: {
+                entityId?: number;
+                type?: AppCameraRays_EntityType;
+                position?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                rotation?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                size?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                name?: string;
+            }[];
+        } & {
+            verticalFov?: number;
+            sampleOffset?: number;
+            rayData?: Uint8Array;
+            distance?: number;
+            entities?: {
+                entityId?: number;
+                type?: AppCameraRays_EntityType;
+                position?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                rotation?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                size?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                name?: string;
+            }[] & ({
+                entityId?: number;
+                type?: AppCameraRays_EntityType;
+                position?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                rotation?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                size?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                name?: string;
+            } & {
+                entityId?: number;
+                type?: AppCameraRays_EntityType;
+                position?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                } & {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                } & { [K_24 in Exclude<keyof I["cameraRays"]["entities"][number]["position"], keyof Vector3>]: never; };
+                rotation?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                } & {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                } & { [K_25 in Exclude<keyof I["cameraRays"]["entities"][number]["rotation"], keyof Vector3>]: never; };
+                size?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                } & {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                } & { [K_26 in Exclude<keyof I["cameraRays"]["entities"][number]["size"], keyof Vector3>]: never; };
+                name?: string;
+            } & { [K_27 in Exclude<keyof I["cameraRays"]["entities"][number], keyof AppCameraRays_Entity>]: never; })[] & { [K_28 in Exclude<keyof I["cameraRays"]["entities"], keyof {
+                entityId?: number;
+                type?: AppCameraRays_EntityType;
+                position?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                rotation?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                size?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                name?: string;
+            }[]>]: never; };
+        } & { [K_29 in Exclude<keyof I["cameraRays"], keyof AppCameraRays>]: never; };
+    } & { [K_30 in Exclude<keyof I, keyof AppBroadcast>]: never; }>(base?: I): AppBroadcast;
     fromPartial<I_1 extends {
         teamChanged?: {
             playerId?: number;
@@ -7466,7 +8157,7 @@ export declare const AppBroadcast: {
                     recruiter?: number;
                     timestamp?: number;
                 }[];
-                maxMemberCount?: number[];
+                maxMemberCount?: number;
             };
         };
         clanMessage?: {
@@ -7477,6 +8168,32 @@ export declare const AppBroadcast: {
                 message?: string;
                 time?: number;
             };
+        };
+        cameraRays?: {
+            verticalFov?: number;
+            sampleOffset?: number;
+            rayData?: Uint8Array;
+            distance?: number;
+            entities?: {
+                entityId?: number;
+                type?: AppCameraRays_EntityType;
+                position?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                rotation?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                size?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                name?: string;
+            }[];
         };
     } & {
         teamChanged?: {
@@ -7557,7 +8274,7 @@ export declare const AppBroadcast: {
                     spawnTime?: number;
                     isAlive?: boolean;
                     deathTime?: number;
-                } & { [K_26 in Exclude<keyof I_1["teamChanged"]["teamInfo"]["members"][number], keyof AppTeamInfo_Member>]: never; })[] & { [K_27 in Exclude<keyof I_1["teamChanged"]["teamInfo"]["members"], keyof {
+                } & { [K_31 in Exclude<keyof I_1["teamChanged"]["teamInfo"]["members"][number], keyof AppTeamInfo_Member>]: never; })[] & { [K_32 in Exclude<keyof I_1["teamChanged"]["teamInfo"]["members"], keyof {
                     steamId?: number;
                     name?: string;
                     x?: number;
@@ -7579,7 +8296,7 @@ export declare const AppBroadcast: {
                     type?: number;
                     x?: number;
                     y?: number;
-                } & { [K_28 in Exclude<keyof I_1["teamChanged"]["teamInfo"]["mapNotes"][number], keyof AppTeamInfo_Note>]: never; })[] & { [K_29 in Exclude<keyof I_1["teamChanged"]["teamInfo"]["mapNotes"], keyof {
+                } & { [K_33 in Exclude<keyof I_1["teamChanged"]["teamInfo"]["mapNotes"][number], keyof AppTeamInfo_Note>]: never; })[] & { [K_34 in Exclude<keyof I_1["teamChanged"]["teamInfo"]["mapNotes"], keyof {
                     type?: number;
                     x?: number;
                     y?: number;
@@ -7596,13 +8313,13 @@ export declare const AppBroadcast: {
                     type?: number;
                     x?: number;
                     y?: number;
-                } & { [K_30 in Exclude<keyof I_1["teamChanged"]["teamInfo"]["leaderMapNotes"][number], keyof AppTeamInfo_Note>]: never; })[] & { [K_31 in Exclude<keyof I_1["teamChanged"]["teamInfo"]["leaderMapNotes"], keyof {
+                } & { [K_35 in Exclude<keyof I_1["teamChanged"]["teamInfo"]["leaderMapNotes"][number], keyof AppTeamInfo_Note>]: never; })[] & { [K_36 in Exclude<keyof I_1["teamChanged"]["teamInfo"]["leaderMapNotes"], keyof {
                     type?: number;
                     x?: number;
                     y?: number;
                 }[]>]: never; };
-            } & { [K_32 in Exclude<keyof I_1["teamChanged"]["teamInfo"], keyof AppTeamInfo>]: never; };
-        } & { [K_33 in Exclude<keyof I_1["teamChanged"], keyof AppTeamChanged>]: never; };
+            } & { [K_37 in Exclude<keyof I_1["teamChanged"]["teamInfo"], keyof AppTeamInfo>]: never; };
+        } & { [K_38 in Exclude<keyof I_1["teamChanged"], keyof AppTeamChanged>]: never; };
         teamMessage?: {
             message?: {
                 steamId?: number;
@@ -7624,8 +8341,8 @@ export declare const AppBroadcast: {
                 message?: string;
                 color?: string;
                 time?: number;
-            } & { [K_34 in Exclude<keyof I_1["teamMessage"]["message"], keyof AppTeamMessage>]: never; };
-        } & { [K_35 in Exclude<keyof I_1["teamMessage"], "message">]: never; };
+            } & { [K_39 in Exclude<keyof I_1["teamMessage"]["message"], keyof AppTeamMessage>]: never; };
+        } & { [K_40 in Exclude<keyof I_1["teamMessage"], "message">]: never; };
         entityChanged?: {
             entityId?: number;
             payload?: {
@@ -7665,7 +8382,7 @@ export declare const AppBroadcast: {
                     itemId?: number;
                     quantity?: number;
                     itemIsBlueprint?: boolean;
-                } & { [K_36 in Exclude<keyof I_1["entityChanged"]["payload"]["items"][number], keyof AppEntityPayload_Item>]: never; })[] & { [K_37 in Exclude<keyof I_1["entityChanged"]["payload"]["items"], keyof {
+                } & { [K_41 in Exclude<keyof I_1["entityChanged"]["payload"]["items"][number], keyof AppEntityPayload_Item>]: never; })[] & { [K_42 in Exclude<keyof I_1["entityChanged"]["payload"]["items"], keyof {
                     itemId?: number;
                     quantity?: number;
                     itemIsBlueprint?: boolean;
@@ -7673,8 +8390,8 @@ export declare const AppBroadcast: {
                 capacity?: number;
                 hasProtection?: boolean;
                 protectionExpiry?: number;
-            } & { [K_38 in Exclude<keyof I_1["entityChanged"]["payload"], keyof AppEntityPayload>]: never; };
-        } & { [K_39 in Exclude<keyof I_1["entityChanged"], keyof AppEntityChanged>]: never; };
+            } & { [K_43 in Exclude<keyof I_1["entityChanged"]["payload"], keyof AppEntityPayload>]: never; };
+        } & { [K_44 in Exclude<keyof I_1["entityChanged"], keyof AppEntityChanged>]: never; };
         clanChanged?: {
             clanInfo?: {
                 clanId?: number;
@@ -7712,7 +8429,7 @@ export declare const AppBroadcast: {
                     recruiter?: number;
                     timestamp?: number;
                 }[];
-                maxMemberCount?: number[];
+                maxMemberCount?: number;
             };
         } & {
             clanInfo?: {
@@ -7751,7 +8468,7 @@ export declare const AppBroadcast: {
                     recruiter?: number;
                     timestamp?: number;
                 }[];
-                maxMemberCount?: number[];
+                maxMemberCount?: number;
             } & {
                 clanId?: number;
                 name?: string;
@@ -7798,7 +8515,7 @@ export declare const AppBroadcast: {
                     canDemote?: boolean;
                     canSetPlayerNotes?: boolean;
                     canAccessLogs?: boolean;
-                } & { [K_40 in Exclude<keyof I_1["clanChanged"]["clanInfo"]["roles"][number], keyof ClanInfo_Role>]: never; })[] & { [K_41 in Exclude<keyof I_1["clanChanged"]["clanInfo"]["roles"], keyof {
+                } & { [K_45 in Exclude<keyof I_1["clanChanged"]["clanInfo"]["roles"][number], keyof ClanInfo_Role>]: never; })[] & { [K_46 in Exclude<keyof I_1["clanChanged"]["clanInfo"]["roles"], keyof {
                     roleId?: number;
                     rank?: number;
                     name?: string;
@@ -7832,7 +8549,7 @@ export declare const AppBroadcast: {
                     lastSeen?: number;
                     notes?: string;
                     online?: boolean;
-                } & { [K_42 in Exclude<keyof I_1["clanChanged"]["clanInfo"]["members"][number], keyof ClanInfo_Member>]: never; })[] & { [K_43 in Exclude<keyof I_1["clanChanged"]["clanInfo"]["members"], keyof {
+                } & { [K_47 in Exclude<keyof I_1["clanChanged"]["clanInfo"]["members"][number], keyof ClanInfo_Member>]: never; })[] & { [K_48 in Exclude<keyof I_1["clanChanged"]["clanInfo"]["members"], keyof {
                     steamId?: number;
                     roleId?: number;
                     joined?: number;
@@ -7852,14 +8569,14 @@ export declare const AppBroadcast: {
                     steamId?: number;
                     recruiter?: number;
                     timestamp?: number;
-                } & { [K_44 in Exclude<keyof I_1["clanChanged"]["clanInfo"]["invites"][number], keyof ClanInfo_Invite>]: never; })[] & { [K_45 in Exclude<keyof I_1["clanChanged"]["clanInfo"]["invites"], keyof {
+                } & { [K_49 in Exclude<keyof I_1["clanChanged"]["clanInfo"]["invites"][number], keyof ClanInfo_Invite>]: never; })[] & { [K_50 in Exclude<keyof I_1["clanChanged"]["clanInfo"]["invites"], keyof {
                     steamId?: number;
                     recruiter?: number;
                     timestamp?: number;
                 }[]>]: never; };
-                maxMemberCount?: number[] & number[] & { [K_46 in Exclude<keyof I_1["clanChanged"]["clanInfo"]["maxMemberCount"], keyof number[]>]: never; };
-            } & { [K_47 in Exclude<keyof I_1["clanChanged"]["clanInfo"], keyof ClanInfo>]: never; };
-        } & { [K_48 in Exclude<keyof I_1["clanChanged"], "clanInfo">]: never; };
+                maxMemberCount?: number;
+            } & { [K_51 in Exclude<keyof I_1["clanChanged"]["clanInfo"], keyof ClanInfo>]: never; };
+        } & { [K_52 in Exclude<keyof I_1["clanChanged"], "clanInfo">]: never; };
         clanMessage?: {
             clanId?: number;
             message?: {
@@ -7880,9 +8597,129 @@ export declare const AppBroadcast: {
                 name?: string;
                 message?: string;
                 time?: number;
-            } & { [K_49 in Exclude<keyof I_1["clanMessage"]["message"], keyof AppClanMessage>]: never; };
-        } & { [K_50 in Exclude<keyof I_1["clanMessage"], keyof AppNewClanMessage>]: never; };
-    } & { [K_51 in Exclude<keyof I_1, keyof AppBroadcast>]: never; }>(object: I_1): AppBroadcast;
+            } & { [K_53 in Exclude<keyof I_1["clanMessage"]["message"], keyof AppClanMessage>]: never; };
+        } & { [K_54 in Exclude<keyof I_1["clanMessage"], keyof AppNewClanMessage>]: never; };
+        cameraRays?: {
+            verticalFov?: number;
+            sampleOffset?: number;
+            rayData?: Uint8Array;
+            distance?: number;
+            entities?: {
+                entityId?: number;
+                type?: AppCameraRays_EntityType;
+                position?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                rotation?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                size?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                name?: string;
+            }[];
+        } & {
+            verticalFov?: number;
+            sampleOffset?: number;
+            rayData?: Uint8Array;
+            distance?: number;
+            entities?: {
+                entityId?: number;
+                type?: AppCameraRays_EntityType;
+                position?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                rotation?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                size?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                name?: string;
+            }[] & ({
+                entityId?: number;
+                type?: AppCameraRays_EntityType;
+                position?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                rotation?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                size?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                name?: string;
+            } & {
+                entityId?: number;
+                type?: AppCameraRays_EntityType;
+                position?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                } & {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                } & { [K_55 in Exclude<keyof I_1["cameraRays"]["entities"][number]["position"], keyof Vector3>]: never; };
+                rotation?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                } & {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                } & { [K_56 in Exclude<keyof I_1["cameraRays"]["entities"][number]["rotation"], keyof Vector3>]: never; };
+                size?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                } & {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                } & { [K_57 in Exclude<keyof I_1["cameraRays"]["entities"][number]["size"], keyof Vector3>]: never; };
+                name?: string;
+            } & { [K_58 in Exclude<keyof I_1["cameraRays"]["entities"][number], keyof AppCameraRays_Entity>]: never; })[] & { [K_59 in Exclude<keyof I_1["cameraRays"]["entities"], keyof {
+                entityId?: number;
+                type?: AppCameraRays_EntityType;
+                position?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                rotation?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                size?: {
+                    x?: number;
+                    y?: number;
+                    z?: number;
+                };
+                name?: string;
+            }[]>]: never; };
+        } & { [K_60 in Exclude<keyof I_1["cameraRays"], keyof AppCameraRays>]: never; };
+    } & { [K_61 in Exclude<keyof I_1, keyof AppBroadcast>]: never; }>(object: I_1): AppBroadcast;
 };
 export declare const AppEmpty: {
     encode(_: AppEmpty, writer?: _m0.Writer): _m0.Writer;
@@ -9524,7 +10361,7 @@ export declare const AppClanInfo: {
                 recruiter?: number;
                 timestamp?: number;
             }[];
-            maxMemberCount?: number[];
+            maxMemberCount?: number;
         };
     } & {
         clanInfo?: {
@@ -9563,7 +10400,7 @@ export declare const AppClanInfo: {
                 recruiter?: number;
                 timestamp?: number;
             }[];
-            maxMemberCount?: number[];
+            maxMemberCount?: number;
         } & {
             clanId?: number;
             name?: string;
@@ -9669,9 +10506,9 @@ export declare const AppClanInfo: {
                 recruiter?: number;
                 timestamp?: number;
             }[]>]: never; };
-            maxMemberCount?: number[] & number[] & { [K_6 in Exclude<keyof I["clanInfo"]["maxMemberCount"], keyof number[]>]: never; };
-        } & { [K_7 in Exclude<keyof I["clanInfo"], keyof ClanInfo>]: never; };
-    } & { [K_8 in Exclude<keyof I, "clanInfo">]: never; }>(base?: I): AppClanInfo;
+            maxMemberCount?: number;
+        } & { [K_6 in Exclude<keyof I["clanInfo"], keyof ClanInfo>]: never; };
+    } & { [K_7 in Exclude<keyof I, "clanInfo">]: never; }>(base?: I): AppClanInfo;
     fromPartial<I_1 extends {
         clanInfo?: {
             clanId?: number;
@@ -9709,7 +10546,7 @@ export declare const AppClanInfo: {
                 recruiter?: number;
                 timestamp?: number;
             }[];
-            maxMemberCount?: number[];
+            maxMemberCount?: number;
         };
     } & {
         clanInfo?: {
@@ -9748,7 +10585,7 @@ export declare const AppClanInfo: {
                 recruiter?: number;
                 timestamp?: number;
             }[];
-            maxMemberCount?: number[];
+            maxMemberCount?: number;
         } & {
             clanId?: number;
             name?: string;
@@ -9795,7 +10632,7 @@ export declare const AppClanInfo: {
                 canDemote?: boolean;
                 canSetPlayerNotes?: boolean;
                 canAccessLogs?: boolean;
-            } & { [K_9 in Exclude<keyof I_1["clanInfo"]["roles"][number], keyof ClanInfo_Role>]: never; })[] & { [K_10 in Exclude<keyof I_1["clanInfo"]["roles"], keyof {
+            } & { [K_8 in Exclude<keyof I_1["clanInfo"]["roles"][number], keyof ClanInfo_Role>]: never; })[] & { [K_9 in Exclude<keyof I_1["clanInfo"]["roles"], keyof {
                 roleId?: number;
                 rank?: number;
                 name?: string;
@@ -9829,7 +10666,7 @@ export declare const AppClanInfo: {
                 lastSeen?: number;
                 notes?: string;
                 online?: boolean;
-            } & { [K_11 in Exclude<keyof I_1["clanInfo"]["members"][number], keyof ClanInfo_Member>]: never; })[] & { [K_12 in Exclude<keyof I_1["clanInfo"]["members"], keyof {
+            } & { [K_10 in Exclude<keyof I_1["clanInfo"]["members"][number], keyof ClanInfo_Member>]: never; })[] & { [K_11 in Exclude<keyof I_1["clanInfo"]["members"], keyof {
                 steamId?: number;
                 roleId?: number;
                 joined?: number;
@@ -9849,14 +10686,14 @@ export declare const AppClanInfo: {
                 steamId?: number;
                 recruiter?: number;
                 timestamp?: number;
-            } & { [K_13 in Exclude<keyof I_1["clanInfo"]["invites"][number], keyof ClanInfo_Invite>]: never; })[] & { [K_14 in Exclude<keyof I_1["clanInfo"]["invites"], keyof {
+            } & { [K_12 in Exclude<keyof I_1["clanInfo"]["invites"][number], keyof ClanInfo_Invite>]: never; })[] & { [K_13 in Exclude<keyof I_1["clanInfo"]["invites"], keyof {
                 steamId?: number;
                 recruiter?: number;
                 timestamp?: number;
             }[]>]: never; };
-            maxMemberCount?: number[] & number[] & { [K_15 in Exclude<keyof I_1["clanInfo"]["maxMemberCount"], keyof number[]>]: never; };
-        } & { [K_16 in Exclude<keyof I_1["clanInfo"], keyof ClanInfo>]: never; };
-    } & { [K_17 in Exclude<keyof I_1, "clanInfo">]: never; }>(object: I_1): AppClanInfo;
+            maxMemberCount?: number;
+        } & { [K_14 in Exclude<keyof I_1["clanInfo"], keyof ClanInfo>]: never; };
+    } & { [K_15 in Exclude<keyof I_1, "clanInfo">]: never; }>(object: I_1): AppClanInfo;
 };
 export declare const AppClanMessage: {
     encode(message: AppClanMessage, writer?: _m0.Writer): _m0.Writer;
@@ -10424,7 +11261,7 @@ export declare const AppClanChanged: {
                 recruiter?: number;
                 timestamp?: number;
             }[];
-            maxMemberCount?: number[];
+            maxMemberCount?: number;
         };
     } & {
         clanInfo?: {
@@ -10463,7 +11300,7 @@ export declare const AppClanChanged: {
                 recruiter?: number;
                 timestamp?: number;
             }[];
-            maxMemberCount?: number[];
+            maxMemberCount?: number;
         } & {
             clanId?: number;
             name?: string;
@@ -10569,9 +11406,9 @@ export declare const AppClanChanged: {
                 recruiter?: number;
                 timestamp?: number;
             }[]>]: never; };
-            maxMemberCount?: number[] & number[] & { [K_6 in Exclude<keyof I["clanInfo"]["maxMemberCount"], keyof number[]>]: never; };
-        } & { [K_7 in Exclude<keyof I["clanInfo"], keyof ClanInfo>]: never; };
-    } & { [K_8 in Exclude<keyof I, "clanInfo">]: never; }>(base?: I): AppClanChanged;
+            maxMemberCount?: number;
+        } & { [K_6 in Exclude<keyof I["clanInfo"], keyof ClanInfo>]: never; };
+    } & { [K_7 in Exclude<keyof I, "clanInfo">]: never; }>(base?: I): AppClanChanged;
     fromPartial<I_1 extends {
         clanInfo?: {
             clanId?: number;
@@ -10609,7 +11446,7 @@ export declare const AppClanChanged: {
                 recruiter?: number;
                 timestamp?: number;
             }[];
-            maxMemberCount?: number[];
+            maxMemberCount?: number;
         };
     } & {
         clanInfo?: {
@@ -10648,7 +11485,7 @@ export declare const AppClanChanged: {
                 recruiter?: number;
                 timestamp?: number;
             }[];
-            maxMemberCount?: number[];
+            maxMemberCount?: number;
         } & {
             clanId?: number;
             name?: string;
@@ -10695,7 +11532,7 @@ export declare const AppClanChanged: {
                 canDemote?: boolean;
                 canSetPlayerNotes?: boolean;
                 canAccessLogs?: boolean;
-            } & { [K_9 in Exclude<keyof I_1["clanInfo"]["roles"][number], keyof ClanInfo_Role>]: never; })[] & { [K_10 in Exclude<keyof I_1["clanInfo"]["roles"], keyof {
+            } & { [K_8 in Exclude<keyof I_1["clanInfo"]["roles"][number], keyof ClanInfo_Role>]: never; })[] & { [K_9 in Exclude<keyof I_1["clanInfo"]["roles"], keyof {
                 roleId?: number;
                 rank?: number;
                 name?: string;
@@ -10729,7 +11566,7 @@ export declare const AppClanChanged: {
                 lastSeen?: number;
                 notes?: string;
                 online?: boolean;
-            } & { [K_11 in Exclude<keyof I_1["clanInfo"]["members"][number], keyof ClanInfo_Member>]: never; })[] & { [K_12 in Exclude<keyof I_1["clanInfo"]["members"], keyof {
+            } & { [K_10 in Exclude<keyof I_1["clanInfo"]["members"][number], keyof ClanInfo_Member>]: never; })[] & { [K_11 in Exclude<keyof I_1["clanInfo"]["members"], keyof {
                 steamId?: number;
                 roleId?: number;
                 joined?: number;
@@ -10749,14 +11586,14 @@ export declare const AppClanChanged: {
                 steamId?: number;
                 recruiter?: number;
                 timestamp?: number;
-            } & { [K_13 in Exclude<keyof I_1["clanInfo"]["invites"][number], keyof ClanInfo_Invite>]: never; })[] & { [K_14 in Exclude<keyof I_1["clanInfo"]["invites"], keyof {
+            } & { [K_12 in Exclude<keyof I_1["clanInfo"]["invites"][number], keyof ClanInfo_Invite>]: never; })[] & { [K_13 in Exclude<keyof I_1["clanInfo"]["invites"], keyof {
                 steamId?: number;
                 recruiter?: number;
                 timestamp?: number;
             }[]>]: never; };
-            maxMemberCount?: number[] & number[] & { [K_15 in Exclude<keyof I_1["clanInfo"]["maxMemberCount"], keyof number[]>]: never; };
-        } & { [K_16 in Exclude<keyof I_1["clanInfo"], keyof ClanInfo>]: never; };
-    } & { [K_17 in Exclude<keyof I_1, "clanInfo">]: never; }>(object: I_1): AppClanChanged;
+            maxMemberCount?: number;
+        } & { [K_14 in Exclude<keyof I_1["clanInfo"], keyof ClanInfo>]: never; };
+    } & { [K_15 in Exclude<keyof I_1, "clanInfo">]: never; }>(object: I_1): AppClanChanged;
 };
 export declare const AppNewClanMessage: {
     encode(message: AppNewClanMessage, writer?: _m0.Writer): _m0.Writer;
@@ -10807,6 +11644,446 @@ export declare const AppNewClanMessage: {
             time?: number;
         } & { [K_2 in Exclude<keyof I_1["message"], keyof AppClanMessage>]: never; };
     } & { [K_3 in Exclude<keyof I_1, keyof AppNewClanMessage>]: never; }>(object: I_1): AppNewClanMessage;
+};
+export declare const AppCameraSubscribe: {
+    encode(message: AppCameraSubscribe, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): AppCameraSubscribe;
+    fromJSON(object: any): AppCameraSubscribe;
+    toJSON(message: AppCameraSubscribe): unknown;
+    create<I extends {
+        cameraId?: string;
+    } & {
+        cameraId?: string;
+    } & { [K in Exclude<keyof I, "cameraId">]: never; }>(base?: I): AppCameraSubscribe;
+    fromPartial<I_1 extends {
+        cameraId?: string;
+    } & {
+        cameraId?: string;
+    } & { [K_1 in Exclude<keyof I_1, "cameraId">]: never; }>(object: I_1): AppCameraSubscribe;
+};
+export declare const AppCameraInput: {
+    encode(message: AppCameraInput, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): AppCameraInput;
+    fromJSON(object: any): AppCameraInput;
+    toJSON(message: AppCameraInput): unknown;
+    create<I extends {
+        buttons?: number;
+        mouseDelta?: {
+            x?: number;
+            y?: number;
+        };
+    } & {
+        buttons?: number;
+        mouseDelta?: {
+            x?: number;
+            y?: number;
+        } & {
+            x?: number;
+            y?: number;
+        } & { [K in Exclude<keyof I["mouseDelta"], keyof Vector2>]: never; };
+    } & { [K_1 in Exclude<keyof I, keyof AppCameraInput>]: never; }>(base?: I): AppCameraInput;
+    fromPartial<I_1 extends {
+        buttons?: number;
+        mouseDelta?: {
+            x?: number;
+            y?: number;
+        };
+    } & {
+        buttons?: number;
+        mouseDelta?: {
+            x?: number;
+            y?: number;
+        } & {
+            x?: number;
+            y?: number;
+        } & { [K_2 in Exclude<keyof I_1["mouseDelta"], keyof Vector2>]: never; };
+    } & { [K_3 in Exclude<keyof I_1, keyof AppCameraInput>]: never; }>(object: I_1): AppCameraInput;
+};
+export declare const AppCameraInfo: {
+    encode(message: AppCameraInfo, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): AppCameraInfo;
+    fromJSON(object: any): AppCameraInfo;
+    toJSON(message: AppCameraInfo): unknown;
+    create<I extends {
+        width?: number;
+        height?: number;
+        nearPlane?: number;
+        farPlane?: number;
+        controlFlags?: number;
+    } & {
+        width?: number;
+        height?: number;
+        nearPlane?: number;
+        farPlane?: number;
+        controlFlags?: number;
+    } & { [K in Exclude<keyof I, keyof AppCameraInfo>]: never; }>(base?: I): AppCameraInfo;
+    fromPartial<I_1 extends {
+        width?: number;
+        height?: number;
+        nearPlane?: number;
+        farPlane?: number;
+        controlFlags?: number;
+    } & {
+        width?: number;
+        height?: number;
+        nearPlane?: number;
+        farPlane?: number;
+        controlFlags?: number;
+    } & { [K_1 in Exclude<keyof I_1, keyof AppCameraInfo>]: never; }>(object: I_1): AppCameraInfo;
+};
+export declare const AppCameraRays: {
+    encode(message: AppCameraRays, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): AppCameraRays;
+    fromJSON(object: any): AppCameraRays;
+    toJSON(message: AppCameraRays): unknown;
+    create<I extends {
+        verticalFov?: number;
+        sampleOffset?: number;
+        rayData?: Uint8Array;
+        distance?: number;
+        entities?: {
+            entityId?: number;
+            type?: AppCameraRays_EntityType;
+            position?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            rotation?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            size?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            name?: string;
+        }[];
+    } & {
+        verticalFov?: number;
+        sampleOffset?: number;
+        rayData?: Uint8Array;
+        distance?: number;
+        entities?: {
+            entityId?: number;
+            type?: AppCameraRays_EntityType;
+            position?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            rotation?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            size?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            name?: string;
+        }[] & ({
+            entityId?: number;
+            type?: AppCameraRays_EntityType;
+            position?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            rotation?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            size?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            name?: string;
+        } & {
+            entityId?: number;
+            type?: AppCameraRays_EntityType;
+            position?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            } & {
+                x?: number;
+                y?: number;
+                z?: number;
+            } & { [K in Exclude<keyof I["entities"][number]["position"], keyof Vector3>]: never; };
+            rotation?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            } & {
+                x?: number;
+                y?: number;
+                z?: number;
+            } & { [K_1 in Exclude<keyof I["entities"][number]["rotation"], keyof Vector3>]: never; };
+            size?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            } & {
+                x?: number;
+                y?: number;
+                z?: number;
+            } & { [K_2 in Exclude<keyof I["entities"][number]["size"], keyof Vector3>]: never; };
+            name?: string;
+        } & { [K_3 in Exclude<keyof I["entities"][number], keyof AppCameraRays_Entity>]: never; })[] & { [K_4 in Exclude<keyof I["entities"], keyof {
+            entityId?: number;
+            type?: AppCameraRays_EntityType;
+            position?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            rotation?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            size?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            name?: string;
+        }[]>]: never; };
+    } & { [K_5 in Exclude<keyof I, keyof AppCameraRays>]: never; }>(base?: I): AppCameraRays;
+    fromPartial<I_1 extends {
+        verticalFov?: number;
+        sampleOffset?: number;
+        rayData?: Uint8Array;
+        distance?: number;
+        entities?: {
+            entityId?: number;
+            type?: AppCameraRays_EntityType;
+            position?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            rotation?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            size?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            name?: string;
+        }[];
+    } & {
+        verticalFov?: number;
+        sampleOffset?: number;
+        rayData?: Uint8Array;
+        distance?: number;
+        entities?: {
+            entityId?: number;
+            type?: AppCameraRays_EntityType;
+            position?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            rotation?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            size?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            name?: string;
+        }[] & ({
+            entityId?: number;
+            type?: AppCameraRays_EntityType;
+            position?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            rotation?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            size?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            name?: string;
+        } & {
+            entityId?: number;
+            type?: AppCameraRays_EntityType;
+            position?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            } & {
+                x?: number;
+                y?: number;
+                z?: number;
+            } & { [K_6 in Exclude<keyof I_1["entities"][number]["position"], keyof Vector3>]: never; };
+            rotation?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            } & {
+                x?: number;
+                y?: number;
+                z?: number;
+            } & { [K_7 in Exclude<keyof I_1["entities"][number]["rotation"], keyof Vector3>]: never; };
+            size?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            } & {
+                x?: number;
+                y?: number;
+                z?: number;
+            } & { [K_8 in Exclude<keyof I_1["entities"][number]["size"], keyof Vector3>]: never; };
+            name?: string;
+        } & { [K_9 in Exclude<keyof I_1["entities"][number], keyof AppCameraRays_Entity>]: never; })[] & { [K_10 in Exclude<keyof I_1["entities"], keyof {
+            entityId?: number;
+            type?: AppCameraRays_EntityType;
+            position?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            rotation?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            size?: {
+                x?: number;
+                y?: number;
+                z?: number;
+            };
+            name?: string;
+        }[]>]: never; };
+    } & { [K_11 in Exclude<keyof I_1, keyof AppCameraRays>]: never; }>(object: I_1): AppCameraRays;
+};
+export declare const AppCameraRays_Entity: {
+    encode(message: AppCameraRays_Entity, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): AppCameraRays_Entity;
+    fromJSON(object: any): AppCameraRays_Entity;
+    toJSON(message: AppCameraRays_Entity): unknown;
+    create<I extends {
+        entityId?: number;
+        type?: AppCameraRays_EntityType;
+        position?: {
+            x?: number;
+            y?: number;
+            z?: number;
+        };
+        rotation?: {
+            x?: number;
+            y?: number;
+            z?: number;
+        };
+        size?: {
+            x?: number;
+            y?: number;
+            z?: number;
+        };
+        name?: string;
+    } & {
+        entityId?: number;
+        type?: AppCameraRays_EntityType;
+        position?: {
+            x?: number;
+            y?: number;
+            z?: number;
+        } & {
+            x?: number;
+            y?: number;
+            z?: number;
+        } & { [K in Exclude<keyof I["position"], keyof Vector3>]: never; };
+        rotation?: {
+            x?: number;
+            y?: number;
+            z?: number;
+        } & {
+            x?: number;
+            y?: number;
+            z?: number;
+        } & { [K_1 in Exclude<keyof I["rotation"], keyof Vector3>]: never; };
+        size?: {
+            x?: number;
+            y?: number;
+            z?: number;
+        } & {
+            x?: number;
+            y?: number;
+            z?: number;
+        } & { [K_2 in Exclude<keyof I["size"], keyof Vector3>]: never; };
+        name?: string;
+    } & { [K_3 in Exclude<keyof I, keyof AppCameraRays_Entity>]: never; }>(base?: I): AppCameraRays_Entity;
+    fromPartial<I_1 extends {
+        entityId?: number;
+        type?: AppCameraRays_EntityType;
+        position?: {
+            x?: number;
+            y?: number;
+            z?: number;
+        };
+        rotation?: {
+            x?: number;
+            y?: number;
+            z?: number;
+        };
+        size?: {
+            x?: number;
+            y?: number;
+            z?: number;
+        };
+        name?: string;
+    } & {
+        entityId?: number;
+        type?: AppCameraRays_EntityType;
+        position?: {
+            x?: number;
+            y?: number;
+            z?: number;
+        } & {
+            x?: number;
+            y?: number;
+            z?: number;
+        } & { [K_4 in Exclude<keyof I_1["position"], keyof Vector3>]: never; };
+        rotation?: {
+            x?: number;
+            y?: number;
+            z?: number;
+        } & {
+            x?: number;
+            y?: number;
+            z?: number;
+        } & { [K_5 in Exclude<keyof I_1["rotation"], keyof Vector3>]: never; };
+        size?: {
+            x?: number;
+            y?: number;
+            z?: number;
+        } & {
+            x?: number;
+            y?: number;
+            z?: number;
+        } & { [K_6 in Exclude<keyof I_1["size"], keyof Vector3>]: never; };
+        name?: string;
+    } & { [K_7 in Exclude<keyof I_1, keyof AppCameraRays_Entity>]: never; }>(object: I_1): AppCameraRays_Entity;
 };
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 export type DeepPartial<T> = T extends Builtin ? T : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {
