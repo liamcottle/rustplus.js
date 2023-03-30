@@ -1,9 +1,9 @@
 // Type definitions for rustplus.js 2.4.0
 // Project: rustplus.js
+// Definitions by: s8wa2 https://github.com/s8wa2
 import { EventEmitter } from "events";
 import type { RequireAtLeastOne } from "type-fest";
 
-// Definitions by: s8wa2 https://github.com/s8wa2
 import {
 	AppMessage,
 	AppRequest,
