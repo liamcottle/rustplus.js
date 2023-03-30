@@ -1,6 +1,6 @@
 {
   "name": "@liamcottle/rustplus.js",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Unofficial NodeJS library for controlling Smart Switches in the PC game Rust",
   "main": "rustplus.js",
   "types": "./typings/index.d.ts",
@@ -40,6 +40,7 @@
     "command-line-args": "^5.2.0",
     "command-line-usage": "^6.1.1",
     "express": "^4.17.1",
+    "jimp": "^0.22.7",
     "long": "^5.2.1",
     "protobufjs": "^7.2.1",
     "push-receiver": "^2.1.0",

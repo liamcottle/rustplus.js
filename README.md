@@ -214,7 +214,7 @@ Here's a list of the emitted events:
 
 ## CCTV Camera Frames
 
-The Rust+ websocket protocol removed the ability to fetch camera frames.
+Check the [examples](./examples) on how to render and control CCTV Cameras, PTZ Cameras, Auto Turrets and Drones.
 
 ## Pairing
 
@@ -329,6 +329,8 @@ SetEntityValue: 1
 SetSubscription: 1
 TeamInfo: 1
 Time: 1
+Camera Subscription: 1
+Camera Movement: 0.01
 ```
 
 ## Hey Facepunch!

@@ -4,6 +4,7 @@ const path = require('path');
 const WebSocket = require('ws');
 const protobuf = require("protobufjs");
 const { EventEmitter } = require('events');
+const Camera = require('./camera');
 
 class RustPlus extends EventEmitter {
 
@@ -117,6 +118,14 @@ class RustPlus extends EventEmitter {
             this.websocket.terminate();
             this.websocket = null;
         }
+    }
+
+    /**
+     * Check if RustPlus is connected to the server.
+     * @returns {boolean}
+     */
+    isConnected() {
+        return this.websocket != null;
     }
 
     /**
@@ -314,18 +323,56 @@ class RustPlus extends EventEmitter {
     }
 
     /**
-     * Get CCTV Camera frame
-     * @param identifier CCTV Camera Identifier, such as OILRIG1 (or custom name)
-     * @param frame integer that should be incremented for each frame request. Otherwise a cached frame is returned
+     * Subscribes to a Camera
+     * @param identifier Camera Identifier, such as OILRIG1 (or custom name)
      * @param callback
      */
-    getCameraFrame(identifier, frame, callback) {
+    subscribeToCamera(identifier, callback) {
         this.sendRequest({
-            getCameraFrame: {
-                identifier: identifier,
-                frame: frame,
+            cameraSubscribe: {
+                cameraId: identifier,
             },
         }, callback);
+    }
+
+    /**
+     * Unsubscribes from a Camera
+     * @param callback
+     */
+    unsubscribeFromCamera(callback) {
+        this.sendRequest({
+            cameraUnsubscribe: {
+
+            }
+        }, callback)
+    }
+
+    /**
+     * Sends camera input to the server (mouse movement)
+     * @param buttons The buttons that are currently pressed
+     * @param x The x delta of the mouse movement
+     * @param y The y delta of the mouse movement
+     * @param callback
+     */
+    sendCameraInput(buttons, x, y, callback) {
+        this.sendRequest({
+            cameraInput: {
+                buttons: buttons,
+                mouseDelta: {
+                    x: x,
+                    y: y,
+                }
+            },
+        }, callback);
+    }
+
+    /**
+     * Get a camera instance for controlling CCTV Cameras, PTZ Cameras and  Auto Turrets
+     * @param identifier Camera Identifier, such as DOME1, OILRIG1L1, (or a custom camera id)
+     * @returns {Camera}
+     */
+    getCamera(identifier) {
+        return new Camera(this, identifier);
     }
 
 }
