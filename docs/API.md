@@ -21,8 +21,15 @@ Redirects to the Profile Image for the SteamId.
     - `Content-Type`: `application/json`
 - Body: `AuthToken`
 
-Api request made by the rust+ app returns a notifcationID, Player SteamId, notification date, Sever ID, title (event title eg {name} is online) , Body (server name), data (event details such as server ip and port target name if relating to player and id)
-The events contained are player deaths when team loads in and pair requests even when the server is not paired
+Response contains event history, such as Player Deaths and Server Pair Requests.
+
+- Notification ID
+- Notification Date
+- Player SteamId
+- Server ID
+- Title (eg `{name} is online`)
+- Body (server name)
+- Data (event data)
 
 ### TODO
 
