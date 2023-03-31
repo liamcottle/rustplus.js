@@ -2,13 +2,9 @@
 // Project: rustplus.js
 // Definitions by: s8wa2 https://github.com/s8wa2
 import { EventEmitter } from "events";
-import type { RequireAtLeastOne } from "type-fest";
+import type { RequireAtLeastOne, Promisable } from "type-fest";
 
-import {
-	AppMessage,
-	AppRequest,
-	AppResponse,
-} from "./proto";
+import { AppMessage, AppRequest, AppResponse } from "./proto";
 import protobuf from "protobufjs";
 import Camera from "../camera";
 export = RustPlus;
@@ -33,20 +29,20 @@ declare class RustPlus extends EventEmitter {
 	// Events
 	on<K extends keyof RustPlusEvents>(
 		event: K,
-		listener: (...args: RustPlusEvents[K]) => void
+		listener: (...args: RustPlusEvents[K]) => Promisable<void>
 	): this;
 	on<S extends string | symbol>(
 		event: Exclude<S, keyof RustPlusEvents>,
-		listener: (...args: any[]) => void
+		listener: (...args: any[]) => Promisable<void>
 	): this;
 
 	once<K extends keyof RustPlusEvents>(
 		event: K,
-		listener: (...args: RustPlusEvents[K]) => void
+		listener: (...args: RustPlusEvents[K]) => Promisable<void>
 	): this;
 	once<S extends string | symbol>(
 		event: Exclude<S, keyof RustPlusEvents>,
-		listener: (...args: any[]) => void
+		listener: (...args: any[]) => Promisable<void>
 	): this;
 
 	emit<K extends keyof RustPlusEvents>(
@@ -60,11 +56,11 @@ declare class RustPlus extends EventEmitter {
 
 	off<K extends keyof RustPlusEvents>(
 		event: K,
-		listener: (...args: RustPlusEvents[K]) => void
+		listener: (...args: RustPlusEvents[K]) => Promisable<void>
 	): this;
 	off<S extends string | symbol>(
 		event: Exclude<S, keyof RustPlusEvents>,
-		listener: (...args: any[]) => void
+		listener: (...args: any[]) => Promisable<void>
 	): this;
 
 	removeAllListeners<K extends keyof RustPlusEvents>(event?: K): this;
@@ -96,9 +92,9 @@ declare class RustPlus extends EventEmitter {
 	disconnect(): void;
 
 	/**
-     * Check if RustPlus is connected to the server.
-     */
-    isConnected(): boolean;
+	 * Check if RustPlus is connected to the server.
+	 */
+	isConnected(): boolean;
 
 	/**
 	 * Send a Request to the Rust Server with an optional callback when a Response is received.
@@ -107,7 +103,7 @@ declare class RustPlus extends EventEmitter {
 	 */
 	sendRequest(
 		data: UserRequest,
-		callback?: (message: AppMessage) => boolean | void
+		callback?: (message: AppMessage) => Promisable<boolean | void>
 	): void;
 
 	/**
@@ -119,7 +115,7 @@ declare class RustPlus extends EventEmitter {
 		data: UserRequest,
 		timeoutMilliseconds?: number
 	): Promise<AppResponse>;
-	
+
 	/**
 	 * Send a Request to the Rust Server to set the Entity Value.
 	 * @param entityId the entity id to set the value for
@@ -129,9 +125,9 @@ declare class RustPlus extends EventEmitter {
 	setEntityValue(
 		entityId: string,
 		value: boolean,
-		callback?: (message: AppMessage) => boolean | void
+		callback?: (message: AppMessage) => Promisable<boolean | void>
 	): void;
-	
+
 	/**
 	 * Turn a Smart Switch On
 	 * @param entityId the entity id of the smart switch to turn on
@@ -139,9 +135,9 @@ declare class RustPlus extends EventEmitter {
 	 */
 	turnSmartSwitchOn(
 		entityId: string,
-		callback?: (message: AppMessage) => boolean | void
+		callback?: (message: AppMessage) => Promisable<boolean | void>
 	): void;
-	
+
 	/**
 	 * Turn a Smart Switch Off
 	 * @param entityId the entity id of the smart switch to turn off
@@ -149,16 +145,16 @@ declare class RustPlus extends EventEmitter {
 	 */
 	turnSmartSwitchOff(
 		entityId: string,
-		callback?: (message: AppMessage) => boolean | void
+		callback?: (message: AppMessage) => Promisable<boolean | void>
 	): void;
-	
+
 	/**
 	 * Quickly turn on and off a Smart Switch as if it were a Strobe Light.
 	 * You will get rate limited by the Rust Server after a short period.
 	 * It was interesting to watch in game though 😝
 	 */
 	strobe(entityId: string, timeoutMilliseconds?: number, value?: boolean): void;
-	
+
 	/**
 	 * Send a message to Team Chat
 	 * @param message the message to send to team chat
@@ -166,7 +162,7 @@ declare class RustPlus extends EventEmitter {
 	 */
 	sendTeamMessage(
 		message: string,
-		callback?: (message: AppMessage) => boolean | void
+		callback?: (message: AppMessage) => Promisable<boolean | void>
 	): void;
 
 	/**
@@ -176,33 +172,37 @@ declare class RustPlus extends EventEmitter {
 	 */
 	getEntityInfo(
 		entityId: string,
-		callback: (message: AppMessage) => boolean | void
+		callback: (message: AppMessage) => Promisable<boolean | void>
 	): void;
-	
+
 	/**
 	 * Get the Map
 	 */
-	getMap(callback: (message: AppMessage) => boolean | void): void;
-	
+	getMap(callback: (message: AppMessage) => Promisable<boolean | void>): void;
+
 	/**
 	 * Get the ingame time
 	 */
-	getTime(callback: (message: AppMessage) => boolean | void): void;
-	
+	getTime(callback: (message: AppMessage) => Promisable<boolean | void>): void;
+
 	/**
 	 * Get all map markers
 	 */
-	getMapMarkers(callback: (message: AppMessage) => boolean | void): void;
-	
+	getMapMarkers(
+		callback: (message: AppMessage) => Promisable<boolean | void>
+	): void;
+
 	/**
 	 * Get the server info
 	 */
-	getInfo(callback: (message: AppMessage) => boolean | void): void;
-	
+	getInfo(callback: (message: AppMessage) => Promisable<boolean | void>): void;
+
 	/**
 	 * Get team info
 	 */
-	getTeamInfo(callback: (message: AppMessage) => boolean | void): void;
+	getTeamInfo(
+		callback: (message: AppMessage) => Promisable<boolean | void>
+	): void;
 
 	/**
 	 * Subscribes to a Camera
@@ -211,7 +211,7 @@ declare class RustPlus extends EventEmitter {
 	 */
 	subscribeToCamera(
 		identifier: string,
-		callback?: (message: AppMessage) => boolean | void
+		callback?: (message: AppMessage) => Promisable<boolean | void>
 	): void;
 
 	/**
@@ -219,7 +219,7 @@ declare class RustPlus extends EventEmitter {
 	 * @param callback
 	 */
 	unsubscribeFromCamera(
-		callback?: (message: AppMessage) => boolean | void
+		callback?: (message: AppMessage) => Promisable<boolean | void>
 	): void;
 
 	/**
@@ -233,7 +233,7 @@ declare class RustPlus extends EventEmitter {
 		buttons: number,
 		x: number,
 		y: number,
-		callback?: (message: AppMessage) => boolean | void
+		callback?: (message: AppMessage) => Promisable<boolean | void>
 	): void;
 
 	/**
