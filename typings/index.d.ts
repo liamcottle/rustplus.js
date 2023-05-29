@@ -2,11 +2,13 @@
 // Project: rustplus.js
 // Definitions by: s8wa2 https://github.com/s8wa2
 import { EventEmitter } from "events";
+import protobuf from "protobufjs";
+
+import Camera from "../camera";
+import { AppMessage, AppRequest, AppResponse } from "./proto";
+
 import type { RequireAtLeastOne, Promisable } from "type-fest";
 
-import { AppMessage, AppRequest, AppResponse } from "./proto";
-import protobuf from "protobufjs";
-import Camera from "../camera";
 export = RustPlus;
 
 interface RustPlusEvents {
@@ -123,7 +125,7 @@ declare class RustPlus extends EventEmitter {
 	 * @param callback AppMessage handler, returning true prevents the message event from firing
 	 */
 	setEntityValue(
-		entityId: string,
+		entityId: number,
 		value: boolean,
 		callback?: (message: AppMessage) => Promisable<boolean | void>
 	): void;
@@ -134,7 +136,7 @@ declare class RustPlus extends EventEmitter {
 	 * @param callback AppMessage handler, returning true prevents the message event from firing
 	 */
 	turnSmartSwitchOn(
-		entityId: string,
+		entityId: number,
 		callback?: (message: AppMessage) => Promisable<boolean | void>
 	): void;
 
@@ -144,7 +146,7 @@ declare class RustPlus extends EventEmitter {
 	 * @param callback AppMessage handler, returning true prevents the message event from firing
 	 */
 	turnSmartSwitchOff(
-		entityId: string,
+		entityId: number,
 		callback?: (message: AppMessage) => Promisable<boolean | void>
 	): void;
 
@@ -153,7 +155,7 @@ declare class RustPlus extends EventEmitter {
 	 * You will get rate limited by the Rust Server after a short period.
 	 * It was interesting to watch in game though 😝
 	 */
-	strobe(entityId: string, timeoutMilliseconds?: number, value?: boolean): void;
+	strobe(entityId: number, timeoutMilliseconds?: number, value?: boolean): void;
 
 	/**
 	 * Send a message to Team Chat
@@ -171,7 +173,7 @@ declare class RustPlus extends EventEmitter {
 	 * @param callback AppMessage handler, returning true prevents the message event from firing
 	 */
 	getEntityInfo(
-		entityId: string,
+		entityId: number,
 		callback: (message: AppMessage) => Promisable<boolean | void>
 	): void;
 
