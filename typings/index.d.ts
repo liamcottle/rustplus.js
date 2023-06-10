@@ -3,6 +3,7 @@
 // Definitions by: s8wa2 https://github.com/s8wa2
 import { EventEmitter } from "events";
 import protobuf from "protobufjs";
+import WebSocket from "ws";
 
 import Camera from "../camera";
 import { AppMessage, AppRequest, AppResponse } from "./proto";
