@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build:types": "cp rustplus.proto proto.proto && protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_opt=esModuleInterop=true --ts_proto_opt=forceLong=long --ts_proto_out=./typings/ proto.proto ; npm run build:types:compile",
-    "build:types:compile": "./node_modules/.bin/tsc --declaration ./typings/proto.ts ; npm run build:types:clean`",
+    "build:types:compile": "./node_modules/.bin/tsc --declaration ./typings/proto.ts ; npm run build:types:clean",
     "build:types:clean": "rm typings/proto.ts ; rm proto.proto"
   },
   "repository": {
