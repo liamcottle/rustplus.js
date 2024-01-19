@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+      "lib": ["ES6","ES7","ESNext"],
+      /* Language and Environment */
+      "target": "ESNext",
+  
+      /* Modules */
+      // "module": "commonjs",
+      "moduleResolution": "node",
+  
+      /* Emit */
+      "outDir": "dist",
+      // "noEmit": true,
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+  
+      /* Type Checking */
+      "strict": true,
+      "noUncheckedIndexedAccess": false,
+  
+      /* Completeness */
+      "skipLibCheck": true
+    }
+  }
