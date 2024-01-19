@@ -2,15 +2,17 @@
   "name": "@liamcottle/rustplus.js",
   "version": "2.4.0",
   "description": "Unofficial NodeJS library for controlling Smart Switches in the PC game Rust",
-  "main": "rustplus.js",
-  "types": "./typings/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "bin": {
     "rustplus": "./cli/index.js"
   },
   "scripts": {
-    "build:types": "cp rustplus.proto proto.proto && protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_opt=esModuleInterop=true --ts_proto_opt=forceLong=long --ts_proto_out=./typings/ proto.proto ; npm run build:types:compile",
-    "build:types:compile": "./node_modules/.bin/tsc --declaration ./typings/proto.ts ; npm run build:types:clean",
-    "build:types:clean": "rm typings/proto.ts ; rm proto.proto"
+    "build": "tsup src/index.ts --format cjs,esm --dts --sourcemap",
+    "lint": "tsc",
+    "build:types": "cp rustplus.proto proto.proto && npx protoc --ts_out=./src --proto_path=. proto.proto ; npm run build:types:clean",
+    "build:types:clean": "rm proto.proto"
   },
   "repository": {
     "type": "git",
@@ -35,6 +37,7 @@
   },
   "homepage": "https://github.com/liamcottle/rustplus.js#readme",
   "dependencies": {
+    "@protobuf-ts/plugin": "^2.9.3",
     "axios": "^1.2.2",
     "chrome-launcher": "^0.15.0",
     "command-line-args": "^5.2.0",
@@ -46,11 +49,14 @@
     "push-receiver": "^2.1.0",
     "ts-proto": "^1.148.1",
     "type-fest": "^3.7.2",
-    "typescript": "^5.0.4",
     "uuid": "^9.0.0",
     "ws": "^8.3.0"
   },
   "devDependencies": {
-    "@types/node": "^20.2.6"
+    "@grpc/proto-loader": "^0.7.10",
+    "@types/node": "^20.2.6",
+    "@types/ws": "^8.5.10",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
   }
 }
