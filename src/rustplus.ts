@@ -1,9 +1,11 @@
 "use strict";
 
-import path from "path";
-import WebSocket from "ws";
-import protobuf from "protobufjs";
 import { EventEmitter } from "events";
+import path from "path";
+import protobuf from "protobufjs";
+import { Promisable, RequireAtLeastOne, SetRequired } from "type-fest";
+import WebSocket from "ws";
+
 import Camera from "./camera";
 import * as Proto from "./proto";
 
