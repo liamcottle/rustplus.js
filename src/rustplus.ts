@@ -226,6 +226,78 @@ export class RustPlus extends EventEmitter {
     return this.websocket != null;
   }
 
+  sendRequest(
+    data: allRequests["cameraInput"]["data"],
+    callback?: allRequests["cameraInput"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["cameraSubscribe"]["data"],
+    callback?: allRequests["cameraSubscribe"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["cameraUnsubscribe"]["data"],
+    callback?: allRequests["cameraUnsubscribe"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["checkSubscription"]["data"],
+    callback?: allRequests["checkSubscription"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["getClanChat"]["data"],
+    callback?: allRequests["getClanChat"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["getClanInfo"]["data"],
+    callback?: allRequests["getClanInfo"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["getEntityInfo"]["data"],
+    callback?: allRequests["getEntityInfo"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["getInfo"]["data"],
+    callback?: allRequests["getInfo"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["getMap"]["data"],
+    callback?: allRequests["getMap"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["getMapMarkers"]["data"],
+    callback?: allRequests["getMapMarkers"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["getTeamChat"]["data"],
+    callback?: allRequests["getTeamChat"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["getTeamInfo"]["data"],
+    callback?: allRequests["getTeamInfo"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["getTime"]["data"],
+    callback?: allRequests["getTime"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["promoteToLeader"]["data"],
+    callback?: allRequests["promoteToLeader"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["sendClanMessage"]["data"],
+    callback?: allRequests["sendClanMessage"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["sendTeamMessage"]["data"],
+    callback?: allRequests["sendTeamMessage"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["setClanMotd"]["data"],
+    callback?: allRequests["setClanMotd"]["callback"]
+  ): sendRequestReturnType;
+  sendRequest(
+    data: allRequests["setEntityValue"]["data"],
+    callback?: allRequests["setEntityValue"]["callback"]
+  ): sendRequestReturnType;
   /**
    * Send a Request to the Rust Server with an optional callback when a Response is received.
    * @param data this should contain valid data for the AppRequest packet in th"..",e rustplus.proto schema file
@@ -262,6 +334,78 @@ export class RustPlus extends EventEmitter {
     this.emit("request", request);
   }
 
+  sendRequestAsync(
+    data: allRequests["cameraInput"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["cameraInput"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["cameraSubscribe"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["cameraSubscribe"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["cameraUnsubscribe"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["cameraUnsubscribe"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["checkSubscription"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["checkSubscription"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["getClanChat"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["getClanChat"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["getClanInfo"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["getClanInfo"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["getEntityInfo"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["getEntityInfo"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["getInfo"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["getInfo"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["getMap"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["getMap"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["getMapMarkers"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["getMapMarkers"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["getTeamChat"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["getTeamChat"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["getTeamInfo"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["getTeamInfo"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["getTime"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["getTime"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["promoteToLeader"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["promoteToLeader"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["sendClanMessage"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["sendClanMessage"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["sendTeamMessage"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["sendTeamMessage"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["setClanMotd"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["setClanMotd"]["callback"]>[0]>;
+  sendRequestAsync(
+    data: allRequests["setEntityValue"]["data"],
+    timeoutMilliseconds?: number
+  ): Promise<Parameters<allRequests["setEntityValue"]["callback"]>[0]>;
   /**
    * Send a Request to the Rust Server and return a Promise
    * @param data this should contain valid data for the AppRequest packet defined in th"..",e rustplus.proto schema file
@@ -276,12 +420,11 @@ export class RustPlus extends EventEmitter {
       var timeout = setTimeout(() => {
         reject(new Error("Timeout reached while waiting for response"));
       }, timeoutMilliseconds);
-      this.sendRequest<"setEntityValue">(
-        { setEntityValue: { value: true }, entityId: 123 },
-        (m) => {}
-      );
+
       // send request
-      this.sendRequest(data, (message) => {
+      this.sendRequest(
+        data as Parameters<typeof this.sendRequest>[0],
+        (message) => {
         // cancel timeout
         clearTimeout(timeout);
 
@@ -292,7 +435,8 @@ export class RustPlus extends EventEmitter {
           // request was successful, resolve with message.response
           resolve(message.response);
         }
-      });
+        }
+      );
     });
   }
 
