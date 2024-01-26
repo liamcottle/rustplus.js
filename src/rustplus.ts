@@ -54,9 +54,9 @@ interface allRequests {
   cameraSubscribe: sendReqType<["cameraSubscribe"], ["cameraSubscribeInfo"]>;
   cameraUnsubscribe: sendReqType<["cameraUnsubscribe"], ["success"]>;
   checkSubscription: sendReqType<
-  ["checkSubscription"],
-  ["cameraSubscribeInfo"]
->;
+    ["checkSubscription"],
+    ["cameraSubscribeInfo"]
+  >;
   getClanChat: sendReqType<["getClanChat"], ["clanChat"]>;
   getClanInfo: sendReqType<["getClanInfo"], ["clanInfo"]>;
   getEntityInfo: sendReqType<["getEntityInfo", "entityId"], ["entityInfo"]>;
@@ -337,75 +337,93 @@ export class RustPlus extends EventEmitter {
   sendRequestAsync(
     data: allRequests["cameraInput"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["cameraInput"]["callback"]>[0]>;
+  ): Promise<Parameters<allRequests["cameraInput"]["callback"]>[0]["response"]>;
   sendRequestAsync(
     data: allRequests["cameraSubscribe"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["cameraSubscribe"]["callback"]>[0]>;
+  ): Promise<
+    Parameters<allRequests["cameraSubscribe"]["callback"]>[0]["response"]
+  >;
   sendRequestAsync(
     data: allRequests["cameraUnsubscribe"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["cameraUnsubscribe"]["callback"]>[0]>;
+  ): Promise<
+    Parameters<allRequests["cameraUnsubscribe"]["callback"]>[0]["response"]
+  >;
   sendRequestAsync(
     data: allRequests["checkSubscription"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["checkSubscription"]["callback"]>[0]>;
+  ): Promise<
+    Parameters<allRequests["checkSubscription"]["callback"]>[0]["response"]
+  >;
   sendRequestAsync(
     data: allRequests["getClanChat"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["getClanChat"]["callback"]>[0]>;
+  ): Promise<Parameters<allRequests["getClanChat"]["callback"]>[0]["response"]>;
   sendRequestAsync(
     data: allRequests["getClanInfo"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["getClanInfo"]["callback"]>[0]>;
+  ): Promise<Parameters<allRequests["getClanInfo"]["callback"]>[0]["response"]>;
   sendRequestAsync(
     data: allRequests["getEntityInfo"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["getEntityInfo"]["callback"]>[0]>;
+  ): Promise<
+    Parameters<allRequests["getEntityInfo"]["callback"]>[0]["response"]
+  >;
   sendRequestAsync(
     data: allRequests["getInfo"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["getInfo"]["callback"]>[0]>;
+  ): Promise<Parameters<allRequests["getInfo"]["callback"]>[0]["response"]>;
   sendRequestAsync(
     data: allRequests["getMap"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["getMap"]["callback"]>[0]>;
+  ): Promise<Parameters<allRequests["getMap"]["callback"]>[0]["response"]>;
   sendRequestAsync(
     data: allRequests["getMapMarkers"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["getMapMarkers"]["callback"]>[0]>;
+  ): Promise<
+    Parameters<allRequests["getMapMarkers"]["callback"]>[0]["response"]
+  >;
   sendRequestAsync(
     data: allRequests["getTeamChat"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["getTeamChat"]["callback"]>[0]>;
+  ): Promise<Parameters<allRequests["getTeamChat"]["callback"]>[0]["response"]>;
   sendRequestAsync(
     data: allRequests["getTeamInfo"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["getTeamInfo"]["callback"]>[0]>;
+  ): Promise<Parameters<allRequests["getTeamInfo"]["callback"]>[0]["response"]>;
   sendRequestAsync(
     data: allRequests["getTime"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["getTime"]["callback"]>[0]>;
+  ): Promise<Parameters<allRequests["getTime"]["callback"]>[0]["response"]>;
   sendRequestAsync(
     data: allRequests["promoteToLeader"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["promoteToLeader"]["callback"]>[0]>;
+  ): Promise<
+    Parameters<allRequests["promoteToLeader"]["callback"]>[0]["response"]
+  >;
   sendRequestAsync(
     data: allRequests["sendClanMessage"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["sendClanMessage"]["callback"]>[0]>;
+  ): Promise<
+    Parameters<allRequests["sendClanMessage"]["callback"]>[0]["response"]
+  >;
   sendRequestAsync(
     data: allRequests["sendTeamMessage"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["sendTeamMessage"]["callback"]>[0]>;
+  ): Promise<
+    Parameters<allRequests["sendTeamMessage"]["callback"]>[0]["response"]
+  >;
   sendRequestAsync(
     data: allRequests["setClanMotd"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["setClanMotd"]["callback"]>[0]>;
+  ): Promise<Parameters<allRequests["setClanMotd"]["callback"]>[0]["response"]>;
   sendRequestAsync(
     data: allRequests["setEntityValue"]["data"],
     timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["setEntityValue"]["callback"]>[0]>;
+  ): Promise<
+    Parameters<allRequests["setEntityValue"]["callback"]>[0]["response"]
+  >;
   /**
    * Send a Request to the Rust Server and return a Promise
    * @param data this should contain valid data for the AppRequest packet defined in th"..",e rustplus.proto schema file
@@ -425,16 +443,16 @@ export class RustPlus extends EventEmitter {
       this.sendRequest(
         data as Parameters<typeof this.sendRequest>[0],
         (message) => {
-        // cancel timeout
-        clearTimeout(timeout);
+          // cancel timeout
+          clearTimeout(timeout);
 
-        if (message.response.error) {
-          // reject promise if server returns an AppError for this request
-          reject(message.response.error);
-        } else {
-          // request was successful, resolve with message.response
-          resolve(message.response);
-        }
+          if (message.response.error) {
+            // reject promise if server returns an AppError for this request
+            reject(message.response.error);
+          } else {
+            // request was successful, resolve with message.response
+            resolve(message.response);
+          }
         }
       );
     });
