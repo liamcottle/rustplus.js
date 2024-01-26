@@ -6,19 +6,11 @@ import protobuf from "protobufjs";
 import { EventEmitter } from "events";
 import Camera from "./camera";
 import * as Proto from "./proto";
-import {
-  Promisable,
-  RequireAtLeastOne,
-  SetRequired,
-  RequireExactlyOne,
-} from "type-fest";
-interface sendReqResponse extends Proto.AppMessage {
-  response: Proto.AppResponse;
-  broadcast: undefined;
+
+declare module "./proto" {
+  interface AppEmpty extends Record<string, never> {}
 }
-type Prettify<T> = {
-  [K in keyof T]: T[K];
-} & {};
+
 type Response<T> = { seq: Proto.AppResponse["seq"] } & (
   | ({ error: undefined } & SetRequired<T, keyof T>)
   | { error: Proto.AppError }
