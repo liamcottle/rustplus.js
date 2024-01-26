@@ -446,7 +446,11 @@ export class RustPlus extends EventEmitter {
    * @param value the value to set on the entity
    * @param callback
    */
-  setEntityValue(entityId: number, value: boolean, callback?: callbackFn) {
+  setEntityValue(
+    entityId: number,
+    value: boolean,
+    callback?: allRequests["setEntityValue"]["callback"]
+  ) {
     this.sendRequest(
       {
         entityId: entityId,
