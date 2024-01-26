@@ -2,8 +2,10 @@
 
 import { EventEmitter } from "events";
 import Jimp from "jimp";
-import { RustPlus } from "./rustplus";
+
 import { AppCameraInfo, AppCameraRays, AppMessage } from "./proto";
+import { RustPlus } from "./rustplus";
+
 export enum CameraButtons {
   NONE = 0,
   FORWARD = 2,
@@ -338,7 +340,9 @@ class Camera extends EventEmitter {
     });
 
     // update camera subscribe info
-    this.cameraSubscribeInfo = response.cameraSubscribeInfo || null;
+    this.cameraSubscribeInfo = response.error
+      ? null
+      : response.cameraSubscribeInfo;
     this.isSubscribed = true;
   }
 
