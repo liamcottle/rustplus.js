@@ -49,124 +49,31 @@ type sendReqType<
   }) => Promisable<void> | boolean; // If returns true then don't fire message event
 };
 
-type sendReqType2<
-  T extends (keyof sendRequestData)[],
-  U extends (keyof Proto.AppResponse)[]
-> = (
-  data: Required<Pick<sendRequestData, T[number]>>,
-  callback: (message: {
-    response: Response<Pick<Proto.AppResponse, U[number]>>;
-  }) => Promisable<void> | boolean // If returns true then don't fire message event
-) => void;
-
-type req_cameraInput = sendReqType<["cameraInput"], []>;
-type req_cameraSubscribe = sendReqType<
-  ["cameraSubscribe"],
-  ["cameraSubscribeInfo"]
->;
-type req_cameraUnsubscribe = sendReqType<["cameraUnsubscribe"], ["success"]>;
-type req_checkSubscription = sendReqType<
-  ["checkSubscription"],
-  ["cameraSubscribeInfo"]
->;
-type req_getClanChat = sendReqType<["getClanChat"], ["clanChat"]>;
-type req_getClanInfo = sendReqType<["getClanInfo"], ["clanInfo"]>;
-type req_getEntityInfo = sendReqType<
-  ["getEntityInfo", "entityId"],
-  ["entityInfo"]
->;
-type req_getInfo = sendReqType<["getInfo"], ["info"]>;
-type req_getMap = sendReqType<["getMap"], ["map"]>;
-type req_getMapMarkers = sendReqType<["getMapMarkers"], ["mapMarkers"]>;
-// todo getNexusAuth
-type req_getTeamChat = sendReqType<["getTeamChat"], ["teamChat"]>;
-type req_getTeamInfo = sendReqType<["getTeamInfo"], ["teamInfo"]>;
-type req_getTime = sendReqType<["getTime"], ["time"]>;
-type req_promoteToLeader = sendReqType<["promoteToLeader"], ["success"]>;
-type req_sendClanMessage = sendReqType<["sendClanMessage"], ["success"]>;
-type req_sendTeamMessage = sendReqType<["sendTeamMessage"], ["success"]>;
-type req_setClanMotd = sendReqType<["setClanMotd"], ["success"]>;
-type req_setEntityValue = sendReqType<
-  ["setEntityValue", "entityId"],
-  ["success"]
->;
-
-// !
-type req2_cameraInput = sendReqType2<["cameraInput"], []>;
-type req2_cameraSubscribe = sendReqType2<
-  ["cameraSubscribe"],
-  ["cameraSubscribeInfo"]
->;
-type req2_cameraUnsubscribe = sendReqType2<["cameraUnsubscribe"], ["success"]>;
-type req2_checkSubscription = sendReqType2<
-  ["checkSubscription"],
-  ["cameraSubscribeInfo"]
->;
-type req2_getClanChat = sendReqType2<["getClanChat"], ["clanChat"]>;
-type req2_getClanInfo = sendReqType2<["getClanInfo"], ["clanInfo"]>;
-type req2_getEntityInfo = sendReqType2<
-  ["getEntityInfo", "entityId"],
-  ["entityInfo"]
->;
-type req2_getInfo = sendReqType2<["getInfo"], ["info"]>;
-type req2_getMap = sendReqType2<["getMap"], ["map"]>;
-type req2_getMapMarkers = sendReqType2<["getMapMarkers"], ["mapMarkers"]>;
-// todo getNexusAuth
-type req2_getTeamChat = sendReqType2<["getTeamChat"], ["teamChat"]>;
-type req2_getTeamInfo = sendReqType2<["getTeamInfo"], ["teamInfo"]>;
-type req2_getTime = sendReqType2<["getTime"], ["time"]>;
-type req2_promoteToLeader = sendReqType2<["promoteToLeader"], ["success"]>;
-type req2_sendClanMessage = sendReqType2<["sendClanMessage"], ["success"]>;
-type req2_sendTeamMessage = sendReqType2<["sendTeamMessage"], ["success"]>;
-type req2_setClanMotd = sendReqType2<["setClanMotd"], ["success"]>;
-type req2_setEntityValue = sendReqType2<
-  ["setEntityValue", "entityId"],
-  ["success"]
->;
-
-// todo setSubscription
-// let thing2= {} as req_getClanInfo['response'];
-// thing2!.error ? thing2.error : thing2.clanInfo.
-
 interface allRequests {
-  cameraInput: req_cameraInput;
-  cameraSubscribe: req_cameraSubscribe;
-  cameraUnsubscribe: req_cameraUnsubscribe;
-  checkSubscription: req_checkSubscription;
-  getClanChat: req_getClanChat;
-  getClanInfo: req_getClanInfo;
-  getEntityInfo: req_getEntityInfo;
-  getInfo: req_getInfo;
-  getMap: req_getMap;
-  getMapMarkers: req_getMapMarkers;
-  getTeamChat: req_getTeamChat;
-  getTeamInfo: req_getTeamInfo;
-  getTime: req_getTime;
-  promoteToLeader: req_promoteToLeader;
-  sendClanMessage: req_sendClanMessage;
-  sendTeamMessage: req_sendTeamMessage;
-  setClanMotd: req_setClanMotd;
-  setEntityValue: req_setEntityValue;
+  cameraInput: sendReqType<["cameraInput"], ["success"]>; // todo manually verify, currently based on server source code
+  cameraSubscribe: sendReqType<["cameraSubscribe"], ["cameraSubscribeInfo"]>;
+  cameraUnsubscribe: sendReqType<["cameraUnsubscribe"], ["success"]>;
+  checkSubscription: sendReqType<
+  ["checkSubscription"],
+  ["cameraSubscribeInfo"]
+>;
+  getClanChat: sendReqType<["getClanChat"], ["clanChat"]>;
+  getClanInfo: sendReqType<["getClanInfo"], ["clanInfo"]>;
+  getEntityInfo: sendReqType<["getEntityInfo", "entityId"], ["entityInfo"]>;
+  // getNexusAuth: sendReqType<["getNexusAuth"],[]> // todo getNexusAuth
+  getInfo: sendReqType<["getInfo"], ["info"]>;
+  getMap: sendReqType<["getMap"], ["map"]>;
+  getMapMarkers: sendReqType<["getMapMarkers"], ["mapMarkers"]>;
+  getTeamChat: sendReqType<["getTeamChat"], ["teamChat"]>;
+  getTeamInfo: sendReqType<["getTeamInfo"], ["teamInfo"]>;
+  getTime: sendReqType<["getTime"], ["time"]>;
+  promoteToLeader: sendReqType<["promoteToLeader"], ["success"]>;
+  sendClanMessage: sendReqType<["sendClanMessage"], ["success"]>;
+  sendTeamMessage: sendReqType<["sendTeamMessage"], ["success"]>;
+  setClanMotd: sendReqType<["setClanMotd"], ["success"]>;
+  setEntityValue: sendReqType<["setEntityValue", "entityId"], ["success"]>;
+  setSubscription: sendReqType<["setSubscription", "entityId"], ["success"]>; // todo manually verify
 }
-type unionRequests =
-  | req2_cameraInput
-  | req2_cameraSubscribe
-  | req2_cameraUnsubscribe
-  | req2_checkSubscription
-  | req2_getClanChat
-  | req2_getClanInfo
-  | req2_getEntityInfo
-  | req2_getInfo
-  | req2_getMap
-  | req2_getMapMarkers
-  | req2_getTeamChat
-  | req2_getTeamInfo
-  | req2_getTime
-  | req2_promoteToLeader
-  | req2_sendClanMessage
-  | req2_sendTeamMessage
-  | req2_setClanMotd
-  | req2_setEntityValue;
 
 type callbackFn = (message: {
   response: Response<allRequests[keyof allRequests]["response"]>;
