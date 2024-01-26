@@ -463,7 +463,10 @@ export class RustPlus extends EventEmitter {
    * @param entityId the entity id of the smart switch to turn on
    * @param callback
    */
-  turnSmartSwitchOn(entityId: number, callback?: callbackFn) {
+  turnSmartSwitchOn(
+    entityId: number,
+    callback?: allRequests["setEntityValue"]["callback"]
+  ) {
     this.setEntityValue(entityId, true, callback);
   }
 
@@ -472,7 +475,10 @@ export class RustPlus extends EventEmitter {
    * @param entityId the entity id of the smart switch to turn off
    * @param callback
    */
-  turnSmartSwitchOff(entityId: number, callback?: callbackFn) {
+  turnSmartSwitchOff(
+    entityId: number,
+    callback?: allRequests["setEntityValue"]["callback"]
+  ) {
     this.setEntityValue(entityId, false, callback);
   }
 
@@ -493,7 +499,10 @@ export class RustPlus extends EventEmitter {
    * @param message the message to send to team chat
    * @param callback
    */
-  sendTeamMessage(message: string, callback?: callbackFn) {
+  sendTeamMessage(
+    message: string,
+    callback?: allRequests["sendTeamMessage"]["callback"]
+  ) {
     this.sendRequest(
       {
         sendTeamMessage: {
@@ -509,7 +518,10 @@ export class RustPlus extends EventEmitter {
    * @param entityId the id of the entity to get info of
    * @param callback
    */
-  getEntityInfo(entityId: any, callback?: callbackFn) {
+  getEntityInfo(
+    entityId: any,
+    callback?: allRequests["getEntityInfo"]["callback"]
+  ) {
     this.sendRequest(
       {
         entityId: entityId,
@@ -522,7 +534,7 @@ export class RustPlus extends EventEmitter {
   /**
    * Get the Map
    */
-  getMap(callback?: callbackFn) {
+  getMap(callback?: allRequests["getMap"]["callback"]) {
     this.sendRequest(
       {
         getMap: {},
@@ -534,7 +546,7 @@ export class RustPlus extends EventEmitter {
   /**
    * Get the in-game time
    */
-  getTime(callback?: callbackFn) {
+  getTime(callback?: allRequests["getTime"]["callback"]) {
     this.sendRequest(
       {
         getTime: {},
@@ -546,7 +558,7 @@ export class RustPlus extends EventEmitter {
   /**
    * Get all map markers
    */
-  getMapMarkers(callback?: callbackFn) {
+  getMapMarkers(callback?: allRequests["getMapMarkers"]["callback"]) {
     this.sendRequest(
       {
         getMapMarkers: {},
@@ -558,7 +570,7 @@ export class RustPlus extends EventEmitter {
   /**
    * Get the server info
    */
-  getInfo(callback: callbackFn) {
+  getInfo(callback: allRequests["getInfo"]["callback"]) {
     this.sendRequest(
       {
         getInfo: {},
@@ -570,7 +582,7 @@ export class RustPlus extends EventEmitter {
   /**
    * Get team info
    */
-  getTeamInfo(callback?: callbackFn) {
+  getTeamInfo(callback?: allRequests["getTeamInfo"]["callback"]) {
     this.sendRequest(
       {
         getTeamInfo: {},
@@ -584,7 +596,10 @@ export class RustPlus extends EventEmitter {
    * @param identifier Camera Identifier, such as OILRIG1 (or custom name)
    * @param callback
    */
-  subscribeToCamera(identifier: string, callback?: callbackFn) {
+  subscribeToCamera(
+    identifier: string,
+    callback?: allRequests["cameraSubscribe"]["callback"]
+  ) {
     this.sendRequest(
       {
         cameraSubscribe: {
@@ -599,7 +614,9 @@ export class RustPlus extends EventEmitter {
    * Unsubscribes from a Camera
    * @param callback
    */
-  unsubscribeFromCamera(callback?: callbackFn) {
+  unsubscribeFromCamera(
+    callback?: allRequests["cameraUnsubscribe"]["callback"]
+  ) {
     this.sendRequest(
       {
         cameraUnsubscribe: {},
@@ -619,7 +636,7 @@ export class RustPlus extends EventEmitter {
     buttons: number,
     x: number,
     y: number,
-    callback?: callbackFn
+    callback?: allRequests["cameraInput"]["callback"]
   ) {
     this.sendRequest(
       {
