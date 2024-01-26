@@ -75,9 +75,11 @@ interface allRequests {
   setSubscription: sendReqType<["setSubscription", "entityId"], ["success"]>; // todo manually verify
 }
 
+type sendRequestReturnType = Promisable<void> | boolean;
+
 type callbackFn = (message: {
   response: Response<allRequests[keyof allRequests]["response"]>;
-}) => Promisable<void> | boolean;
+}) => sendRequestReturnType;
 
 export class RustPlus extends EventEmitter {
   seq: number;
