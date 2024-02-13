@@ -125,7 +125,7 @@ class RustPlus extends EventEmitter {
      * @returns {boolean}
      */
     isConnected() {
-        return this.websocket != null;
+        return (this.websocket.readyState === WebSocket.OPEN);
     }
 
     /**
