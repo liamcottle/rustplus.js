@@ -258,6 +258,7 @@ message AppMap {
 		required string token = 1;
 		required float x = 2;
 		required float y = 3;
+		required float name = 7;
 	}
 }
 
