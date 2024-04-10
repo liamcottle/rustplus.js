@@ -12,6 +12,7 @@
     "build": "tsup src/index.ts --config tsup.config.ts",
     "lint": "tsc",
     "format": "prettier --write .",
+    "build:types": "cp rustplus.proto proto.proto && protoc --ts_out=./src --proto_path .  proto.proto && npm run build:types:clean || npm run build:types:clean",
     "build:types:clean": "rm proto.proto"
   },
   "repository": {
