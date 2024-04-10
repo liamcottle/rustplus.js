@@ -48,13 +48,16 @@ For requests that aren't available through a convenience method, you can still c
 
 ```js
 // Send Team Message without using convenience method
-rustplus.sendRequest({
+rustplus.sendRequest(
+  {
     sendTeamMessage: {
-        message: "Message for Team Chat",
+      message: "Message for Team Chat",
     },
-}, (message) => {
+  },
+  (message) => {
     console.log(message);
-});
+  },
+);
 ```
 
 If you want a promise based API for sending requests, you can use `sendRequestAsync`. You won't be able to use the convenience methods, but it's very straightforward to craft the request payloads manually. Check [this example](./examples/6_async_requests.js) for using `sendRequestAsync`.
@@ -73,15 +76,13 @@ You will need to provide the following details to be able to connect:
 - Player Token ([Token from Server Pairing](#pairing))
 
 ```js
-const RustPlus = require('@liamcottle/rustplus.js');
-var rustplus = new RustPlus('ip', 'port', 'playerId', 'playerToken');
+const RustPlus = require("@liamcottle/rustplus.js");
+var rustplus = new RustPlus("ip", "port", "playerId", "playerToken");
 
 // wait until connected before sending commands
-rustplus.on('connected', () => {
-
-    // ready to send requests
-    rustplus.sendTeamMessage('Hello from rustplus.js!');
-
+rustplus.on("connected", () => {
+  // ready to send requests
+  rustplus.sendTeamMessage("Hello from rustplus.js!");
 });
 
 // connect to rust server
@@ -108,7 +109,7 @@ rustplus.turnSmartSwitchOn(1234567, (message) => {
 You need to be in a team before you can send messages to team chat.
 
 ```js
-rustplus.sendTeamMessage('message to team chat');
+rustplus.sendTeamMessage("message to team chat");
 ```
 
 ### Get Entity Info
@@ -131,17 +132,17 @@ If you don't call `getEntityInfo` at least once, you will never receive the broa
 You can capture the broadcast like so:
 
 ```js
-rustplus.on('message', (message) => {
-    if(message.broadcast && message.broadcast.entityChanged){
+rustplus.on("message", (message) => {
+  if (message.broadcast && message.broadcast.entityChanged) {
+    var entityChanged = message.broadcast.entityChanged;
 
-        var entityChanged = message.broadcast.entityChanged;
-    
-        var entityId = entityChanged.entityId;
-        var value = entityChanged.payload.value;
-        
-        console.log("entity " + entityId + " is now " + (value ? "active" : "inactive"));
+    var entityId = entityChanged.entityId;
+    var value = entityChanged.payload.value;
 
-    }
+    console.log(
+      "entity " + entityId + " is now " + (value ? "active" : "inactive"),
+    );
+  }
 });
 ```
 
@@ -158,30 +159,26 @@ You can use the following snippet as an idea of how to listen for changes to a S
 As above, make sure to call `getEntityInfo` with the Storage Monitor entity id so you are sent the broadcasts by the server.
 
 ```js
-rustplus.on('message', (message) => {
-    if(message.broadcast && message.broadcast.entityChanged){
+rustplus.on("message", (message) => {
+  if (message.broadcast && message.broadcast.entityChanged) {
+    var entityChanged = message.broadcast.entityChanged;
 
-        var entityChanged = message.broadcast.entityChanged;
-    
-        var entityId = entityChanged.entityId;
-        var value = entityChanged.payload.value;
-        var capacity = entityChanged.payload.capacity;
-        var items = entityChanged.payload.items;
-        
-        // only print info when second broadcast is received
-        if(!value){
+    var entityId = entityChanged.entityId;
+    var value = entityChanged.payload.value;
+    var capacity = entityChanged.payload.capacity;
+    var items = entityChanged.payload.items;
 
-            console.log(`entity ${entityId} has a capacity of ${capacity}`);
-            console.log(`entity ${entityId} contains ${items.length} item(s)`);
-            
-            // print out the items in this storage entity
-            items.forEach((item) => {
-                console.log(item);
-            });
+    // only print info when second broadcast is received
+    if (!value) {
+      console.log(`entity ${entityId} has a capacity of ${capacity}`);
+      console.log(`entity ${entityId} contains ${items.length} item(s)`);
 
-        }
-
+      // print out the items in this storage entity
+      items.forEach((item) => {
+        console.log(item);
+      });
     }
+  }
 });
 ```
 
@@ -198,8 +195,8 @@ When a message has been received and has not been handled by your callback, it w
 You can register a listener to catch all received messages like so:
 
 ```js
-rustplus.on('message', (message) => {
-    console.log("message received: " + JSON.stringify(message));
+rustplus.on("message", (message) => {
+  console.log("message received: " + JSON.stringify(message));
 });
 ```
 
@@ -231,8 +228,8 @@ If you just want to interact with your own private server for testing, you won't
 - You already have access to your `Server IP` and `App Port` configured in your `server.cfg` file.
 - You can find your `playerToken` in the sqlite3 database file `player.tokens.db` with the following command on a Linux server. `sqlite3 player.tokens.db "select * from data;" ".exit"`
 - You will get output like so: `xxxxxxxxxxxxxxxxx|yyyyyyyyy`
-    - `xxxxxxxxxxxxxxxxx` is the `playerId`
-    - `yyyyyyyyy` is the `playerToken`. (It can be a positive or negative integer.)
+  - `xxxxxxxxxxxxxxxxx` is the `playerId`
+  - `yyyyyyyyy` is the `playerToken`. (It can be a positive or negative integer.)
 - As an admin you can use the command `lookingat_debug` to show/hide the entity id of what you are currently looking at. I like to bind it to a key with `bind o lookingat_debug`.
 
 ### Using the Command Line Tool
@@ -292,9 +289,9 @@ node cli/index.js <command>
 The Rust game server enforces a limit on how many connections can be made to the Rust+ websocket, and how many connections can be made by the same IP Address at once.
 
 - Max Connections: `500` is default
-    - Can be adjusted with server var `app.maxconnections`
+  - Can be adjusted with server var `app.maxconnections`
 - Max Connections per IP: `5` is default
-    - Can be adjusted with server var `app.maxconnectionsperip`
+  - Can be adjusted with server var `app.maxconnectionsperip`
 
 ## Rate Limits
 
@@ -305,12 +302,12 @@ The token bucket gives you a maximum amount of tokens, and replenishes them over
 Here is a list of the rate limits enforced by the Rust game server:
 
 - Requests per IP Address
-    - `50 tokens limit, 15 tokens replenished per second.`
+  - `50 tokens limit, 15 tokens replenished per second.`
 - Requests per Player ID
-    - `25 tokens limit, 3 tokens replenished per second.`
+  - `25 tokens limit, 3 tokens replenished per second.`
 - Requests for Server Pairing
-    - `5 tokens limit, 0.1 tokens replenished per second.`
-    
+  - `5 tokens limit, 0.1 tokens replenished per second.`
+
 Rate limits can be found in the `CompanionServer.Listener` class in `Assembly-CSharp.dll` from the game server files.
 
 Below is the token cost per request type:
@@ -340,10 +337,10 @@ If you want this project taken down, feel free to message me! However this proje
 I'm looking forward to seeing all of the projects the Rust community come up with! Here are some ideas I came up with:
 
 - Discord Bot
-    - Sync Team Chat in-game and on Discord.
-    - Send messages to Discord when Smart Alarms are triggered.
-    - Send messages to Discord when Cargo, Heli or Crate events spawn on the map.
-    - Controlling Smart Devices via Discord messages.
+  - Sync Team Chat in-game and on Discord.
+  - Send messages to Discord when Smart Alarms are triggered.
+  - Send messages to Discord when Cargo, Heli or Crate events spawn on the map.
+  - Controlling Smart Devices via Discord messages.
 - [Vending Machine Search Tool](https://github.com/liamcottle/atlas-for-rust)
-    - Find a specific item for sale on the map
-    - Statistics on what items are commonly sold, and for what prices.
+  - Find a specific item for sale on the map
+  - Statistics on what items are commonly sold, and for what prices.

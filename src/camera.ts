@@ -136,7 +136,7 @@ class Camera extends EventEmitter {
       const frame = await this._renderCameraFrame(
         this.cameraRays,
         this.cameraSubscribeInfo.width,
-        this.cameraSubscribeInfo.height
+        this.cameraSubscribeInfo.height,
       );
 
       // fire callback
@@ -162,7 +162,7 @@ class Camera extends EventEmitter {
   async _renderCameraFrame(
     frames: AppCameraRays[],
     width: number,
-    height: number
+    height: number,
   ) {
     // First we populate the samplePositionBuffer with the positions of each sample
     const samplePositionBuffer = new Int16Array(width * height * 2);
@@ -320,10 +320,10 @@ class Camera extends EventEmitter {
           target_colour[0],
           target_colour[1],
           target_colour[2],
-          255
+          255,
         ),
         x,
-        y
+        y,
       );
     }
 

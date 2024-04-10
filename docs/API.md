@@ -41,7 +41,7 @@ Registers a new Rust server with the Rust+ Companion API. This is called when th
 
 - Method: `POST`
 - Headers:
-    - `Content-Type`: `text/plain`
+  - `Content-Type`: `text/plain`
 - Body: `Existing Server Token`
 
 Refreshes an existing server token.
@@ -50,35 +50,35 @@ Refreshes an existing server token.
 
 - Method: `POST`
 - Headers:
-    - `Content-Type`: `application/json`
+  - `Content-Type`: `application/json`
 - JSON Body:
-    - `ServerToken` (string)
-    - `SteamIds` (list of unsigned longs)
-    - `Channel` (int)
-      - `Pairing=1001`
-      - `PlayerLoggedIn=1002`
-      - `PlayerDied=1003`
-      - `SmartAlarm=1004`
-    - `Title` (string)
-    - `Body` (string)
-    - `Data` (dictionary<string, string>)
-        - `id` (string)
-        - `name` (string)
-        - `desc` (string)
-        - `img` (string)
-        - `logo` (string)
-        - `url` (string)
-        - `ip` (string)
-        - `port` (string)
-        - `playerId` (string)
-        - `playerToken` (string)
-        - `entityId` (string)
-        - `entityType` (string)
-        - `entityName` (string)
-        - `type` (string)
-            - `death`
-            - `login`
-            - `server`
-            - `entity`
+  - `ServerToken` (string)
+  - `SteamIds` (list of unsigned longs)
+  - `Channel` (int)
+    - `Pairing=1001`
+    - `PlayerLoggedIn=1002`
+    - `PlayerDied=1003`
+    - `SmartAlarm=1004`
+  - `Title` (string)
+  - `Body` (string)
+  - `Data` (dictionary<string, string>)
+    - `id` (string)
+    - `name` (string)
+    - `desc` (string)
+    - `img` (string)
+    - `logo` (string)
+    - `url` (string)
+    - `ip` (string)
+    - `port` (string)
+    - `playerId` (string)
+    - `playerToken` (string)
+    - `entityId` (string)
+    - `entityType` (string)
+    - `entityName` (string)
+    - `type` (string)
+      - `death`
+      - `login`
+      - `server`
+      - `entity`
 
 Sends a push notification to the Rust+ Companion App.
