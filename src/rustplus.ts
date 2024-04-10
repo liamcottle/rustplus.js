@@ -14,7 +14,7 @@ declare module "./proto" {
 }
 
 type Response<T> = { seq: Proto.AppResponse["seq"] } & (
-  | ({ error: undefined } & SetRequired<T, keyof T>)
+  | ({ error: undefined | null } & SetRequired<T, keyof T>)
   | { error: Proto.AppError }
 );
 
