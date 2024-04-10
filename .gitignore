@@ -1,5 +1,4 @@
 .idea/
 node_modules/
 rustplus.config.json
-.prettierrc
 pnpm-lock.yaml
