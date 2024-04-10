@@ -82,20 +82,25 @@ type callbackFn = (message: {
 }) => sendRequestReturnType;
 
 export class RustPlus extends EventEmitter {
-  seq: number;
-  seqCallbacks: callbackFn[];
+  private seq: number;
+  private seqCallbacks: callbackFn[];
 
-  server: string;
-  port: string;
-  playerId: string;
-  playerToken: string;
-  useFacepunchProxy: boolean;
-  websocket:
+  public readonly server: string;
+  public readonly port: string;
+  public readonly playerId: string;
+  public readonly playerToken: string;
+  public readonly useFacepunchProxy: boolean;
+
+  protected websocket:
     | WebSocket
     | null
     | undefined; /* Defined on first connection, null on disconnect */
-  AppRequest: protobuf.Type | undefined; /* Defined on first connection */
-  AppMessage: protobuf.Type | undefined; /* Defined on first connection */
+  private AppRequest:
+    | protobuf.Type
+    | undefined; /* Defined on first connection */
+  private AppMessage:
+    | protobuf.Type
+    | undefined; /* Defined on first connection */
 
   /**
    * @param server The ip address or hostname of the Rust Server
