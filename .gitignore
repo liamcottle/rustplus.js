@@ -2,3 +2,6 @@
 node_modules/
 rustplus.config.json
 pnpm-lock.yaml
+
+# Ignore failed type build files
+proto.proto
