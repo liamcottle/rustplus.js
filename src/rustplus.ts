@@ -22,6 +22,7 @@ type Response<T> = { seq: Proto.AppResponse["seq"] } & (
 type sendRequestData = RequireAtLeastOne<
   Omit<Proto.AppRequest, "seq" | "playerId" | "playerToken">
 >;
+
 /* 
     T is an array of keys of sendRequestData e.g. ["getTime"] works because getTime is a key of AppRequest
 
@@ -95,16 +96,12 @@ export class RustPlus extends EventEmitter {
   public readonly playerToken: string;
   public readonly useFacepunchProxy: boolean;
 
-  protected websocket:
-    | WebSocket
-    | null
-    | undefined; /* Defined on first connection, null on disconnect */
-  private AppRequest:
-    | protobuf.Type
-    | undefined; /* Defined on first connection */
-  private AppMessage:
-    | protobuf.Type
-    | undefined; /* Defined on first connection */
+  /* Defined on first connection, null on disconnect */
+  protected websocket: WebSocket | null | undefined;
+  /* Defined on first connection */
+  private AppRequest: protobuf.Type | undefined;
+  /* Defined on first connection */
+  private AppMessage: protobuf.Type | undefined;
 
   /**
    * @param server The ip address or hostname of the Rust Server
@@ -232,84 +229,14 @@ export class RustPlus extends EventEmitter {
    * @returns {boolean}
    */
   isConnected(): boolean {
-    return this.websocket != null;
+    // Note: null == undefined. Keep != over !==
+    return (
+      this.websocket != null && this.websocket.readyState === WebSocket.OPEN
+    );
   }
-
-  sendRequest(
-    data: allRequests["cameraInput"]["data"],
-    callback?: allRequests["cameraInput"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["cameraSubscribe"]["data"],
-    callback?: allRequests["cameraSubscribe"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["cameraUnsubscribe"]["data"],
-    callback?: allRequests["cameraUnsubscribe"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["checkSubscription"]["data"],
-    callback?: allRequests["checkSubscription"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["getClanChat"]["data"],
-    callback?: allRequests["getClanChat"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["getClanInfo"]["data"],
-    callback?: allRequests["getClanInfo"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["getEntityInfo"]["data"],
-    callback?: allRequests["getEntityInfo"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["getInfo"]["data"],
-    callback?: allRequests["getInfo"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["getMap"]["data"],
-    callback?: allRequests["getMap"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["getMapMarkers"]["data"],
-    callback?: allRequests["getMapMarkers"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["getTeamChat"]["data"],
-    callback?: allRequests["getTeamChat"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["getTeamInfo"]["data"],
-    callback?: allRequests["getTeamInfo"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["getTime"]["data"],
-    callback?: allRequests["getTime"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["promoteToLeader"]["data"],
-    callback?: allRequests["promoteToLeader"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["sendClanMessage"]["data"],
-    callback?: allRequests["sendClanMessage"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["sendTeamMessage"]["data"],
-    callback?: allRequests["sendTeamMessage"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["setClanMotd"]["data"],
-    callback?: allRequests["setClanMotd"]["callback"]
-  ): sendRequestReturnType;
-  sendRequest(
-    data: allRequests["setEntityValue"]["data"],
-    callback?: allRequests["setEntityValue"]["callback"]
-  ): sendRequestReturnType;
   /**
    * Send a Request to the Rust Server with an optional callback when a Response is received.
-   * @param data this should contain valid data for the AppRequest packet in th"..",e rustplus.proto schema file
+   * @param data this should contain valid data for the AppRequest packet in the rustplus.proto schema file
    * @param callback
    */
   sendRequest<T extends keyof allRequests>(
@@ -435,7 +362,7 @@ export class RustPlus extends EventEmitter {
   >;
   /**
    * Send a Request to the Rust Server and return a Promise
-   * @param data this should contain valid data for the AppRequest packet defined in th"..",e rustplus.proto schema file
+   * @param data this should contain valid data for the AppRequest packet defined in the rustplus.proto schema file
    * @param timeoutMilliseconds milliseconds before the promise will be rejected. Defaults to 10 seconds.
    */
   sendRequestAsync<T extends keyof allRequests>(
@@ -451,6 +378,7 @@ export class RustPlus extends EventEmitter {
       // send request
       this.sendRequest(
         data as Parameters<typeof this.sendRequest>[0],
+        // May cause error here if unhandled response changed to never type
         (message) => {
           // cancel timeout
           clearTimeout(timeout);
