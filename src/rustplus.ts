@@ -58,7 +58,7 @@ interface allRequests {
   getClanChat: sendReqType<["getClanChat"], ["clanChat"]>;
   getClanInfo: sendReqType<["getClanInfo"], ["clanInfo"]>;
   getEntityInfo: sendReqType<["getEntityInfo", "entityId"], ["entityInfo"]>;
-  // getNexusAuth: sendReqType<["getNexusAuth"],[]> // todo getNexusAuth
+  getNexusAuth: sendReqType<["getNexusAuth"], ["nexusAuth"]>; // todo manually verify
   getInfo: sendReqType<["getInfo"], ["info"]>;
   getMap: sendReqType<["getMap"], ["map"]>;
   getMapMarkers: sendReqType<["getMapMarkers"], ["mapMarkers"]>;
