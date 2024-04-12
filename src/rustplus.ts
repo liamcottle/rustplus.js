@@ -178,8 +178,8 @@ export class RustPlus extends EventEmitter {
 
           // decode received message
           var message = this.AppMessage.decode(data) as unknown as {
-            response: Response<allRequests[keyof allRequests]["response"]>;
-          };
+            response: allRequests[keyof allRequests]["response"];
+          }; //! remove if better method
 
           // check if received message is a response and if we have a callback registered for it
           if (
@@ -234,11 +234,69 @@ export class RustPlus extends EventEmitter {
       this.websocket != null && this.websocket.readyState === WebSocket.OPEN
     );
   }
+
+  /*
+   DO NOT randomly change order of callback chain!
+   It's based off processing order of if statement inside Assembly-Csharp.dll (Server files) path = "CompanionServer ns > Listener class > Dispatch method"
+   
+   Rust+ checks each statement one by one in a short circuiting if statement. The first one to return true (can be handled) gets executed
+
+   Some issues encountered with other solutions:
+   - "any" type, or un-narrowed union in type for server response (all possible values unioned)
+   - Unrelated TS errors when passed bad data - makes it harder for user (at least w/ overload solution)
+   
+   If you can get a better solution that uses less code but provides >= type accuracy, please replace this
+   */
   /**
    * Send a Request to the Rust Server with an optional callback when a Response is received.
    * @param data this should contain valid data for the AppRequest packet in the rustplus.proto schema file
    * @param callback
    */
+  sendRequest<T extends keyof allRequests, D extends allRequests[T]["data"]>(
+    data: D,
+    callback?: "getInfo" extends keyof D
+      ? allRequests["getInfo"]["callback"]
+      : "getTime" extends keyof D
+      ? allRequests["getTime"]["callback"]
+      : "getMap" extends keyof D
+      ? allRequests["getMap"]["callback"]
+      : "getTeamInfo" extends keyof D
+      ? allRequests["getTeamInfo"]["callback"]
+      : "getTeamChat" extends keyof D
+      ? allRequests["getTeamChat"]["callback"]
+      : "sendTeamMessage" extends keyof D
+      ? allRequests["sendTeamMessage"]["callback"]
+      : "getEntityInfo" extends keyof D
+      ? allRequests["getEntityInfo"]["callback"]
+      : "setEntityValue" extends keyof D
+      ? allRequests["setEntityValue"]["callback"]
+      : "checkSubscription" extends keyof D
+      ? allRequests["checkSubscription"]["callback"]
+      : "setSubscription" extends keyof D
+      ? allRequests["setSubscription"]["callback"]
+      : "getMapMarkers" extends keyof D
+      ? allRequests["getMapMarkers"]["callback"]
+      : "promoteToLeader" extends keyof D
+      ? allRequests["promoteToLeader"]["callback"]
+      : "getClanInfo" extends keyof D
+      ? allRequests["getClanInfo"]["callback"]
+      : "getClanChat" extends keyof D
+      ? allRequests["getClanChat"]["callback"]
+      : "setClanMotd" extends keyof D
+      ? allRequests["setClanMotd"]["callback"]
+      : "sendClanMessage" extends keyof D
+      ? allRequests["sendClanMessage"]["callback"]
+      : "getNexusAuth" extends keyof D
+      ? allRequests["getNexusAuth"]["callback"]
+      : "cameraSubscribe" extends keyof D
+      ? allRequests["cameraSubscribe"]["callback"]
+      : "cameraUnsubscribe" extends keyof D
+      ? allRequests["cameraUnsubscribe"]["callback"]
+      : "cameraInput" extends keyof D
+      ? allRequests["cameraInput"]["callback"]
+      : unhandledReturn
+  ): sendRequestReturnType;
+
   sendRequest<T extends keyof allRequests>(
     data: allRequests[T]["data"],
     callback?: (message: {
@@ -270,111 +328,70 @@ export class RustPlus extends EventEmitter {
     this.emit("request", request);
   }
 
-  sendRequestAsync(
-    data: allRequests["cameraInput"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["cameraInput"]["callback"]>[0]["response"]>;
-  sendRequestAsync(
-    data: allRequests["cameraSubscribe"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<
-    Parameters<allRequests["cameraSubscribe"]["callback"]>[0]["response"]
-  >;
-  sendRequestAsync(
-    data: allRequests["cameraUnsubscribe"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<
-    Parameters<allRequests["cameraUnsubscribe"]["callback"]>[0]["response"]
-  >;
-  sendRequestAsync(
-    data: allRequests["checkSubscription"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<
-    Parameters<allRequests["checkSubscription"]["callback"]>[0]["response"]
-  >;
-  sendRequestAsync(
-    data: allRequests["getClanChat"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["getClanChat"]["callback"]>[0]["response"]>;
-  sendRequestAsync(
-    data: allRequests["getClanInfo"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["getClanInfo"]["callback"]>[0]["response"]>;
-  sendRequestAsync(
-    data: allRequests["getEntityInfo"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<
-    Parameters<allRequests["getEntityInfo"]["callback"]>[0]["response"]
-  >;
-  sendRequestAsync(
-    data: allRequests["getInfo"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["getInfo"]["callback"]>[0]["response"]>;
-  sendRequestAsync(
-    data: allRequests["getMap"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["getMap"]["callback"]>[0]["response"]>;
-  sendRequestAsync(
-    data: allRequests["getMapMarkers"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<
-    Parameters<allRequests["getMapMarkers"]["callback"]>[0]["response"]
-  >;
-  sendRequestAsync(
-    data: allRequests["getTeamChat"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["getTeamChat"]["callback"]>[0]["response"]>;
-  sendRequestAsync(
-    data: allRequests["getTeamInfo"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["getTeamInfo"]["callback"]>[0]["response"]>;
-  sendRequestAsync(
-    data: allRequests["getTime"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["getTime"]["callback"]>[0]["response"]>;
-  sendRequestAsync(
-    data: allRequests["promoteToLeader"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<
-    Parameters<allRequests["promoteToLeader"]["callback"]>[0]["response"]
-  >;
-  sendRequestAsync(
-    data: allRequests["sendClanMessage"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<
-    Parameters<allRequests["sendClanMessage"]["callback"]>[0]["response"]
-  >;
-  sendRequestAsync(
-    data: allRequests["sendTeamMessage"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<
-    Parameters<allRequests["sendTeamMessage"]["callback"]>[0]["response"]
-  >;
-  sendRequestAsync(
-    data: allRequests["setClanMotd"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<Parameters<allRequests["setClanMotd"]["callback"]>[0]["response"]>;
-  sendRequestAsync(
-    data: allRequests["setEntityValue"]["data"],
-    timeoutMilliseconds?: number
-  ): Promise<
-    Parameters<allRequests["setEntityValue"]["callback"]>[0]["response"]
-  >;
   /**
    * Send a Request to the Rust Server and return a Promise
    * @param data this should contain valid data for the AppRequest packet defined in the rustplus.proto schema file
    * @param timeoutMilliseconds milliseconds before the promise will be rejected. Defaults to 10 seconds.
    */
+  sendRequestAsync<
+    T extends keyof allRequests,
+    D extends allRequests[T]["data"]
+  >(
+    data: D,
+    timeoutMilliseconds?: number
+  ): Promise<
+    "getInfo" extends keyof D
+      ? allRequests["getInfo"]["response"]
+      : "getTime" extends keyof D
+      ? allRequests["getTime"]["response"]
+      : "getMap" extends keyof D
+      ? allRequests["getMap"]["response"]
+      : "getTeamInfo" extends keyof D
+      ? allRequests["getTeamInfo"]["response"]
+      : "getTeamChat" extends keyof D
+      ? allRequests["getTeamChat"]["response"]
+      : "sendTeamMessage" extends keyof D
+      ? allRequests["sendTeamMessage"]["response"]
+      : "getEntityInfo" extends keyof D
+      ? allRequests["getEntityInfo"]["response"]
+      : "setEntityValue" extends keyof D
+      ? allRequests["setEntityValue"]["response"]
+      : "checkSubscription" extends keyof D
+      ? allRequests["checkSubscription"]["response"]
+      : "setSubscription" extends keyof D
+      ? allRequests["setSubscription"]["response"]
+      : "getMapMarkers" extends keyof D
+      ? allRequests["getMapMarkers"]["response"]
+      : "promoteToLeader" extends keyof D
+      ? allRequests["promoteToLeader"]["response"]
+      : "getClanInfo" extends keyof D
+      ? allRequests["getClanInfo"]["response"]
+      : "getClanChat" extends keyof D
+      ? allRequests["getClanChat"]["response"]
+      : "setClanMotd" extends keyof D
+      ? allRequests["setClanMotd"]["response"]
+      : "sendClanMessage" extends keyof D
+      ? allRequests["sendClanMessage"]["response"]
+      : "getNexusAuth" extends keyof D
+      ? allRequests["getNexusAuth"]["response"]
+      : "cameraSubscribe" extends keyof D
+      ? allRequests["cameraSubscribe"]["response"]
+      : "cameraUnsubscribe" extends keyof D
+      ? allRequests["cameraUnsubscribe"]["response"]
+      : "cameraInput" extends keyof D
+      ? allRequests["cameraInput"]["response"]
+      : unhandled
+  >;
+
   sendRequestAsync<T extends keyof allRequests>(
     data: allRequests[T]["data"],
-    timeoutMilliseconds = 10000
+    timeoutMilliseconds: number = 10000
   ): Promise<Parameters<allRequests[T]["callback"]>[0]["response"]> {
     return new Promise((resolve, reject) => {
       // reject promise after timeout
       var timeout = setTimeout(() => {
         reject(new Error("Timeout reached while waiting for response"));
       }, timeoutMilliseconds);
-
       // send request
       this.sendRequest(
         data as Parameters<typeof this.sendRequest>[0],
