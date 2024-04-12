@@ -44,9 +44,7 @@ type sendReqType<
 > = {
   data: Required<Pick<sendRequestData, T[number]>>;
   response: Response<Pick<Proto.AppResponse, U[number]>>;
-  callback: (message: {
-    response: Response<Pick<Proto.AppResponse, U[number]>>;
-  }) => Promisable<void> | boolean; // If returns true then don't fire message event
+  callback: _callbackFn<Response<Pick<Proto.AppResponse, U[number]>>>;
 };
 
 interface allRequests {
@@ -75,11 +73,17 @@ interface allRequests {
   setSubscription: sendReqType<["setSubscription", "entityId"], ["success"]>; // todo manually verify
 }
 
-type sendRequestReturnType = Promisable<void> | boolean;
+type sendRequestReturnType = Promisable<void> | boolean; // If returns true then don't fire message event
 
-type callbackFn = (message: {
-  response: Response<allRequests[keyof allRequests]["response"]>;
+type _callbackFn<T = allRequests[keyof allRequests]["response"]> = (message: {
+  response: T;
 }) => sendRequestReturnType;
+type unhandled = {
+  seq: number;
+  error: { error: "unhandled" };
+};
+type unhandledReturn = _callbackFn<unhandled>;
+type callbackFn = _callbackFn;
 
 export class RustPlus extends EventEmitter {
   private seq: number;
@@ -312,7 +316,7 @@ export class RustPlus extends EventEmitter {
     data: allRequests[T]["data"],
     callback?: (message: {
       response: allRequests[T]["response"];
-    }) => Promisable<void> | boolean
+    }) => sendRequestReturnType
   ) {
     if (!this.AppRequest || !this.websocket) return;
 
