@@ -1,8 +1,6 @@
 "use strict";
 
 import { EventEmitter } from "events";
-import path from "path";
-import protobuf from "protobufjs";
 import { Promisable, RequireAtLeastOne, SetRequired } from "type-fest";
 import WebSocket from "ws";
 import TypedEmitter from "typed-emitter";
@@ -104,14 +102,16 @@ export class RustPlus extends (EventEmitter as new () => TypedEmitter<RustPlusEv
   public readonly port: string;
   public readonly playerId: string;
   public readonly playerToken: string;
+  private readonly _playerId: Proto.AppRequest["playerId"];
+  private readonly _playerToken: Proto.AppRequest["playerToken"];
   public readonly useFacepunchProxy: boolean;
 
   /* Defined on first connection, null on disconnect */
   protected websocket: WebSocket | null | undefined;
   /* Defined on first connection */
-  private AppRequest: protobuf.Type | undefined;
+  private AppRequest: typeof Proto.AppRequest | undefined;
   /* Defined on first connection */
-  private AppMessage: protobuf.Type | undefined;
+  private AppMessage: typeof Proto.AppMessage | undefined;
 
   /**
    * @param server The ip address or hostname of the Rust Server
@@ -141,6 +141,8 @@ export class RustPlus extends (EventEmitter as new () => TypedEmitter<RustPlusEv
     this.port = port;
     this.playerId = playerId;
     this.playerToken = playerToken;
+    this._playerId = BigInt(playerId);
+    this._playerToken = Number(playerToken);
     this.useFacepunchProxy = useFacepunchProxy;
 
     this.seq = 0;
@@ -152,79 +154,73 @@ export class RustPlus extends (EventEmitter as new () => TypedEmitter<RustPlusEv
    */
   connect() {
     // load protobuf then connect
-    protobuf
-      .load(path.resolve(__dirname, "..", "rustplus.proto"))
-      .then((root) => {
-        // make sure existing connection is disconnected before connecting again.
-        if (this.websocket) {
-          this.disconnect();
+
+    // make sure existing connection is disconnected before connecting again.
+    if (this.websocket) {
+      this.disconnect();
+    }
+
+    // load proto types
+    this.AppRequest = Proto.AppRequest;
+    this.AppMessage = Proto.AppMessage;
+
+    // fire event as we are connecting
+    this.emit("connecting");
+
+    // connect to websocket
+    var address = this.useFacepunchProxy
+      ? `wss://companion-rust.facepunch.com/game/${this.server}/${this.port}`
+      : `ws://${this.server}:${this.port}`;
+    this.websocket = new WebSocket(address);
+
+    // fire event when connected
+    this.websocket.on("open", () => {
+      this.emit("connected");
+    });
+
+    // fire event for websocket errors
+    this.websocket.on("error", (e: any) => {
+      this.emit("error", e);
+    });
+
+    this.websocket.on("message", (data: Uint8Array) => {
+      if (!this.AppMessage) return;
+
+      // decode received message
+      var message = this.AppMessage.fromBinary(data) as unknown as {
+        response: allRequests[keyof allRequests]["response"];
+      }; //! remove if better method
+
+      // check if received message is a response and if we have a callback registered for it
+      if (
+        message.response &&
+        message.response.seq &&
+        this.seqCallbacks[message.response.seq]
+      ) {
+        // get the callback for the response sequence
+        var callback = this.seqCallbacks[message.response.seq];
+
+        // call the callback with the response message
+        var result = callback(message);
+
+        // remove the callback
+        delete this.seqCallbacks[message.response.seq];
+
+        // ! If callback is a promise, this will run anyways
+        // if callback returns true, don't fire message event
+        if (result) {
+          return;
         }
+      }
 
-        // load proto types
-        this.AppRequest = root.lookupType("rustplus.AppRequest");
-        this.AppMessage = root.lookupType("rustplus.AppMessage");
+      // fire message event for received messages that aren't handled by callback
+      this.emit("message", this.AppMessage.fromBinary(data));
+    });
 
-        // fire event as we are connecting
-        this.emit("connecting");
-
-        // connect to websocket
-        var address = this.useFacepunchProxy
-          ? `wss://companion-rust.facepunch.com/game/${this.server}/${this.port}`
-          : `ws://${this.server}:${this.port}`;
-        this.websocket = new WebSocket(address);
-
-        // fire event when connected
-        this.websocket.on("open", () => {
-          this.emit("connected");
-        });
-
-        // fire event for websocket errors
-        this.websocket.on("error", (e: any) => {
-          this.emit("error", e);
-        });
-
-        this.websocket.on("message", (data: Uint8Array | protobuf.Reader) => {
-          if (!this.AppMessage) return;
-
-          // decode received message
-          var message = this.AppMessage.decode(data) as unknown as {
-            response: allRequests[keyof allRequests]["response"];
-          }; //! remove if better method
-
-          // check if received message is a response and if we have a callback registered for it
-          if (
-            message.response &&
-            message.response.seq &&
-            this.seqCallbacks[message.response.seq]
-          ) {
-            // get the callback for the response sequence
-            var callback = this.seqCallbacks[message.response.seq];
-
-            // call the callback with the response message
-            var result = callback(message);
-
-            // remove the callback
-            delete this.seqCallbacks[message.response.seq];
-
-            // ! If callback is a promise, this will run anyways
-            // if callback returns true, don't fire message event
-            if (result) {
-              return;
-            }
-          }
-
-          // fire message event for received messages that aren't handled by callback
-          this.emit(
-            "message",
-            this.AppMessage.decode(data) as Proto.AppMessage
-          );
-        });
-
-        // fire event when disconnected
-        this.websocket.on("close", () => {
-          this.emit("disconnected");
-        });
-      });
+    // fire event when disconnected
+    this.websocket.on("close", () => {
+      this.emit("disconnected");
+    });
   }
 
   /**
@@ -327,18 +323,18 @@ export class RustPlus extends (EventEmitter as new () => TypedEmitter<RustPlusEv
     }
 
     // create protobuf from AppRequest packet
-    let request = this.AppRequest.fromObject({
+    let request = this.AppRequest.toBinary({
       seq: currentSeq,
-      playerId: this.playerId,
-      playerToken: this.playerToken,
+      playerId: this._playerId,
+      playerToken: this._playerToken,
       ...data, // merge in provided data for AppRequest
     });
 
     // send AppRequest packet to rust server
-    this.websocket.send(this.AppRequest.encode(request).finish());
+    this.websocket.send(request);
 
     // fire event when request has been sent, this is useful for logging
-    this.emit("request", request as unknown as Proto.AppRequest);
+    this.emit("request", this.AppRequest.fromBinary(request));
   }
 
   /**
