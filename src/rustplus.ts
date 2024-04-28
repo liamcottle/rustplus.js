@@ -141,7 +141,7 @@ export class RustPlus extends (EventEmitter as new () => TypedEmitter<RustPlusEv
     this.port = port;
     this.playerId = playerId;
     this.playerToken = playerToken;
-    this._playerId = BigInt(playerId);
+    this._playerId = String(playerId);
     this._playerToken = Number(playerToken);
     this.useFacepunchProxy = useFacepunchProxy;
 
