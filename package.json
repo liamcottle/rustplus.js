@@ -13,7 +13,8 @@
     "lint": "tsc --noEmit",
     "format": "prettier --write .",
     "build:types": "cp rustplus.proto proto.proto && protoc --ts_out=./src --proto_path .  proto.proto && npm run build:types:clean || npm run build:types:clean",
-    "build:types:clean": "rm proto.proto"
+    "build:types:clean": "rm proto.proto",
+    "release": "pnpm run build && changeset publish"
   },
   "repository": {
     "type": "git",
