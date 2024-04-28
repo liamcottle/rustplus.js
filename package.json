@@ -55,10 +55,12 @@
     "ws": "^8.3.0"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.1",
     "@grpc/proto-loader": "^0.7.10",
     "@types/node": "^20.2.6",
     "@types/ws": "^8.5.10",
     "tsup": "^8.0.2",
+    "typed-emitter": "^2.1.0",
     "typescript": "^5.3.3"
   }
 }

@@ -5,3 +5,6 @@ pnpm-lock.yaml
 
 # Ignore failed type build files
 proto.proto
+
+# Build dir
+dist/

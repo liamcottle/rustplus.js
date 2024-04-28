@@ -5,6 +5,7 @@ import path from "path";
 import protobuf from "protobufjs";
 import { Promisable, RequireAtLeastOne, SetRequired } from "type-fest";
 import WebSocket from "ws";
+import TypedEmitter from "typed-emitter";
 
 import Camera from "./camera";
 import * as Proto from "./proto";
@@ -86,7 +87,16 @@ type unhandled = {
 type unhandledReturn = _callbackFn<unhandled>;
 type callbackFn = _callbackFn;
 
-export class RustPlus extends EventEmitter {
+type RustPlusEvents = {
+  error: (error: Error) => Promisable<void>;
+  connected: () => Promisable<void>;
+  connecting: () => Promisable<void>;
+  disconnected: () => Promisable<void>;
+  message: (message: Proto.AppMessage) => Promisable<void>;
+  request: (request: Proto.AppRequest) => Promisable<void>;
+};
+
+export class RustPlus extends (EventEmitter as new () => TypedEmitter<RustPlusEvents>) {
   private seq: number;
   private seqCallbacks: callbackFn[];
 
@@ -204,7 +214,10 @@ export class RustPlus extends EventEmitter {
           }
 
           // fire message event for received messages that aren't handled by callback
-          this.emit("message", this.AppMessage.decode(data));
+          this.emit(
+            "message",
+            this.AppMessage.decode(data) as Proto.AppMessage
+          );
         });
 
         // fire event when disconnected
@@ -325,7 +338,7 @@ export class RustPlus extends EventEmitter {
     this.websocket.send(this.AppRequest.encode(request).finish());
 
     // fire event when request has been sent, this is useful for logging
-    this.emit("request", request);
+    this.emit("request", request as unknown as Proto.AppRequest);
   }
 
   /**
