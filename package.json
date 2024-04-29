@@ -52,6 +52,7 @@
     "push-receiver": "^2.1.0",
     "ts-proto": "^1.148.1",
     "type-fest": "^3.7.2",
+    "typed-emitter": "^2.1.0",
     "uuid": "^9.0.0",
     "ws": "^8.3.0"
   },
@@ -61,7 +62,6 @@
     "@types/node": "^20.2.6",
     "@types/ws": "^8.5.10",
     "tsup": "^8.0.2",
-    "typed-emitter": "^2.1.0",
     "typescript": "^5.3.3"
   }
 }
