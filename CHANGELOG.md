@@ -1,5 +1,11 @@
 # @grolm/rustplus.js-typed
 
+## 3.0.1
+
+### Patch Changes
+
+- 1e21b4a: Fix dependency issue
+
 ## 3.0.0
 
 ### Major Changes
