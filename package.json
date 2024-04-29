@@ -1,6 +1,6 @@
 {
   "name": "@grolm/rustplus.js-typed",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Unofficial NodeJS library for controlling Smart Switches in the PC game Rust",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
