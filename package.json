@@ -14,7 +14,7 @@
     "format": "prettier --write .",
     "build:types": "cp rustplus.proto proto.proto && protoc --ts_out=./src --ts_opt long_type_string --proto_path .  proto.proto && npm run build:types:clean || npm run build:types:clean",
     "build:types:clean": "rm proto.proto",
-    "release": "pnpm run build && changeset publish"
+    "release": "npm run build && changeset publish"
   },
   "repository": {
     "type": "git",
