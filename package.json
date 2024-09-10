@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/liamcottle/rustplus.js#readme",
   "dependencies": {
+    "@liamcottle/push-receiver": "^0.0.3",
     "axios": "^1.2.2",
     "chrome-launcher": "^0.15.0",
     "command-line-args": "^5.2.0",
@@ -36,7 +37,6 @@
     "express": "^4.17.1",
     "jimp": "^0.22.7",
     "protobufjs": "^7.1.2",
-    "push-receiver": "^2.1.0",
     "uuid": "^9.0.0",
     "ws": "^8.3.0"
   }

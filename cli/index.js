@@ -3,12 +3,13 @@
 const axios = require('axios');
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
-const { register, listen } = require('push-receiver');
 const commandLineArgs = require('command-line-args');
 const commandLineUsage = require('command-line-usage');
 const ChromeLauncher = require('chrome-launcher');
 const path = require('path');
 const fs = require('fs');
+const AndroidFCM = require('@liamcottle/push-receiver/src/android/fcm');
+const PushReceiverClient = require("@liamcottle/push-receiver/src/client");
 
 let server;
 let fcmClient;
@@ -51,16 +52,15 @@ function updateConfig(configFile, config) {
     fs.writeFileSync(configFile, json, "utf8");
 }
 
-async function getExpoPushToken(credentials) {
+async function getExpoPushToken(fcmToken) {
     const response = await axios.post('https://exp.host/--/api/v2/push/getExpoPushToken', {
-        deviceId: uuidv4(),
-        experienceId: '@facepunch/RustCompanion',
-        appId: 'com.facepunch.rust.companion',
-        deviceToken: credentials.fcm.token,
         type: 'fcm',
-        development: false
+        deviceId: uuidv4(),
+        development: false,
+        appId: 'com.facepunch.rust.companion',
+        deviceToken: fcmToken,
+        projectId: "49451aca-a822-41e6-ad59-955718d0ff9c",
     });
-
     return response.data.data.expoPushToken;
 }
 
@@ -68,7 +68,7 @@ async function registerWithRustPlus(authToken, expoPushToken) {
     return axios.post('https://companion-rust.facepunch.com:443/api/push/register', {
         AuthToken: authToken,
         DeviceId: 'rustplus.js',
-        PushKind: 0,
+        PushKind: 3,
         PushToken: expoPushToken,
     })
 }
@@ -142,10 +142,16 @@ var rustplusAuthToken = null;
 
 async function fcmRegister(options) {
     console.log("Registering with FCM");
-    const fcmCredentials = await register('976529667804');
+    const apiKey = "AIzaSyB5y2y-Tzqb4-I4Qnlsh_9naYv_TD8pCvY";
+    const projectId = "rust-companion-app";
+    const gcmSenderId = "976529667804";
+    const gmsAppId = "1:976529667804:android:d6f1ddeb4403b338fea619";
+    const androidPackageName = "com.facepunch.rust.companion";
+    const androidPackageCert = "E28D05345FB78A7A1A63D70F4A302DBF426CA5AD";
+    const fcmCredentials = await AndroidFCM.register(apiKey, projectId, gcmSenderId, gmsAppId, androidPackageName, androidPackageCert);
 
     console.log("Fetching Expo Push Token");
-    expoPushToken = await getExpoPushToken(fcmCredentials).catch((error) => {
+    expoPushToken = await getExpoPushToken(fcmCredentials.fcm.token).catch((error) => {
         console.log("Failed to fetch Expo Push Token");
         console.log(error);
         process.exit(1);
@@ -194,9 +200,10 @@ async function fcmListen(options) {
     }
 
     console.log("Listening for FCM Notifications");
-    fcmClient = await listen(config.fcm_credentials, ({ notification, persistentId }) => {
-        // parse notification body
-        const body = JSON.parse(notification.data.body);
+    const androidId = config.fcm_credentials.gcm.androidId;
+    const securityToken = config.fcm_credentials.gcm.securityToken;
+    const client = new PushReceiverClient(androidId, securityToken, []);
+    client.on('ON_DATA_RECEIVED', (data) => {
 
         // generate timestamp
         const timestamp = new Date().toLocaleString();
@@ -205,9 +212,17 @@ async function fcmListen(options) {
         console.log('\x1b[32m%s\x1b[0m', `[${timestamp}] Notification Received`)
 
         // log notification body
-        console.log(body);
+        console.log(data);
 
     });
+
+    // force exit on ctrl + c
+    process.on('SIGINT', async () => {
+        process.exit(0);
+    });
+
+    await client.connect();
+
 }
 
 function showUsage() {
