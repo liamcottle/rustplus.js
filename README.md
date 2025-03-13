@@ -339,7 +339,7 @@ If you want this project taken down, feel free to message me! However this proje
 
 I'm looking forward to seeing all of the projects the Rust community come up with! Here are some ideas I came up with:
 
-- Discord Bot
+- [Discord Bot](https://github.com/alexemanuelol/rustplusplus)
     - Sync Team Chat in-game and on Discord.
     - Send messages to Discord when Smart Alarms are triggered.
     - Send messages to Discord when Cargo, Heli or Crate events spawn on the map.
