@@ -229,7 +229,7 @@ message AppInfo {
 	required uint32 wipeTime = 6;
 	required uint32 players = 7;
 	required uint32 maxPlayers = 8;
-	required uint32 queuedPlayers = 9;
+	optional uint32 queuedPlayers = 9;
 	optional uint32 seed = 10;
 	optional uint32 salt = 11;
 	optional string logoImage = 12;
@@ -298,7 +298,7 @@ message AppTeamInfo {
 	}
 
 	message Note {
-		required int32 type = 2;
+		optional int32 type = 2;
 		required float x = 3;
 		required float y = 4;
 	}
