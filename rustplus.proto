@@ -1,4 +1,4 @@
-syntax = "proto2";
+syntax = "proto3";
 package rustplus;
 
 message Vector2 {
@@ -38,17 +38,17 @@ message Ray {
 }
 
 message ClanActionResult {
-	required int32 requestId = 1;
-	required int32 result = 2;
-	required bool hasClanInfo = 3;
+	int32 requestId = 1;
+	int32 result = 2;
+	bool hasClanInfo = 3;
 	optional ClanInfo clanInfo = 4;
 }
 
 message ClanInfo {
-	required int64 clanId = 1;
-	required string name = 2;
-	required int64 created = 3;
-	required uint64 creator = 4;
+	int64 clanId = 1;
+	string name = 2;
+	int64 created = 3;
+	uint64 creator = 4;
 	optional string motd = 5;
 	optional int64 motdTimestamp = 6;
 	optional uint64 motdAuthor = 7;
@@ -60,42 +60,42 @@ message ClanInfo {
 	optional int32 maxMemberCount = 13;
 
 	message Role {
-		required int32 roleId = 1;
-		required int32 rank = 2;
-		required string name = 3;
-		required bool canSetMotd = 4;
-		required bool canSetLogo = 5;
-		required bool canInvite = 6;
-		required bool canKick = 7;
-		required bool canPromote = 8;
-		required bool canDemote = 9;
-		required bool canSetPlayerNotes = 10;
-		required bool canAccessLogs = 11;
+		int32 roleId = 1;
+		int32 rank = 2;
+		string name = 3;
+		bool canSetMotd = 4;
+		bool canSetLogo = 5;
+		bool canInvite = 6;
+		bool canKick = 7;
+		bool canPromote = 8;
+		bool canDemote = 9;
+		bool canSetPlayerNotes = 10;
+		bool canAccessLogs = 11;
 	}
 
 	message Member {
-		required uint64 steamId = 1;
-		required int32 roleId = 2;
-		required int64 joined = 3;
-		required int64 lastSeen = 4;
+		uint64 steamId = 1;
+		int32 roleId = 2;
+		int64 joined = 3;
+		int64 lastSeen = 4;
 		optional string notes = 5;
 		optional bool online = 6;
 	}
 
 	message Invite {
-		required uint64 steamId = 1;
-		required uint64 recruiter = 2;
-		required int64 timestamp = 3;
+		uint64 steamId = 1;
+		uint64 recruiter = 2;
+		int64 timestamp = 3;
 	}
 }
 
 message ClanLog {
-	required int64 clanId = 1;
+	int64 clanId = 1;
 	repeated ClanLog.Entry logEntries = 2;
 
 	message Entry {
-		required int64 timestamp = 1;
-		required string eventKey = 2;
+		int64 timestamp = 1;
+		string eventKey = 2;
 		optional string arg1 = 3;
 		optional string arg2 = 4;
 		optional string arg3 = 5;
@@ -107,13 +107,14 @@ message ClanInvitations {
 	repeated ClanInvitations.Invitation invitations = 1;
 
 	message Invitation {
-		required int64 clanId = 1;
-		required uint64 recruiter = 2;
-		required int64 timestamp = 3;
+		int64 clanId = 1;
+		uint64 recruiter = 2;
+		int64 timestamp = 3;
 	}
 }
 
 enum AppEntityType {
+	Reserved = 0;
 	Switch = 1;
 	Alarm = 2;
 	StorageMonitor = 3;
@@ -132,9 +133,9 @@ enum AppMarkerType {
 }
 
 message AppRequest {
-	required uint32 seq = 1;
-	required uint64 playerId = 2;
-	required int32 playerToken = 3;
+	uint32 seq = 1;
+	uint64 playerId = 2;
+	int32 playerToken = 3;
 	optional uint32 entityId = 4;
 	optional AppEmpty getInfo = 8;
 	optional AppEmpty getTime = 9;
@@ -164,7 +165,7 @@ message AppMessage {
 }
 
 message AppResponse {
-	required uint32 seq = 1;
+	uint32 seq = 1;
 	optional AppSuccess success = 4;
 	optional AppError error = 5;
 	optional AppInfo info = 6;
@@ -194,42 +195,42 @@ message AppEmpty {
 }
 
 message AppSendMessage {
-	required string message = 1;
+	string message = 1;
 }
 
 message AppSetEntityValue {
-	required bool value = 1;
+	bool value = 1;
 }
 
 message AppPromoteToLeader {
-	required uint64 steamId = 1;
+	uint64 steamId = 1;
 }
 
 message AppGetNexusAuth {
-	required string appKey = 1;
+	string appKey = 1;
 }
 
 message AppSuccess {
 }
 
 message AppError {
-	required string error = 1;
+	string error = 1;
 }
 
 message AppFlag {
-	required bool value = 1;
+	bool value = 1;
 }
 
 message AppInfo {
-	required string name = 1;
-	required string headerImage = 2;
-	required string url = 3;
-	required string map = 4;
-	required uint32 mapSize = 5;
-	required uint32 wipeTime = 6;
-	required uint32 players = 7;
-	required uint32 maxPlayers = 8;
-	required uint32 queuedPlayers = 9;
+	string name = 1;
+	string headerImage = 2;
+	string url = 3;
+	string map = 4;
+	uint32 mapSize = 5;
+	uint32 wipeTime = 6;
+	uint32 players = 7;
+	uint32 maxPlayers = 8;
+	uint32 queuedPlayers = 9;
 	optional uint32 seed = 10;
 	optional uint32 salt = 11;
 	optional string logoImage = 12;
@@ -239,77 +240,77 @@ message AppInfo {
 }
 
 message AppTime {
-	required float dayLengthMinutes = 1;
-	required float timeScale = 2;
-	required float sunrise = 3;
-	required float sunset = 4;
-	required float time = 5;
+	float dayLengthMinutes = 1;
+	float timeScale = 2;
+	float sunrise = 3;
+	float sunset = 4;
+	float time = 5;
 }
 
 message AppMap {
-	required uint32 width = 1;
-	required uint32 height = 2;
-	required bytes jpgImage = 3;
-	required int32 oceanMargin = 4;
+	uint32 width = 1;
+	uint32 height = 2;
+	bytes jpgImage = 3;
+	int32 oceanMargin = 4;
 	repeated AppMap.Monument monuments = 5;
 	optional string background = 6;
 
 	message Monument {
-		required string token = 1;
-		required float x = 2;
-		required float y = 3;
+		string token = 1;
+		float x = 2;
+		float y = 3;
 	}
 }
 
 message AppEntityInfo {
-	required AppEntityType type = 1;
-	required AppEntityPayload payload = 3;
+	AppEntityType type = 1;
+	AppEntityPayload payload = 3;
 }
 
 message AppEntityPayload {
-	optional bool value = 1;
+	bool value = 1;
 	repeated AppEntityPayload.Item items = 2;
-	optional int32 capacity = 3;
+	int32 capacity = 3;
 	optional bool hasProtection = 4;
-	optional uint32 protectionExpiry = 5;
+	uint32 protectionExpiry = 5;
 
 	message Item {
-		required int32 itemId = 1;
-		required int32 quantity = 2;
-		required bool itemIsBlueprint = 3;
+		int32 itemId = 1;
+		int32 quantity = 2;
+		bool itemIsBlueprint = 3;
 	}
 }
 
 message AppTeamInfo {
-	required uint64 leaderSteamId = 1;
+	uint64 leaderSteamId = 1;
 	repeated AppTeamInfo.Member members = 2;
 	repeated AppTeamInfo.Note mapNotes = 3;
 	repeated AppTeamInfo.Note leaderMapNotes = 4;
 
 	message Member {
-		required uint64 steamId = 1;
-		required string name = 2;
-		required float x = 3;
-		required float y = 4;
-		required bool isOnline = 5;
-		required uint32 spawnTime = 6;
-		required bool isAlive = 7;
-		required uint32 deathTime = 8;
+		uint64 steamId = 1;
+		string name = 2;
+		float x = 3;
+		float y = 4;
+		bool isOnline = 5;
+		uint32 spawnTime = 6;
+		bool isAlive = 7;
+		uint32 deathTime = 8;
 	}
 
 	message Note {
-		required int32 type = 2;
-		required float x = 3;
-		required float y = 4;
+		int32 type = 2;
+		float x = 3;
+		float y = 4;
 	}
 }
 
 message AppTeamMessage {
-	required uint64 steamId = 1;
-	required string name = 2;
-	required string message = 3;
-	required string color = 4;
-	required uint32 time = 5;
+	uint64 steamId = 1;
+	string name = 2;
+	string message = 3;
+	string color = 4;
+	uint32 time = 5;
 }
 
 message AppTeamChat {
@@ -317,10 +318,10 @@ message AppTeamChat {
 }
 
 message AppMarker {
-	required uint32 id = 1;
-	required AppMarkerType type = 2;
-	required float x = 3;
-	required float y = 4;
+	uint32 id = 1;
+	AppMarkerType type = 2;
+	float x = 3;
+	float y = 4;
 	optional uint64 steamId = 5;
 	optional float rotation = 6;
 	optional float radius = 7;
@@ -332,13 +333,13 @@ message AppMarker {
 	repeated AppMarker.SellOrder sellOrders = 13;
 
 	message SellOrder {
-		required int32 itemId = 1;
-		required int32 quantity = 2;
-		required int32 currencyId = 3;
-		required int32 costPerItem = 4;
-		required int32 amountInStock = 5;
-		required bool itemIsBlueprint = 6;
-		required bool currencyIsBlueprint = 7;
+		int32 itemId = 1;
+		int32 quantity = 2;
+		int32 currencyId = 3;
+		int32 costPerItem = 4;
+		int32 amountInStock = 5;
+		bool itemIsBlueprint = 6;
+		bool currencyIsBlueprint = 7;
 		optional float itemCondition = 8;
 		optional float itemConditionMax = 9;
 	}
@@ -353,10 +354,10 @@ message AppClanInfo {
 }
 
 message AppClanMessage {
-	required uint64 steamId = 1;
-	required string name = 2;
-	required string message = 3;
-	required int64 time = 4;
+	uint64 steamId = 1;
+	string name = 2;
+	string message = 3;
+	int64 time = 4;
 }
 
 message AppClanChat {
@@ -364,22 +365,22 @@ message AppClanChat {
 }
 
 message AppNexusAuth {
-	required string serverId = 1;
-	required int32 playerToken = 2;
+	string serverId = 1;
+	int32 playerToken = 2;
 }
 
 message AppTeamChanged {
-	required uint64 playerId = 1;
-	required AppTeamInfo teamInfo = 2;
+	uint64 playerId = 1;
+	AppTeamInfo teamInfo = 2;
 }
 
 message AppNewTeamMessage {
-	required AppTeamMessage message = 1;
+	AppTeamMessage message = 1;
 }
 
 message AppEntityChanged {
-	required uint32 entityId = 1;
-	required AppEntityPayload payload = 2;
+	uint32 entityId = 1;
+	AppEntityPayload payload = 2;
 }
 
 message AppClanChanged {
@@ -387,45 +388,46 @@ message AppClanChanged {
 }
 
 message AppNewClanMessage {
-	required int64 clanId = 1;
-	required AppClanMessage message = 2;
+	int64 clanId = 1;
+	AppClanMessage message = 2;
 }
 
 message AppCameraSubscribe {
-	required string cameraId = 1;
+	string cameraId = 1;
 }
 
 message AppCameraInput {
-	required int32 buttons = 1;
-	required Vector2 mouseDelta = 2;
+	int32 buttons = 1;
+	Vector2 mouseDelta = 2;
 }
 
 message AppCameraInfo {
-	required int32 width = 1;
-	required int32 height = 2;
-	required float nearPlane = 3;
-	required float farPlane = 4;
-	required int32 controlFlags = 5;
+	int32 width = 1;
+	int32 height = 2;
+	float nearPlane = 3;
+	float farPlane = 4;
+	int32 controlFlags = 5;
 }
 
 message AppCameraRays {
-	required float verticalFov = 1;
-	required int32 sampleOffset = 2;
-	required bytes rayData = 3;
-	required float distance = 4;
+	float verticalFov = 1;
+	int32 sampleOffset = 2;
+	bytes rayData = 3;
+	float distance = 4;
 	repeated AppCameraRays.Entity entities = 5;
 
 	enum EntityType {
+		Reserved = 0;
 		Tree = 1;
 		Player = 2;
 	}
 
 	message Entity {
-		required uint32 entityId = 1;
-		required EntityType type = 2;
-		required Vector3 position = 3;
-		required Vector3 rotation = 4;
-		required Vector3 size = 5;
+		uint32 entityId = 1;
+		EntityType type = 2;
+		Vector3 position = 3;
+		Vector3 rotation = 4;
+		Vector3 size = 5;
 		optional string name = 6;
 	}
 }
