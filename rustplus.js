@@ -73,6 +73,13 @@ class RustPlus extends EventEmitter {
             });
 
             this.websocket.on('message', (data) => {
+                // Check if the length is under the minimum of 10 byte
+                if(data.length < 10){
+                    // We must do a paded for the message to be taken into account
+                    const paded = Buffer.alloc(10);
+                    data.copy(paded);
+                    data = paded;
+                }
 
                 // decode received message
                 var message = this.AppMessage.decode(data);

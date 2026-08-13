@@ -29,15 +29,15 @@
   },
   "homepage": "https://github.com/liamcottle/rustplus.js#readme",
   "dependencies": {
-    "@liamcottle/push-receiver": "^0.0.3",
-    "axios": "^1.2.2",
-    "chrome-launcher": "^0.15.0",
-    "command-line-args": "^5.2.0",
-    "command-line-usage": "^6.1.1",
-    "express": "^4.17.1",
-    "jimp": "^0.22.7",
-    "protobufjs": "^7.1.2",
-    "uuid": "^9.0.0",
-    "ws": "^8.3.0"
+    "@liamcottle/push-receiver": "^0.0.4",
+    "axios": "^1.9.0",
+    "chrome-launcher": "^1.2.0",
+    "command-line-args": "^6.0.1",
+    "command-line-usage": "^7.0.3",
+    "express": "^5.1.0",
+    "jimp": "^1.6.0",
+    "protobufjs": "^7.4.0",
+    "uuid": "^11.1.0",
+    "ws": "^8.18.2"
   }
 }
